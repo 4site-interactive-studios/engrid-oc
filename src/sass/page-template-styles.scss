@@ -837,7 +837,7 @@ body:not(#en__pagebuilder)[data-engrid-footer-below-fold]
   .en__field--recurrpay > label {
     display: none;
   }
-  @include from(3) {
+  @media screen and (max-width: 775px) {
     > .en__field__element {
       flex-wrap: nowrap;
       width: 50%;
