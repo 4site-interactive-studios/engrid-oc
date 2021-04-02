@@ -1,10 +1,11 @@
 /* Add your custom theme styles here */
-@media screen and (max-width: 360px) {
+@media screen and (max-width: 600px) {
   // Remove down arrow when giving frequency wraps
   [data-engrid-theme="oc"] {
     .monthly-gift-upsell-tooltip .highlight:after {
       display: none;
     }
+    --theme-body-padding: 0px 30px;
   }
 }
 
@@ -69,6 +70,30 @@ body {
 [data-engrid-theme="oc"] {
   --background-image: url("https://aaf1a18515da0e792f78-c27fdabe952dfc357fe25ebf5c8897ee.ssl.cf5.rackcdn.com/1991/gray_pattern-optimized-2.jpg?v=1598492702000");
   --theme-page-backgroundImage-background-color: #f3f3f3;
+  @media screen and (min-width: 600px) {
+    .en__component--advrow {
+      grid-template-columns:
+        [pc-start lpc-start] minmax(25px, 1fr)
+        [lpc-end cc-start lcc-start] minmax(25px, 25px)
+        [lcc-end bc-start lbc-start] minmax(250px, 400px)
+        [lbc-end rbc-start] minmax(250px, 400px)
+        [rbc-end bc-end rcc-start] minmax(25px, 475px)
+        [rcc-end cc-end rpc-start] minmax(25px, 1fr)
+        [rpc-end pc-end];
+    }
+    .en__component--advrow .pseudo-subgrid {
+      /* autoprefixer grid: off */
+      grid-template-columns:
+        [
+        pc-start lpc-start] minmax(25px, 1fr) [lpc-end
+        cc-start lcc-start] minmax(25px, 250px) [lcc-end
+        bc-start lbc-start] minmax(250px, 420px) [lbc-end
+        rbc-start] minmax(250px, 420px) [rbc-end bc-end
+        rcc-start] minmax(25px, 250px) [rcc-end cc-end
+        rpc-start] minmax(25px, 1fr) [rpc-end pc-end
+        ] !important;
+    }
+  }
 }
 
 // @media screen and (min-width: 600px) {
@@ -181,14 +206,6 @@ body:not(#en__pagebuilder) {
   .en__field--donationAmt > label {
     display: none;
   }
-}
-
-/* RAN Named their EMAIl Opt-in `email` which causes it to get the generated class `en__field--email` that matches the auto assigned class `en__field--email` given to EMAIL type fields. This fixes that collision of styles. https://d.pr/i/ziiG76 */
-.en__field--102600 label {
-  position: relative !important;
-  -webkit-transform: initial !important;
-  transform: initial !important;
-  opacity: 1 !important;
 }
 
 /* Legacy Template Support */
@@ -381,6 +398,9 @@ body {
     clip-path: inset(100%);
     clip: rect(0 0 0 0);
     overflow: hidden;
+  }
+  .content-preFooter {
+    height: 40px;
   }
 
   .body-headerOutside {
@@ -671,69 +691,69 @@ body:not(#en__pagebuilder)[data-engrid-footer-below-fold]
 }
 
 /* Card */
-.give-by-select .en__field__element--radio .en__field__item:nth-child(1) label {
+.give-by-select .en__field__element--radio .en__field__item.card label span {
+  display: inline-block;
+  height: 20px;
+  width: 20px;
   background-image: url(https://cdn.jsdelivr.net/gh/4site-interactive-studios/Ocean-Conservancy-Engaging-Networks-Template@master/themes/parent-theme/images/icon-card-black.svg);
-  padding-left: 27px !important;
-  background-size: 20px 16px;
-  background-position-x: calc(50% - 23px);
-  background-position-y: calc(50% - 1px);
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: 50%;
+  position: relative;
+  margin-right: 7px;
+  top: 1px;
 }
 
 /* Paypal */
-.give-by-select .en__field__element--radio .en__field__item:nth-child(2) label {
+.give-by-select .en__field__element--radio .en__field__item.paypal label span {
+  display: inline-block;
+  height: 20px;
+  width: 20px;
   background-image: url(https://cdn.jsdelivr.net/gh/4site-interactive-studios/Ocean-Conservancy-Engaging-Networks-Template@master/themes/parent-theme/images/icon-paypal-black.svg);
-  // background-position: left center;
-  // background-repeat: no-repeat;
-  padding-left: 23px !important;
-  background-size: 14px 17px;
-  background-position-x: calc(50% - 29px);
-  background-position-y: calc(50% + 1px);
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: 50%;
+  position: relative;
+  margin-right: 7px;
+  top: 1px;
 }
 
 /* Check */
-.give-by-select .en__field__element--radio .en__field__item:nth-child(3) label {
+.give-by-select .en__field__element--radio .en__field__item.check label span {
+  display: inline-block;
+  height: 20px;
+  width: 20px;
   background-image: url(https://cdn.jsdelivr.net/gh/4site-interactive-studios/Ocean-Conservancy-Engaging-Networks-Template@master/themes/parent-theme/images/icon-check-black.svg);
-  // background-position: left center;
-  // background-repeat: no-repeat;
-  padding-left: 27px !important;
-  background-size: 20px 16px;
-  background-position-x: calc(50% - 27px);
-  background-position-y: calc(50% - 1px);
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: 50%;
+  position: relative;
+  margin-right: 7px;
+  top: 1px;
 }
 
 .give-by-select
   .en__field__element--radio
-  .en__field__item:nth-child(1)
-  label.en__field__label.en__field__label--item:hover,
-.give-by-select
-  .en__field__element--radio
-  .en__field__item:nth-child(1)
-  input[type="radio"]:checked
-  + label {
+  .en__field__item.card
+  input:checked
+  + label
+  span {
   background-image: url(https://cdn.jsdelivr.net/gh/4site-interactive-studios/Ocean-Conservancy-Engaging-Networks-Template@master/themes/parent-theme/images/icon-card-white.svg);
 }
-
 .give-by-select
   .en__field__element--radio
-  .en__field__item:nth-child(2)
-  label.en__field__label.en__field__label--item:hover,
-.give-by-select
-  .en__field__element--radio
-  .en__field__item:nth-child(2)
-  input[type="radio"]:checked
-  + label {
+  .en__field__item.paypal
+  input:checked
+  + label
+  span {
   background-image: url(https://cdn.jsdelivr.net/gh/4site-interactive-studios/Ocean-Conservancy-Engaging-Networks-Template@master/themes/parent-theme/images/icon-paypal-white.svg);
 }
-
 .give-by-select
   .en__field__element--radio
-  .en__field__item:nth-child(3)
-  label.en__field__label.en__field__label--item:hover,
-.give-by-select
-  .en__field__element--radio
-  .en__field__item:nth-child(3)
-  input[type="radio"]:checked
-  + label {
+  .en__field__item.check
+  input:checked
+  + label
+  span {
   background-image: url(https://cdn.jsdelivr.net/gh/4site-interactive-studios/Ocean-Conservancy-Engaging-Networks-Template@master/themes/parent-theme/images/icon-check-white.svg);
 }
 
@@ -1245,10 +1265,10 @@ input[name="transaction.donationAmt.other"] {
 
 .en__component--advrow .body-header:before,
 .en__component--advrow .body-banner:before,
-.en__component--advrow .body-top:before,
+// .en__component--advrow .body-top:before,
 .en__component--advrow .body-side:before,
-.en__component--advrow .body-main:before,
-.en__component--advrow .body-bottom:before,
+// .en__component--advrow .body-main:before,
+// .en__component--advrow .body-bottom:before,
 .en__component--advrow .body-footer:before {
   content: "";
   position: absolute;
@@ -1349,9 +1369,20 @@ img.oc-gs-logo {
   max-width: 370px;
   margin-left: auto;
   margin-right: auto;
+  margin-top: 40px;
+  margin-bottom: 40px;
   button {
     padding: 11px 0;
     font-size: 20px;
+    margin-top: 0;
+    margin-bottom: 0;
+    background-color: var(--theme-cta);
+    border-color: var(--theme-cta);
+    color: var(--color-white);
+    &:hover {
+      background-color: var(--theme-cta-hover);
+      border-color: var(--theme-cta-hover);
+    }
   }
 }
 
@@ -1504,4 +1535,49 @@ div[id^="nb-field-"] div.nb-feedback {
 .has-give-once .en__field--giveBySelect .en__field__item.check,
 .give-by-select-2-options .en__field--giveBySelect .en__field__item.check {
   display: none;
+}
+
+.en__field--recurrfreq {
+  margin-top: 25px;
+}
+
+.en__field--recurrfreq.en__field--radio input[type="radio"] + label {
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+}
+.en__component
+  .en__field--donationAmt.en__field.en__field--radio
+  .en__field__item:not(.en__field__item--other) {
+  flex-basis: 24%;
+  min-width: 120px;
+}
+.en__component
+  .en__field--donationAmt.en__field.en__field--radio
+  .en__field__item.en__field__item--other
+  input {
+  border-radius: var(--theme-typography-button-border-radius);
+  &:focus {
+    background-color: var(
+      --theme-typography-donation-amount-button-checked-background-color
+    );
+  }
+}
+
+.en__field--donationAmt.en__field--radio
+  .en__field__item--other:not(.en__field__item--hidden)
+  input {
+  background-color: var(
+    --theme-typography-donation-amount-button-checked-background-color
+  );
+  color: var(--theme-typography-donation-amount-button-checked-color);
+}
+
+.en__field__input--checkbox:checked + .en__field__label:after {
+  left: -27px;
+  top: 6px;
+}
+.give-by-select.en__field--radio input[type="radio"] + label {
+  flex-basis: 100%;
+  justify-content: center;
 }
