@@ -1,5 +1,6 @@
 /* ENGRID */
 @import "@4site/engrid-styles";
+// @import "../../../engrid-scripts/packages/styles";
 
 /* THEME STYLING AND LAYOUTS */
 @import "./page-template-variables";
@@ -9,6 +10,6 @@
 /* ENGRID PAGE TEMPLATES MAKES THE BODY INVISIBLE SO THE USER NEVER SEE'S AN UNSTYLED PAGE*/
 /* THIS MAKES THE BODY VISIBLE AFTER IT'S DOWNLOADED AND PARSED BY THE BROWSER */
 body {
-    opacity: 1;
-    transition: opacity 0.2s;
+  opacity: 1;
+  transition: opacity 0.2s;
 }

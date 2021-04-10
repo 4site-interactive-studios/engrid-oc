@@ -1,5 +1,5 @@
 /* Add your custom theme styles here */
-@media screen and (max-width: 600px) {
+@include mq($until: tablet) {
   // Remove down arrow when giving frequency wraps
   [data-engrid-theme="oc"] {
     .monthly-gift-upsell-tooltip .highlight:after {

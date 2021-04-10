@@ -157,6 +157,7 @@ const options: Options = {
   CurrencySymbol: '$',
   CurrencySeparator: '.',
   MediaAttribution: true,
+  Debug: false,
   onLoad: () => { console.log("Starter Theme Loaded"); dataCapture(); },
   onResize: () => console.log("Starter Theme Window Resized"),
   onSubmit: () => {
