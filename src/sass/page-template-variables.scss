@@ -141,7 +141,7 @@
   // TYPOGRAPHY CHECKBOX
   --theme-typography-checkbox-color: var(--color-white);
   --theme-typography-checkbox-background-color: var(--color-white);
-  --theme-typography-checkbox-border-width: 2px;
+  --theme-typography-checkbox-border-width: 1px;
   --theme-typography-checkbox-border-color: var(--theme-off-black);
   --theme-typography-checkbox-border-radius: 50px;
 
@@ -250,9 +250,9 @@
   --theme-typography-button-font-weight: bold;
   --theme-typography-button-line-height: initial;
   --theme-typography-button-background-color: var(--color-white);
-  --theme-typography-button-border-width: 2px;
+  --theme-typography-button-border-width: 1px;
   --theme-typography-button-border-color: var(--color-black);
-  --theme-typography-button-border-radius: 50px;
+  --theme-typography-button-border-radius: 1000px;
 
   // TYPOGRAPHY BUTTON:HOVER
   --theme-typography-button-hover-color: var(--theme-typography-button-color);
