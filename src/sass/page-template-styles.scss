@@ -10,13 +10,62 @@
 }
 
 [data-engrid-theme="oc"] {
+
+  /*
+  * ##########################################################
+  * # HIDE UNUSED SECTIONS
+  * ##########################################################
+  */
+  .page-alert,
+  .content-header,
+  .body-headerOutside,
+  .body-footerOutside,
+  .content-preFooter,
+  .page-backgroundImageOverlay{
+    display: none;
+  }
+
+  body#en__pagebuilder .content-footerSpacer {
+    display: none;
+  }
+
+  // Fixes an issue with the border radius of the error field
+  // https://d.pr/i/DrbKU0
+  div:not(.manual-form-layout) .en__field--donationAmt.en__field--withOther.en__field--validationFailed .en__field__element--radio {
+      border-radius: 5px !important;
+  }
+
   --background-image: url("https://aaf1a18515da0e792f78-c27fdabe952dfc357fe25ebf5c8897ee.ssl.cf5.rackcdn.com/1991/gray_pattern-optimized-2.jpg?v=1598492702000");
   --theme-page-backgroundImage-background-color: #f3f3f3;
   
-  // When Captcha is present force it to occupy the full width of the row
+  // When Captcha is present force it to occupy the full width of the row and center it
   // @TODO Move into ENGrid
   .en__captcha{
     flex-basis: 100%;
+    align-items: center;
+  }
+
+  // Fixes an issue with how the ecard thumbnails are being displayed
+  .en__ecarditems__list{
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .en__ecarditems__thumb{
+    flex-basis: calc((100% - 3.75rem) / 3);
+  }
+
+
+  .en__twitterTarget__image {
+    width: 50px;
+  }
+
+  .en__tweetButton__send a,
+  .en__tweetButton__sent a  {
+    background-color: #039bc4;
+    padding: 11px 0;
+    color: #ffffff;
+    min-width: 150px;
   }
 
   .en__field--donationAmt div.en__field__item:not(.en__field__item--other) {
@@ -32,6 +81,20 @@
   .en__field--donationAmt div.en__field__item label{
     margin-left: 0;
     margin-right: 0;
+  }
+
+  .en__contactDetails__rows{
+    margin-left: 32px;
+    width: 100%;
+  }
+
+  .en__contactDetails__rows:before {
+      left: 0px;
+  }
+
+  .en__contactDetails__select:checked + .en__contactDetails__rows:after{
+    left: 5px;
+    top: 6px;
   }
 
   @mixin on-mobile{
@@ -53,6 +116,12 @@
       margin-bottom: 40px;
     }
   }
+
+  @mixin simplified-page-backgroundImage {
+    .page-backgroundImage {
+      display: none;
+    }
+  }
   
   // Universal stylings
   // &[data-engrid-layout] {
@@ -69,32 +138,35 @@
   &[data-engrid-layout="centercenter1col"],
   &[data-engrid-layout="centerright1col"] {
     @media screen and (max-width: 600px) {
-      @include on-mobile
+      @include on-mobile;
+      @include simplified-page-backgroundImage;
     }
 
     @media screen and (min-width: 600px) {
-      @include on-desktop
+      @include on-desktop;
     }
   }
   
   &[data-engrid-layout="leftleft1col"],
   &[data-engrid-layout="rightright1col"] {
     @media screen and (max-width: 774px) {
-      @include on-mobile
+      @include on-mobile;
+      @include simplified-page-backgroundImage;
     }
 
     @media screen and (min-width: 774px) {
-      @include on-desktop
+      @include on-desktop;
     }
   }
   
   &[data-engrid-layout="centercenter2col"] {
     @media screen and (max-width: 1200px) {
-      @include on-mobile
+      @include on-mobile;
+      @include simplified-page-backgroundImage;
     }
 
     @media screen and (min-width: 1200px) {
-      @include on-desktop
+      @include on-desktop;
     }
   }
 
@@ -153,6 +225,10 @@
   .en__field--giveBySelect input:focus + label,
   .en__submit button{
     outline: none;
+  }
+
+  .dynamic-giving-button .en__submit button{
+    text-transform: capitalize;
   }
 
   /*
