@@ -277,47 +277,23 @@
   --theme-typography-recurring-frequency-button-color: var(
     --theme-typography-button-color
   );
-  --theme-typography-recurring-frequency-button-font-size: var(
-    --theme-typography-button-font-size
-  );
-  --theme-typography-recurring-frequency-button-font-weight: var(
-    --theme-typography-button-font-weight
-  );
-  --theme-typography-recurring-frequency-button-line-height: var(
-    --theme-typography-button-line-height
-  );
-  --theme-typography-recurring-frequency-button-background-color: var(
-    --theme-typography-button-background-color
-  );
-  --theme-typography-recurring-frequency-button-border-width: var(
-    --theme-typography-button-border-width
-  );
-  --theme-typography-recurring-frequency-button-border-color: var(
-    --theme-typography-button-border-color
-  );
-  --theme-typography-recurring-frequency-button-border-radius: var(
-    --theme-typography-button-border-radius
-  );
+  --theme-typography-recurring-frequency-button-font-size: 14px;
+  --theme-typography-recurring-frequency-button-font-weight: 400;
+  --theme-typography-recurring-frequency-button-line-height: 21px;
+  --theme-typography-recurring-frequency-button-background-color: none;
+  --theme-typography-recurring-frequency-button-border-width: 0px;
+  --theme-typography-recurring-frequency-button-border-color: initial;
+  --theme-typography-recurring-frequency-button-border-radius: 0px;
 
   // TYPOGRAPHY GIVING FREQUENCY BUTTON:HOVER
-  --theme-typography-recurring-frequency-button-hover-color: var(--color-white);
-  --theme-typography-recurring-frequency-button-hover-background-color: var(
-    --color-black
-  );
-  --theme-typography-recurring-frequency-button-hover-border-color: var(
-    --theme-typography-button-hover-border-color
-  );
+  --theme-typography-recurring-frequency-button-hover-color: var(--theme-typography-recurring-frequency-button-color);
+  --theme-typography-recurring-frequency-button-hover-background-color: none;
+  --theme-typography-recurring-frequency-button-hover-border-color: none;
 
   // TYPOGRAPHY GIVING FREQUENCY BUTTON:CHECKED
-  --theme-typography-recurring-frequency-button-checked-color: var(
-    --color-white
-  );
-  --theme-typography-recurring-frequency-button-checked-background-color: var(
-    --theme-cta
-  );
-  --theme-typography-recurring-frequency-button-checked-border-color: var(
-    --theme-cta
-  );
+  --theme-typography-recurring-frequency-button-checked-color: var(--theme-typography-recurring-frequency-button-color);
+  --theme-typography-recurring-frequency-button-checked-background-color: none;
+  --theme-typography-recurring-frequency-button-checked-border-color: none;
 
   // TYPOGRAPHY GIVING AMOUNT BUTTON
   --theme-typography-donation-amount-button-font-family: var(
@@ -326,9 +302,7 @@
   --theme-typography-donation-amount-button-color: var(
     --theme-typography-button-color
   );
-  --theme-typography-donation-amount-button-font-size: var(
-    --theme-typography-button-font-size
-  );
+  --theme-typography-donation-amount-button-font-size: 16px;
   --theme-typography-donation-amount-button-font-weight: 400;
   --theme-typography-donation-amount-button-line-height: var(
     --theme-typography-button-line-height
@@ -371,15 +345,9 @@
   --theme-typography-give-by-select-button-color: var(
     --theme-typography-button-color
   );
-  --theme-typography-give-by-select-button-font-size: var(
-    --theme-typography-button-font-size
-  );
-  --theme-typography-give-by-select-button-font-weight: var(
-    --theme-typography-button-font-weight
-  );
-  --theme-typography-give-by-select-button-line-height: var(
-    --theme-typography-button-line-height
-  );
+  --theme-typography-give-by-select-button-font-size: 16px;
+  --theme-typography-give-by-select-button-font-weight: 500;
+  --theme-typography-give-by-select-button-line-height: 24px;
   --theme-typography-give-by-select-button-background-color: var(
     --theme-typography-button-background-color
   );
