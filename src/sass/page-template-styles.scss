@@ -28,6 +28,81 @@
     display: none;
   }
 
+  @mixin smart-trim-child-element-margin-and-padding{
+      // Let it butt right up against the top of the section
+      & > div:first-of-type > :first-child {
+        margin-top: 0px;
+        padding-top: 0px;
+      }
+  
+      // Let the second to last element determine the spacing between it and the last element
+      // Let the parent section determin the spacing between the last element and the next section
+      & > div:last-of-type > :last-child {
+        margin-top: 0;
+        padding-top: 0;
+        padding-bottom: 0;
+        margin-bottom: 0;
+      }
+  }
+
+  /*
+  * ##########################################################
+  * # BODY TITLE
+  * ##########################################################
+  */
+  
+    .body-title:not(:empty) {
+      padding-top: 2rem;
+      padding-bottom: 1rem;
+  
+      @include smart-trim-child-element-margin-and-padding;
+
+      h1{
+        text-align: center;
+      }
+    }
+
+  /*
+  * ##########################################################
+  * # BODY TOP
+  * ##########################################################
+  */
+
+  .body-top:not(:empty) {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+
+    @include smart-trim-child-element-margin-and-padding;
+  }
+
+  /*
+  * ##########################################################
+  * # BODY MAIN
+  * ##########################################################
+  */
+
+  .body-main:not(:empty) {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    @include smart-trim-child-element-margin-and-padding;
+  }
+
+  /*
+  * ##########################################################
+  * # BODY BOTTOM
+  * ##########################################################
+  */
+
+  .body-bottom:not(:empty) {
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    @include smart-trim-child-element-margin-and-padding;
+
+    div{
+      margin-bottom: 0.5rem;
+    }
+  }
+
   // Fixes an issue with the border radius of the error field
   // https://d.pr/i/DrbKU0
   div:not(.manual-form-layout)
@@ -447,17 +522,10 @@ body:not(#en__pagebuilder) {
 }
 
 h1 {
-  color: var(--color-black);
-  font-family: "Roboto", sans-serif;
-  font-size: calc(0.05552rem * 48);
+  color: var(--theme-cta);
+  font-size: 1.75rem;
   font-weight: 900;
-  font-stretch: normal;
-  font-style: normal;
   line-height: normal;
-  letter-spacing: -1px;
-  text-align: center;
-  margin-bottom: 0;
-  text-transform: uppercase;
 }
 
 h2 {
