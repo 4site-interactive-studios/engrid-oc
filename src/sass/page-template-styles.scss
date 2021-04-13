@@ -99,7 +99,15 @@
     top: 6px;
   }
 
-  @mixin on-mobile {
+  /* Correct the sizing of the H2 Header that is moved inside a form component with JS before page render */
+  .en__field--donationAmt h2 {
+      margin-left: .5rem;
+      margin-right: 0;
+      width: calc(100% - 1rem);
+  }
+
+  @mixin on-mobile{
+
   }
 
   @mixin on-desktop {
@@ -1802,3 +1810,94 @@ div[id^="nb-field-"] div.nb-feedback {
   flex-basis: 100%;
   justify-content: center;
 }
+
+/*
+* ##########################################################
+* # NeverBounce
+* ##########################################################
+*/
+div[id^=nb-wrapper] {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+div[id^=nb-wrapper] div.nb-feedback {
+      border-top: 0px solid transparent !important;
+      border-right: 1px solid transparent !important;
+      border-bottom: 1px solid transparent !important;
+      border-left: 1px solid transparent !important;
+      border-radius: 0 0 0.3rem 0.3rem !important;
+      box-sizing: border-box!important;
+      color: #999999!important;
+      font-family: Helvetica Neue,Helvetica,Arial,sans-serif!important;
+      font-size: .75em!important;
+      line-height: normal!important;
+      padding: 0.5rem !important;
+      position: relative!important;
+      display: block!important;
+      width: 100%!important;
+      max-width: 100%!important;
+      box-shadow: none!important;
+  }
+  div[id^=nb-wrapper] div.nb-hidden {
+      display: none!important;
+  }
+  
+  /* Style upon being wrapped and having a validation message displayed*/
+  div[id^=nb-wrapper] .nb-loading input,
+  div[id^=nb-wrapper].nb-error input,
+  div[id^=nb-wrapper].nb-success input{
+      margin-bottom: 0!important;
+      border-bottom-right-radius: 0!important;
+      border-bottom-left-radius: 0!important;
+  }
+  div[id^=nb-wrapper] .nb-loading.nb-feedback,
+  div[id^=nb-wrapper].nb-error div.nb-feedback,
+  div[id^=nb-wrapper].nb-success div.nb-feedback{
+      border-top-right-radius: 0!important;
+      border-top-left-radius: 0!important;
+  }
+
+  div[id^=nb-wrapper] .nb-loading #en__field_supporter_emailAddress,
+  div[id^=nb-wrapper].nb-error #en__field_supporter_emailAddress,
+  div[id^=nb-wrapper].nb-success #en__field_supporter_emailAddress{
+    outline: none;
+  }
+
+  /* Style notice while checking */
+  div[id^=nb-wrapper] div.nb-loading.nb-feedback{
+     border-color: #323232!important;
+  }
+  
+  /* Style upon error */
+  div[id^=nb-wrapper].nb-error input{
+      border-color: #e74b3c!important;
+      color: #999999!important;
+      background-color: initial !important;
+      color: #0a0a0a !important;
+  }
+  div[id^=nb-wrapper].nb-error div.nb-feedback{
+      border-color: #e74b3c!important;
+      color: #e74b3c!important;
+      background-color: #e74b3c !important;
+      color: #ffffff !important;
+  }
+  /* Style upon success */
+  div[id^=nb-wrapper].nb-success input {
+      border-color: #009bc4!important;
+  }
+  div[id^=nb-wrapper].nb-success div.nb-feedback {
+      border-color: #009bc4!important;
+      background-color: #009bc4!important;
+      color: #ffffff!important;
+  }
+  div[id^=nb-wrapper].nb-loading #nb-feedback:after {
+    overflow: hidden;
+    display: inline-block;
+    vertical-align: bottom;
+    -webkit-animation: ellipsis steps(4,end) 900ms infinite;      
+    animation: ellipsis steps(4,end) 900ms infinite;
+    content: "\2026"; /* ascii code for the ellipsis character */
+    width: 0px;
+  }
