@@ -119,6 +119,7 @@
   .en__captcha {
     flex-basis: 100%;
     align-items: center;
+    margin-bottom: 1rem;
   }
 
   // Fixes an issue with how the ecard thumbnails are being displayed
@@ -252,6 +253,19 @@
     @media screen and (min-width: 1200px) {
       @include on-desktop;
     }
+  }
+
+  // On smaller displays center the logo
+  @media screen and (max-width: 600px) {
+    .body-header{
+      justify-content: center;
+      min-height: auto !important;
+
+      p{
+        margin-bottom: 0;
+      }
+    }
+
   }
 
   .en__field--recurrfreq {
@@ -408,7 +422,7 @@ body {
         rbc-start] minmax(250px, 420px) [rbc-end bc-end
         rcc-start] minmax(25px, 250px) [rcc-end cc-end
         rpc-start] minmax(25px, 1fr) [rpc-end pc-end
-        ] !important;
+        ];
     }
   }
 }
@@ -913,8 +927,8 @@ body#en__pagebuilder {
   .en__component--advrow .body-main,
   .en__component--advrow .body-bottom,
   .en__component--advrow .body-footer {
-    padding-left: 6.5rem;
-    padding-right: 6.5rem;
+    // padding-left: 6.5rem;
+    // padding-right: 6.5rem;
   }
 
   .en__component--advrow .body-header,
@@ -1768,7 +1782,6 @@ div[id^="nb-field-"] div.nb-feedback {
 @media screen and (min-width: 600px) {
   [data-engrid-layout="centerleft1col"],
   [data-engrid-layout="centercenter1col"],
-  [data-engrid-layout="centercenter2col"],
   [data-engrid-layout="centerright1col"] {
     .body-header {
       margin-top: 3rem;
@@ -1969,3 +1982,147 @@ div[id^=nb-wrapper] div.nb-feedback {
     content: "\2026"; /* ascii code for the ellipsis character */
     width: 0px;
   }
+
+/*
+* ##########################################################
+* # ENGRID LAYOUTS
+* # GRID COLUMN AND GRID ROW POSITIONING
+* ##########################################################
+*/
+
+[data-engrid-theme="oc"][data-engrid-layout="centercenter2col"] {
+  @media screen and (min-width: 1000px) {
+    /* prettier-ignore */
+    .en__component--advrow,
+          .en__component--advrow .pseudo-subgrid {
+              /* autoprefixer grid: off */
+              grid-template-columns:
+              [
+                  pc-start lpc-start]  minmax(0px, 0px)     [lpc-end
+                  cc-start lcc-start]  minmax(0px, 1fr)     [lcc-end
+                  bc-start lbc-start]  minmax(0px, 485px)   [lbc-end
+                  rbc-start]           minmax(0px, 485px)   [rbc-end bc-end
+                  rcc-start]           minmax(0px, 1fr)     [rcc-end cc-end
+                  rpc-start]           minmax(0px, 0px)     [rpc-end pc-end             
+              ];
+
+              grid-template-rows:
+              [
+                page-start page-alert-start]        min-content        [page-alert-end
+                content-header-start]               min-content        [content-header-end
+                body-headerOutside-start]           min-content        [body-headerOutside-end
+                body-header-start]                  min-content        [body-header-end
+                body-title-start]                   min-content        [body-title-end
+                body-banner-start]                  min-content        [body-banner-end
+                body-bannerOverlay-start]           min-content        [body-bannerOverlay-end
+                body-top-start]                     minmax(0px, 1fr)   [body-top-end
+                body-side-start]                    min-content        [body-side-end  
+                body-main-start]                    min-content        [body-main-end  
+                body-bottom-start]                  min-content        [body-bottom-end  
+                body-footer-start]                  min-content        [body-footer-end
+                body-footerOutside-start]           min-content        [body-footerOutside-end  
+                content-footerSpacer-start]         max-content        [content-footerSpacer-end
+                content-preFooter-start]            min-content        [content-preFooter-end
+                content-footer-start]               min-content        [content-footer-end
+                page-backgroundImage-start]         min-content        [page-backgroundImage-end
+                page-backgroundImageOverlay-start]  min-content        [page-backgroundImageOverlay-end page-end
+                page-customCode-start]              min-content        [page-customCode-end        
+              ];  
+          }
+
+    .body-header{
+      grid-column: pc;
+      margin-top: 0;
+    }
+
+    .body-title {
+      grid-row: body-header-end / body-title-end;
+    }
+
+    .body-banner,
+    .body-bannerOverlay {
+      grid-row: body-title-end / body-banner-end;
+    }
+
+    .body-top {
+      grid-row: body-banner-end / body-bottom-end;
+    }
+
+    .body-main {
+      grid-row: body-header-end / body-bottom-start;
+    }
+
+    .body-bottom {
+      grid-row: body-main-end / body-bottom-end;
+    }
+  }
+
+  @media screen and (max-width: 999px) {
+    --theme-body-padding: 0px 24px;
+    /* prettier-ignore */
+    .en__component--advrow,
+    .en__component--advrow .pseudo-subgrid {
+        /* autoprefixer grid: off */
+        grid-template-columns:
+        [
+            pc-start lpc-start]  minmax(0px, 0px)    [lpc-end
+            cc-start lcc-start]  minmax(0px, 0px)    [lcc-end
+            bc-start lbc-start]  minmax(0px, 50vw)   [lbc-end
+            rbc-start]           minmax(0px, 50vw)   [rbc-end bc-end
+            rcc-start]           minmax(0px, 0px)    [rcc-end cc-end
+            rpc-start]           minmax(0px, 0px)    [rpc-end pc-end             
+        ];
+    }
+
+    .en__component--advrow > div {
+      grid-column: pc;
+    }
+  }
+}
+
+[data-engrid-theme="oc"][data-engrid-layout="centercenter2col"] {
+  --theme-body-padding: 0px 50px;
+
+  .body-main:not(:empty) {
+    padding-top: 36px;
+  }
+
+  // Remove the box body based shadow, otherwise it will overlap with the side-by-side content
+  .body-header:before,
+  .body-title:before,
+  .body-banner:before,
+  .body-top:before,
+  .body-side:before,
+  .body-main:before,
+  .body-bottom:before,
+  .body-footer:before {
+    display: none;
+  }
+
+  .body-bottom:not(:empty) {
+    padding-bottom: 60px;
+  }
+
+  @media screen and (min-width: 1000px) {
+    .body-header {
+      margin-bottom: 80px;
+      border-radius: 0;
+    }
+
+    .body-title{
+      border-top-left-radius: 5px;
+    }
+
+    .body-main{
+      border-top-right-radius: 5px;
+    }
+
+    .body-footer {
+      margin-bottom: 80px;
+    }
+  }
+
+  @media screen and (max-width: 999px) {
+    --theme-body-padding: 0px 24px;
+  }
+}
