@@ -343,6 +343,24 @@
     flex-basis: calc(100% / 3);
     min-width: 12ch;
   }
+
+  /*
+  * ##########################################################
+  * # GENERAL: Inline Label Tooltip
+  * ##########################################################
+  */
+  
+    label a.label-tooltip {
+      text-transform: none;
+      position: absolute;
+      right: 0;
+      text-decoration: underline;
+      // color: #767676;
+      opacity: 0.8;
+      font-weight: 400;
+    }
+
+
 }
 
 /*
