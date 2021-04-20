@@ -150,7 +150,6 @@ function dataCapture() {
 }
 
 const options: Options = {
-  ModalDebug: true,
   applePay: false,
   CapitalizeFields: true,
   ClickToExpand: true,
@@ -159,7 +158,7 @@ const options: Options = {
   MediaAttribution: true,
   SkipToMainContentLink: true,
   SrcDefer: true,
-  Debug: false,
+  Debug: App.getUrlParameter('debug') == 'true' ? true : false,
   onLoad: () => { console.log("Starter Theme Loaded"); dataCapture(); },
   onResize: () => console.log("Starter Theme Window Resized"),
   onSubmit: () => {

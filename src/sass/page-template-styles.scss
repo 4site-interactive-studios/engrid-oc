@@ -9,13 +9,14 @@
   }
 }
 
-body:not(#en__pagebuilder){
-  background: #f3f3f3 url("https://aaf1a18515da0e792f78-c27fdabe952dfc357fe25ebf5c8897ee.ssl.cf5.rackcdn.com/1991/gray_pattern-optimized.jpg?v=1527883852000") repeat;
+body:not(#en__pagebuilder) {
+  background: #f3f3f3
+    url("https://aaf1a18515da0e792f78-c27fdabe952dfc357fe25ebf5c8897ee.ssl.cf5.rackcdn.com/1991/gray_pattern-optimized.jpg?v=1527883852000")
+    repeat;
   background-position: left top;
 }
 
 [data-engrid-theme="oc"] {
-
   /*
   * ##########################################################
   * # HIDE UNUSED SECTIONS
@@ -34,21 +35,21 @@ body:not(#en__pagebuilder){
     display: none;
   }
 
-  @mixin smart-trim-child-element-margin-and-padding{
-      // Let it butt right up against the top of the section
-      & > div:first-of-type > :first-child {
-        margin-top: 0px;
-        padding-top: 0px;
-      }
-  
-      // Let the second to last element determine the spacing between it and the last element
-      // Let the parent section determin the spacing between the last element and the next section
-      & > div:last-of-type > :last-child {
-        margin-top: 0;
-        padding-top: 0;
-        padding-bottom: 0;
-        margin-bottom: 0;
-      }
+  @mixin smart-trim-child-element-margin-and-padding {
+    // Let it butt right up against the top of the section
+    & > div:first-of-type > :first-child {
+      margin-top: 0px;
+      padding-top: 0px;
+    }
+
+    // Let the second to last element determine the spacing between it and the last element
+    // Let the parent section determin the spacing between the last element and the next section
+    & > div:last-of-type > :last-child {
+      margin-top: 0;
+      padding-top: 0;
+      padding-bottom: 0;
+      margin-bottom: 0;
+    }
   }
 
   /*
@@ -56,17 +57,17 @@ body:not(#en__pagebuilder){
   * # BODY TITLE
   * ##########################################################
   */
-  
-    .body-title:not(:empty) {
-      padding-top: 2rem;
-      padding-bottom: 1rem;
-  
-      @include smart-trim-child-element-margin-and-padding;
 
-      h1{
-        text-align: center;
-      }
+  .body-title:not(:empty) {
+    padding-top: 2rem;
+    padding-bottom: 1rem;
+
+    @include smart-trim-child-element-margin-and-padding;
+
+    h1 {
+      text-align: center;
     }
+  }
 
   /*
   * ##########################################################
@@ -99,8 +100,8 @@ body:not(#en__pagebuilder){
   * ##########################################################
   */
 
-  .body-bottom{
-    p{
+  .body-bottom {
+    p {
       font-size: 80%;
       opacity: 0.8;
     }
@@ -111,7 +112,7 @@ body:not(#en__pagebuilder){
     padding-bottom: 1rem;
     @include smart-trim-child-element-margin-and-padding;
 
-    div{
+    div {
       margin-bottom: 1rem;
     }
   }
@@ -190,13 +191,12 @@ body:not(#en__pagebuilder){
 
   /* Correct the sizing of the H2 Header that is moved inside a form component with JS before page render */
   .en__field--donationAmt h2 {
-      margin-left: .5rem;
-      margin-right: 0;
-      width: calc(100% - 1rem);
+    margin-left: 0.5rem;
+    margin-right: 0;
+    width: calc(100% - 1rem);
   }
 
-  @mixin on-mobile{
-
+  @mixin on-mobile {
   }
 
   @mixin on-desktop {
@@ -272,16 +272,15 @@ body:not(#en__pagebuilder){
 
   // On smaller displays center the logo
   @media screen and (max-width: 600px) {
-    .body-header{
+    .body-header {
       justify-content: center;
       min-height: auto !important;
       padding: 0.9375rem 1.875rem 0 1.875rem;
 
-      p{
+      p {
         margin: 0;
       }
     }
-
   }
 
   .en__field--recurrfreq {
@@ -365,18 +364,16 @@ body:not(#en__pagebuilder){
   * # GENERAL: Inline Label Tooltip
   * ##########################################################
   */
-  
-    label a.label-tooltip {
-      text-transform: none;
-      position: absolute;
-      right: 0;
-      text-decoration: underline;
-      // color: #767676;
-      opacity: 0.8;
-      font-weight: 400;
-    }
 
-
+  label a.label-tooltip {
+    text-transform: none;
+    position: absolute;
+    right: 0;
+    text-decoration: underline;
+    // color: #767676;
+    opacity: 0.8;
+    font-weight: 400;
+  }
 }
 
 /*
@@ -1931,91 +1928,91 @@ div[id^="nb-field-"] div.nb-feedback {
 * # NeverBounce
 * ##########################################################
 */
-div[id^=nb-wrapper] {
+div[id^="nb-wrapper"] {
   width: 100%;
   display: flex;
   flex-direction: column;
 }
 
-div[id^=nb-wrapper] div.nb-feedback {
-      border-top: 0px solid transparent !important;
-      border-right: 1px solid transparent !important;
-      border-bottom: 1px solid transparent !important;
-      border-left: 1px solid transparent !important;
-      border-radius: 0 0 0.3rem 0.3rem !important;
-      box-sizing: border-box!important;
-      color: #999999!important;
-      font-family: Helvetica Neue,Helvetica,Arial,sans-serif!important;
-      font-size: .75em!important;
-      line-height: normal!important;
-      padding: 0.5rem !important;
-      position: relative!important;
-      display: block!important;
-      width: 100%!important;
-      max-width: 100%!important;
-      box-shadow: none!important;
-  }
-  div[id^=nb-wrapper] div.nb-hidden {
-      display: none!important;
-  }
-  
-  /* Style upon being wrapped and having a validation message displayed*/
-  div[id^=nb-wrapper] .nb-loading input,
-  div[id^=nb-wrapper].nb-error input,
-  div[id^=nb-wrapper].nb-success input{
-      margin-bottom: 0!important;
-      border-bottom-right-radius: 0!important;
-      border-bottom-left-radius: 0!important;
-  }
-  div[id^=nb-wrapper] .nb-loading.nb-feedback,
-  div[id^=nb-wrapper].nb-error div.nb-feedback,
-  div[id^=nb-wrapper].nb-success div.nb-feedback{
-      border-top-right-radius: 0!important;
-      border-top-left-radius: 0!important;
-  }
+div[id^="nb-wrapper"] div.nb-feedback {
+  border-top: 0px solid transparent !important;
+  border-right: 1px solid transparent !important;
+  border-bottom: 1px solid transparent !important;
+  border-left: 1px solid transparent !important;
+  border-radius: 0 0 0.3rem 0.3rem !important;
+  box-sizing: border-box !important;
+  color: #999999 !important;
+  font-family: Helvetica Neue, Helvetica, Arial, sans-serif !important;
+  font-size: 0.75em !important;
+  line-height: normal !important;
+  padding: 0.5rem !important;
+  position: relative !important;
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  box-shadow: none !important;
+}
+div[id^="nb-wrapper"] div.nb-hidden {
+  display: none !important;
+}
 
-  div[id^=nb-wrapper] .nb-loading #en__field_supporter_emailAddress,
-  div[id^=nb-wrapper].nb-error #en__field_supporter_emailAddress,
-  div[id^=nb-wrapper].nb-success #en__field_supporter_emailAddress{
-    outline: none;
-  }
+/* Style upon being wrapped and having a validation message displayed*/
+div[id^="nb-wrapper"] .nb-loading input,
+div[id^="nb-wrapper"].nb-error input,
+div[id^="nb-wrapper"].nb-success input {
+  margin-bottom: 0 !important;
+  border-bottom-right-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+}
+div[id^="nb-wrapper"] .nb-loading.nb-feedback,
+div[id^="nb-wrapper"].nb-error div.nb-feedback,
+div[id^="nb-wrapper"].nb-success div.nb-feedback {
+  border-top-right-radius: 0 !important;
+  border-top-left-radius: 0 !important;
+}
 
-  /* Style notice while checking */
-  div[id^=nb-wrapper] div.nb-loading.nb-feedback{
-     border-color: #323232!important;
-  }
-  
-  /* Style upon error */
-  div[id^=nb-wrapper].nb-error input{
-      border-color: #e74b3c!important;
-      color: #999999!important;
-      background-color: initial !important;
-      color: #0a0a0a !important;
-  }
-  div[id^=nb-wrapper].nb-error div.nb-feedback{
-      border-color: #e74b3c!important;
-      color: #e74b3c!important;
-      background-color: #e74b3c !important;
-      color: #ffffff !important;
-  }
-  /* Style upon success */
-  div[id^=nb-wrapper].nb-success input {
-      border-color: #009bc4!important;
-  }
-  div[id^=nb-wrapper].nb-success div.nb-feedback {
-      border-color: #009bc4!important;
-      background-color: #009bc4!important;
-      color: #ffffff!important;
-  }
-  div[id^=nb-wrapper].nb-loading #nb-feedback:after {
-    overflow: hidden;
-    display: inline-block;
-    vertical-align: bottom;
-    -webkit-animation: ellipsis steps(4,end) 900ms infinite;      
-    animation: ellipsis steps(4,end) 900ms infinite;
-    content: "\2026"; /* ascii code for the ellipsis character */
-    width: 0px;
-  }
+div[id^="nb-wrapper"] .nb-loading #en__field_supporter_emailAddress,
+div[id^="nb-wrapper"].nb-error #en__field_supporter_emailAddress,
+div[id^="nb-wrapper"].nb-success #en__field_supporter_emailAddress {
+  outline: none;
+}
+
+/* Style notice while checking */
+div[id^="nb-wrapper"] div.nb-loading.nb-feedback {
+  border-color: #323232 !important;
+}
+
+/* Style upon error */
+div[id^="nb-wrapper"].nb-error input {
+  border-color: #e74b3c !important;
+  color: #999999 !important;
+  background-color: initial !important;
+  color: #0a0a0a !important;
+}
+div[id^="nb-wrapper"].nb-error div.nb-feedback {
+  border-color: #e74b3c !important;
+  color: #e74b3c !important;
+  background-color: #e74b3c !important;
+  color: #ffffff !important;
+}
+/* Style upon success */
+div[id^="nb-wrapper"].nb-success input {
+  border-color: #009bc4 !important;
+}
+div[id^="nb-wrapper"].nb-success div.nb-feedback {
+  border-color: #009bc4 !important;
+  background-color: #009bc4 !important;
+  color: #ffffff !important;
+}
+div[id^="nb-wrapper"].nb-loading #nb-feedback:after {
+  overflow: hidden;
+  display: inline-block;
+  vertical-align: bottom;
+  -webkit-animation: ellipsis steps(4, end) 900ms infinite;
+  animation: ellipsis steps(4, end) 900ms infinite;
+  content: "\2026"; /* ascii code for the ellipsis character */
+  width: 0px;
+}
 
 /*
 * ##########################################################
@@ -2064,7 +2061,7 @@ div[id^=nb-wrapper] div.nb-feedback {
               ];  
           }
 
-    .body-header{
+    .body-header {
       // grid-column: pc;
       // margin-top: 0;
       margin-bottom: 0;
@@ -2140,16 +2137,15 @@ div[id^=nb-wrapper] div.nb-feedback {
   }
 
   @media screen and (min-width: 1000px) {
-
     .body-header {
       margin-top: 35px;
     }
 
-    .body-title{
+    .body-title {
       // border-top-left-radius: 5px;
     }
 
-    .body-main{
+    .body-main {
       // border-top-right-radius: 5px;
     }
 
@@ -2160,5 +2156,13 @@ div[id^=nb-wrapper] div.nb-feedback {
 
   @media screen and (max-width: 999px) {
     --theme-body-padding: 0px 24px;
+  }
+}
+[data-engrid-theme="oc"] {
+  #goMonthly {
+    border-radius: 10px;
+    #upsellYesButton a {
+      color: #fff;
+    }
   }
 }
