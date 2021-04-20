@@ -9,7 +9,13 @@
   }
 }
 
+body:not(#en__pagebuilder){
+  background: #f3f3f3 url("https://aaf1a18515da0e792f78-c27fdabe952dfc357fe25ebf5c8897ee.ssl.cf5.rackcdn.com/1991/gray_pattern-optimized.jpg?v=1527883852000") repeat;
+  background-position: left top;
+}
+
 [data-engrid-theme="oc"] {
+
   /*
   * ##########################################################
   * # HIDE UNUSED SECTIONS
@@ -93,13 +99,20 @@
   * ##########################################################
   */
 
+  .body-bottom{
+    p{
+      font-size: 80%;
+      opacity: 0.8;
+    }
+  }
+
   .body-bottom:not(:empty) {
     padding-top: 1rem;
     padding-bottom: 1rem;
     @include smart-trim-child-element-margin-and-padding;
 
     div{
-      margin-bottom: 0.5rem;
+      margin-bottom: 1rem;
     }
   }
 
@@ -187,6 +200,8 @@
   }
 
   @mixin on-desktop {
+    --theme-body-padding: 0px 100px;
+
     .body-header {
       border-top-left-radius: var(--theme-body-border-radius);
       border-top-right-radius: var(--theme-body-border-radius);
@@ -260,9 +275,10 @@
     .body-header{
       justify-content: center;
       min-height: auto !important;
+      padding: 0.9375rem 1.875rem 0 1.875rem;
 
       p{
-        margin-bottom: 0;
+        margin: 0;
       }
     }
 
@@ -2018,8 +2034,8 @@ div[id^=nb-wrapper] div.nb-feedback {
               [
                   pc-start lpc-start]  minmax(0px, 0px)     [lpc-end
                   cc-start lcc-start]  minmax(0px, 1fr)     [lcc-end
-                  bc-start lbc-start]  minmax(0px, 485px)   [lbc-end
-                  rbc-start]           minmax(0px, 485px)   [rbc-end bc-end
+                  bc-start lbc-start]  minmax(0px, 550px)   [lbc-end
+                  rbc-start]           minmax(0px, 550px)   [rbc-end bc-end
                   rcc-start]           minmax(0px, 1fr)     [rcc-end cc-end
                   rpc-start]           minmax(0px, 0px)     [rpc-end pc-end             
               ];
@@ -2030,9 +2046,9 @@ div[id^=nb-wrapper] div.nb-feedback {
                 content-header-start]               min-content        [content-header-end
                 body-headerOutside-start]           min-content        [body-headerOutside-end
                 body-header-start]                  min-content        [body-header-end
-                body-title-start]                   min-content        [body-title-end
                 body-banner-start]                  min-content        [body-banner-end
                 body-bannerOverlay-start]           min-content        [body-bannerOverlay-end
+                body-title-start]                   min-content        [body-title-end
                 body-top-start]                     minmax(0px, 1fr)   [body-top-end
                 body-side-start]                    min-content        [body-side-end  
                 body-main-start]                    min-content        [body-main-end  
@@ -2049,29 +2065,31 @@ div[id^=nb-wrapper] div.nb-feedback {
           }
 
     .body-header{
-      grid-column: pc;
-      margin-top: 0;
+      // grid-column: pc;
+      // margin-top: 0;
+      margin-bottom: 0;
     }
 
     .body-title {
-      grid-row: body-header-end / body-title-end;
+      // grid-row: body-header-end / body-title-end;
     }
 
     .body-banner,
     .body-bannerOverlay {
-      grid-row: body-title-end / body-banner-end;
+      // grid-row: body-title-end / body-banner-end;
+      grid-column: bc;
     }
 
     .body-top {
-      grid-row: body-banner-end / body-bottom-end;
+      // grid-row: body-banner-end / body-bottom-end;
     }
 
     .body-main {
-      grid-row: body-header-end / body-bottom-start;
+      grid-row: body-title-start / body-bottom-start;
     }
 
     .body-bottom {
-      grid-row: body-main-end / body-bottom-end;
+      // grid-row: body-main-end / body-bottom-end;
     }
   }
 
@@ -2122,21 +2140,21 @@ div[id^=nb-wrapper] div.nb-feedback {
   }
 
   @media screen and (min-width: 1000px) {
+
     .body-header {
-      margin-bottom: 80px;
-      border-radius: 0;
+      margin-top: 35px;
     }
 
     .body-title{
-      border-top-left-radius: 5px;
+      // border-top-left-radius: 5px;
     }
 
     .body-main{
-      border-top-right-radius: 5px;
+      // border-top-right-radius: 5px;
     }
 
     .body-footer {
-      margin-bottom: 80px;
+      margin-bottom: 35px;
     }
   }
 
