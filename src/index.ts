@@ -160,6 +160,7 @@ const options: Options = {
   SrcDefer: true,
   NeverBounceAPI: "public_45feb67a2317d1f97b59ba35cc2b7118",
   NeverBounceDateField: "supporter.NOT_TAGGED_116",
+  NeverBounceStatusField: "supporter.NOT_TAGGED_59",
   Debug: App.getUrlParameter('debug') == 'true' ? true : false,
   onLoad: () => { console.log("Starter Theme Loaded"); dataCapture(); },
   onResize: () => console.log("Starter Theme Window Resized"),
