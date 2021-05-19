@@ -758,13 +758,13 @@ body {
     display: flex;
     justify-content: space-between;
 
-    :first-child,
-    :last-child {
+    > :first-child,
+    > :last-child {
       align-items: center;
       justify-content: center;
     }
 
-    :first-child {
+    > :first-child {
       display: flex;
       justify-content: flex-start;
 
@@ -779,7 +779,7 @@ body {
       }
     }
 
-    :last-child {
+    > :last-child {
       display: flex;
       justify-content: flex-end;
     }
@@ -790,8 +790,8 @@ body {
       }
     }
 
-    :first-child img,
-    :last-child img {
+    > :first-child img,
+    > :last-child img {
       display: block;
     }
 
