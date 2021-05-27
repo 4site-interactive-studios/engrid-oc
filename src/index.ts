@@ -150,7 +150,7 @@ function dataCapture() {
 }
 
 const options: Options = {
-  applePay: false,
+  applePay: true,
   CapitalizeFields: true,
   ClickToExpand: true,
   CurrencySymbol: '$',
