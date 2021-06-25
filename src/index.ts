@@ -162,7 +162,7 @@ const options: Options = {
   NeverBounceDateField: "supporter.NOT_TAGGED_116",
   NeverBounceStatusField: "supporter.NOT_TAGGED_59",
   Debug: App.getUrlParameter('debug') == 'true' ? true : false,
-  onLoad: () => { console.log("Starter Theme Loaded"); dataCapture(); },
+  onLoad: () => { console.log("Starter Theme Loaded"); /*dataCapture();*/ },
   onResize: () => console.log("Starter Theme Window Resized"),
   onSubmit: () => {
     console.log('%c Upland / Mobilecommons Script', 'font-size: 30px; background-color: #000; color: #FF0');
