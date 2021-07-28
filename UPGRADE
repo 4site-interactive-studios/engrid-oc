@@ -1,0 +1,8 @@
+Frequency Block - Classes: recurring-frequency_count_3 radio-to-buttons_donationAmt donation-amount_count_4 i1-hide-label i2-hide i3-hide-label
+Personal Information - Classes: i1-50 i2-50
+Country Block - Classes: simple_country_select i2-50 i3-50 i4-33 i5-33 i6-33
+Payment Block - Remove "en__field--giveBySelect" - Add "en__field--give-by-select"
+
+NEW: Added "radio-to-buttons_recurrpay" and "radio-to-buttons_donationAmt" helper classes to selectively change radio inputs into buttons. And created new CSS Properties and Helper Classes that allow for the number of buttons shown on those elements and other Radio to Button elements to be quickly defined or changed
+BREAKING: Removed "manual-form-layout" CSS class
+BREAKING: Removed "--engrid__page-backgroundImage_background-pattern" CSS Custom Property

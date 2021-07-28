@@ -8,12 +8,18 @@
         "domain": "https://"
     }'
     ></include>
+    <include
+    src="src/templates/includes/brand-guide-elements/styles.html"
+    locals='{
+      "theme": "engrid",
+    }'
+    ></include>
   </head>
   <body
     data-engrid-layout="centercenter1col"
     data-engrid-theme="engrid"
     data-engrid-add-input-placeholders
-    data-engrid-errors="fancy"
+    data-engrid-embedded
   >
     <include
       src="src/templates/includes/page-wrapper-elements/body.html"
@@ -24,7 +30,7 @@
     <div id="engrid">
       <!-- Start EN Page Builder -->
       <include
-        src="src/templates/includes/page-contents/page-contents-donation.html"
+        src="src/templates/includes/page-contents/page-contents-brand-guide.html"
         locals='{
         "theme": "engrid",
     }'

@@ -1,0 +1,448 @@
+// The most broadly used CSS Custom Properties for quick theming.
+// Uncomment to use and reference engrid-scrips SASS files for more CSS Custom Properties.
+// All CSS Custom Properties should be scoped to the theme using CSS Data Attributes.
+[data-engrid-theme="oc"] {
+  // FIXED COLOR PALETTE
+  --color_transparent: transparent;
+  --color_white: #fff;
+  --color_black: #323232;
+  --pagebuilder__background-color: #c1c0c0;
+
+  // GRAYSCALE COLOR PALETTE
+  --color_off-white: #dfdfdf;
+  --color_light-gray: #cacaca;
+  --color_gray: #8a8a8a;
+  --color_dark-gray: #808080;
+  --color_off-black: #404040;
+
+  // SEMANTIC COLOR PALETTE
+  --success: #33cc33;
+  --warning: #fcac00;
+  --error: #f12222;
+
+  // PRIMARY COLORS
+  --color_primary: #039bc4;
+  --color_primary_overlay: #e74b3c;
+
+  // SEMANTIC GEOMETRIC SCALING
+  --scale-up_20pct: 1.2;
+  --scale-up_40pct: 1.4;
+  --scale-up_80pct: 1.8;
+  --scale-up_160pct: 2.6;
+  --scale-down_20pct: 0.8;
+  --scale-down_40pct: 0.6;
+  --scale-down_80pct: 0.2;
+
+  // FONT STACKS
+  --native-fonts__sans-serif: "Roboto", sans-serif;
+
+  // TYPOGRAPHY DEFAULT
+  --default_font-family: var(--native-fonts__sans-serif);
+  --default_color: #252525;
+  --default_font-size: var(--root_font-size);
+  --default_font-weight: initial;
+  --default_line-height: initial;
+
+  // TYPOGRAPHY H1
+  --h1_color: initial;
+  --h1_font-size: calc(var(--root_font-size) * var(--scale-up_160pct));
+  --h1_font-weight: var(--headline-font-weight);
+  --h1_line-height: var(--h1_font-size);
+
+  // TYPOGRAPHY H2
+  --h2_font-family: var(--h1_font-family);
+  --h2_color: initial;
+  --h2_font-size: calc(var(--root_font-size) * var(--scale-up_80pct));
+  --h2_font-weight: initial;
+  --h2_line-height: var(--h2_font-size);
+
+  // TYPOGRAPHY H3
+  --h3_font-family: var(--h1_font-family);
+  --h3_color: initial;
+  --h3_font-size: calc(var(--root_font-size) * var(--scale-up_40pct));
+  --h3_font-weight: initial;
+  --h3_line-height: var(--h3_font-size);
+
+  // TYPOGRAPHY P
+  --p_font-family: var(--default_font-family);
+  --p_color: initial;
+  --p_font-size: 18px;
+  --p_font-weight: initial;
+  --p_line-height: initial;
+
+  // TYPOGRAPHY LABEL
+  --label-color: #525252;
+  --label-font-size: 14px;
+  --label-font-weight: initial;
+  --label-line-height: initial;
+
+  // TYPOGRAPHY INPUT
+  --input_font-family: var(--default_font-family);
+  --input_color: initial;
+  --input_font-size: var(--root_font-size);
+  --input_font-weight: initial;
+  --input_line-height: initial;
+  --input_background-color: var(--color_white);
+  --input_border-width: 1px;
+  --input_border-color: var(--color_black);
+  --input_border-radius: 5px;
+  --input_placeholder-color: #767676;
+  --input_box-shadow: none;
+
+  // TYPOGRAPHY INPUT:FOCUS
+
+  // TYPOGRAPHY INPUT:HOVER
+  --input_color_hover: var(--input_color);
+  --input_background-color_hover: var(--input_background-color);
+  --input_border-color_hover: var(--input_border-color);
+  --input_box-shadow_hover: none;
+
+  // TYPOGRAPHY RADIO
+  --radio_content: "";
+  --radio_color: var(--color_primary);
+  --radio_background-color: var(--color_white);
+  --radio_border-width: 1px;
+  --radio_border-color: var(--color_black);
+  --radio_border-radius: 50%;
+  --radio_height: 1.4rem;
+  --radio_width: 1.4rem;
+  --radio_box-shadow: none;
+
+  // TYPOGRAPHY RADIO INPUT:FOCUS
+  // TYPOGRAPHY RADIO INPUT:HOVER
+  --radio_color_hover: var(--radio_color);
+  --radio_background-color_hover: var(--radio_background-color);
+  --radio_border-color_hover: var(--radio_border-color);
+  --radio_box-shadow_hover: none;
+
+  // TYPOGRAPHY RADIO INPUT:CHECKED
+  --radio_color_selected_selected: var(--radio_background-color);
+  --radio_background-color_selected: var(--color_white);
+  --radio_border-color_selected: var(--radio_border-color);
+  --radio_box-shadow_selected: inset 0 0 0 6px var(--color_black);
+
+  // TYPOGRAPHY CHECKBOX
+  --checkbox_color: var(--color_white);
+  --checkbox_background-color: var(--color_white);
+  --checkbox_border-width: 1px;
+  --checkbox_border-color: var(--color_black);
+  --checkbox_border-radius: 50%;
+  --checkbox_height: 1.35rem;
+  --checkbox_width: var(--checkbox_height);
+
+  // TYPOGRAPHY CHECKBOX INPUT:FOCUS
+  // TYPOGRAPHY CHECKBOX INPUT:HOVER
+  --checkbox_color_hover: var(--checkbox_color);
+  --checkbox_background-color_hover: var(--checkbox_background-color);
+  --checkbox_border-color_hover: var(--checkbox_border-color);
+
+  // TYPOGRAPHY CHECKBOX INPUT:CHECKED
+  --checkbox_content_checked: "✓";
+  --checkbox_color_checked: var(--checkbox_background-color);
+  --checkbox_background-color_checked: var(--color_black);
+  --checkbox_border-color_checked: var(--checkbox_border-color);
+
+  // TYPOGRAPHY SELECT
+  --select_font-family: var(--default_font-family);
+  --select_color: var(--color_black);
+  --select_font-size: var(--root_font-size);
+  --select_font-weight: initial;
+  --select_line-height: initial;
+  --select_background-color: var(--input_background-color);
+  --select_border-width: var(--input_border-width);
+  --select_border-color: var(--input_border-color);
+  --select_border-radius: var(--input_border-radius);
+  --select_box-shadow: var(--input_box-shadow);
+
+  // TYPOGRAPHY SELECT:FOCUS
+  // TYPOGRAPHY SELECT:HOVER
+  --select_color_hover: var(--select_color);
+  --select_background-color_hover: var(--select_background-color);
+  --select_border-color_hover: var(--select_border-color);
+  --select_border-bottom-color_hover: var(--color_black);
+  --select_box-shadow_hover: var(--input_box-shadow_hover);
+
+  // TYPOGRAPHY TEXTAREA
+  --textarea_font-family: var(--default_font-family);
+  --textarea_color: initial;
+  --textarea_font-size: var(--root_font-size);
+  --textarea_font-weight: initial;
+  --textarea_line-height: initial;
+  --textarea_background-color: var(--input_background-color);
+  --textarea_border-width: var(--input_border-width);
+  --textarea_border-color: var(--input_border-color);
+  --textarea_border-radius: var(--input_border-radius);
+  --textarea_placeholder-color: var(--color_light-gray);
+  --textarea_box-shadow: var(--input_box-shadow);
+
+  // TYPOGRAPHY TEXTAREA:FOCUS
+  // TYPOGRAPHY TEXTAREA:HOVER
+  --textarea_color_hover: var(--textarea_color);
+  --textarea_background-color_hover: var(--textarea_background-color);
+  --textarea_border-color_hover: var(--textarea_background-color);
+  --textarea_border-bottom-color_hover: var(--input_border-bottom-color_hover);
+  --textarea_box-shadow_hover: var(--input_box-shadow_hover);
+
+  // TYPOGRAPHY BUTTON
+  --button_color: var(--color_black);
+  --button_font-size: 18px;
+  --button_font-weight: bold;
+  --button_line-height: initial;
+  --button_background-color: var(--color_white);
+  --button_border-width: 1px;
+  --button_border-color: var(--color_black);
+  --button_border-radius: 1000px;
+  --button_padding: 0.5ch 0.75ch;
+
+  // TYPOGRAPHY BUTTON:HOVER
+  --button_color_hover: var(--button_color);
+  --button_background-color_hover: var(--button_background-color);
+  --button_border-color_hover: var(--button_color);
+  --button_focus-hover-background-color: var(--color_black);
+  --button_focus-hover-color: var(--color_white);
+
+  // TYPOGRAPHY BUTTON:CHECKED
+  --button_color_checked: var(--color_white);
+  --button_background-color_checked: #252525;
+  --button_border-color_checked: #252525;
+
+  // TYPOGRAPHY GIVING FREQUENCY BUTTON
+  --recurring-frequency__button_font-family: var(--button_font-family);
+  --recurring-frequency__button_color: var(--button_color);
+  --recurring-frequency__button_font-size: 14px;
+  --recurring-frequency__button_font-weight: 400;
+  --recurring-frequency__button_line-height: 21px;
+  --recurring-frequency__button_background-color: none;
+  --recurring-frequency__button_border-width: 0px;
+  --recurring-frequency__button_border-color: initial;
+  --recurring-frequency__button_border-radius: 0;
+  --recurring-frequency__button_padding: 0;
+
+  // TYPOGRAPHY GIVING FREQUENCY BUTTON:HOVER
+  --recurring-frequency__button_color_hover: var(--button_color_hover);
+  --recurring-frequency__button_border-color_hover: none;
+  --recurring-frequency__button_background-color_hover: none;
+
+  // TYPOGRAPHY GIVING FREQUENCY BUTTON:CHECKED
+  --recurring-frequency__button_color_checked: var(--button_color_hover);
+  --recurring-frequency__button_background-color_checked: none;
+  --recurring-frequency__button_border-color_checked: none;
+
+  // TYPOGRAPHY GIVING AMOUNT BUTTON
+  --donation-amount__button_font-family: var(--button_font-family);
+  --donation-amount__button_color: var(--button_color);
+  --donation-amount__button_font-size: 16px;
+  --donation-amount__button_font-weight: 400;
+  --donation-amount__button_line-height: var(--button_line-height);
+  --donation-amount__button_background-color: var(--button_background-color);
+  --donation-amount__button_border-width: var(--button_border-width);
+  --donation-amount__button_border-color: var(--button_border-color);
+  --donation-amount__button_border-radius: var(--button_border-radius);
+  --donation-amount__button_padding: var(--button_padding);
+
+  // TYPOGRAPHY GIVING AMOUNT BUTTON:HOVER
+  --donation-amount__button_color_hover: var(--button_color_hover);
+  --donation-amount__button_background-color_hover: var(--color_off-white);
+  --donation-amount__button_border-color_hover: var(
+    --button_border-color_hover
+  );
+
+  // TYPOGRAPHY GIVING AMOUNT BUTTON:CHECKED
+  --donation-amount__button_color_checked: var(--color_white);
+  --donation-amount__button_background-color_checked: var(--button_color);
+  --donation-amount__button_border-color_checked: var(--button_color);
+
+  // TYPOGRAPHY GIVE BY SELECT BUTTON
+  --give-by-select__button_font-family: var(--button_font-family);
+  --give-by-select__button_color: var(--button_color);
+  --give-by-select__button_font-size: 16px;
+  --give-by-select__button_font-weight: 500;
+  --give-by-select__button_line-height: 24px;
+  --give-by-select__button_background-color: var(--button_background-color);
+  --give-by-select__button_border-width: var(--button_border-width);
+  --give-by-select__button_border-color: var(--button_border-color);
+  --give-by-select__button_border-radius: var(--button_border-radius);
+  --give-by-select__button_count: 3;
+
+  // TYPOGRAPHY GIVE BY SELECT BUTTON:HOVER
+  --give-by-select__button_color_hover: var(--button_color_hover);
+  --give-by-select__button_background-color_hover: var(
+    --button_background-color_hover
+  );
+  --give-by-select__button_border-color_hover: var(--button_border-color_hover);
+
+  // TYPOGRAPHY GIVE BY SELECT BUTTON:CHECKED
+  --give-by-select__button_color_checked: var(--color_white);
+  --give-by-select__button_background-color_checked: var(--button_color);
+  --give-by-select__button_border-color_checked: var(--button_color);
+
+  // TYPOGRAPHY SUBMIT BUTTON
+  --submit__button_font-size: 20px;
+  --submit__button_padding-top: 0.5ch;
+  --submit__button_padding-bottom: 0.5ch;
+  --submit__button_color: var(--color_white);
+  --submit__button_color_hover: var(--color_white);
+  --submit__button_backgrond-color: var(--color_primary);
+  --submit__button_backgrond-color_hover: var(--color_primary_overlay);
+  --submit__button_border-color_hover: var(--color_black);
+
+  // TYPOGRAPHY A
+  --a_font-family: var(--headline-font-family);
+  --a_color: initial;
+  --a_text-decoration: initial;
+
+  // TYPOGRAPHY A:FOCUS
+  // TYPOGRAPHY A:HOVER
+  --a_color_checked: var(--a_color);
+  --a_text-decoration_checked: initial;
+
+  // CTA COLORS
+  --color_cta: #039bc4;
+  --color_cta_hover: #e74b3c;
+
+  // ENGRID SECTIONS BACKGROUND COLOR
+  // QUICK SETTINGS
+  --engrid__page_background-color: var(--color_transparent);
+  --engrid__content_background-color: var(--color_transparent);
+  --engrid__body_background-color: var(--color_white);
+  // DETAIL SETTINGS
+  --engrid__page-alert_background-color: var(--engrid__page_background-color);
+  --engrid__content-header_background-color: var(--color_white);
+  --engrid__body-headerOutside_background-color: var(--color_transparent);
+  --engrid__body-header_background-color: var(--color_white);
+  --engrid__body-title_background-color: var(--engrid__body_background-color);
+  --engrid__body-banner_background-color: var(--engrid__body_background-color);
+  --engrid__body-bannerOverlay_background-color: var(--color_transparent);
+  --engrid__body-top_background-color: var(--engrid__body_background-color);
+  --engrid__body-side_background-color: var(--engrid__body_background-color);
+  --engrid__body-main_background-color: var(--engrid__body_background-color);
+  --engrid__body-bottom_background-color: var(--engrid__body_background-color);
+  --engrid__body-footer_background-color: #323232;
+  --engrid__body-footerOutside_background-color: var(--color_transparent);
+  --engrid__content-footerSpacer_background-color: var(
+    --engrid__content_background-color
+  );
+  --engrid__content-preFooter_background-color: #d0e2e7;
+  --engrid__content-footer_background-color: var(--color_white);
+  --engrid__page-backgroundImage_background-color: #f3f3f3;
+  --engrid__page-backgroundImageOverlay_background-color: var(
+    --color_transparent
+  );
+  --engrid__page-customCode_background-color: var(
+    --engrid__page_background-color
+  );
+
+  // ENGRID SECTIONS PADDING
+  // QUICK SETTINGS
+  --engrid__page_padding: 0px;
+  --engrid__content_padding: 0px;
+  --engrid__body_padding: 0px 50px;
+  // DETAIL SETTINGS
+  --engrid__page-alert_padding: var(--engrid__page_padding);
+  --engrid__content-header_padding: var(--engrid__content_padding);
+  --engrid__body-headerOutside_padding: var(--engrid__body_padding);
+  --engrid__body-header_padding: var(--engrid__body_padding);
+  --engrid__body-title_padding: var(--engrid__body_padding);
+  --engrid__body-banner_padding: 0px;
+  --engrid__body-bannerOverlay_padding: var(--engrid__body_padding);
+  --engrid__body-top_padding: var(--engrid__body_padding);
+  --engrid__body-side_padding: var(--engrid__body_padding);
+  --engrid__body-main_padding: var(--engrid__body_padding);
+  --engrid__body-bottom_padding: var(--engrid__body_padding);
+  --engrid__body-footer_padding: var(--engrid__body_padding);
+  --engrid__body-footerOutside_padding: var(--engrid__body_padding);
+  --engrid__content-footerSpacer_padding: var(--engrid__content_padding);
+  --engrid__content-preFooter_padding: var(--engrid__content_padding);
+  --engrid__content-footer_padding: var(--engrid__content_padding);
+  --engrid__page-backgroundImage_padding: 0px;
+  --engrid__page-backgroundImageOverlay_padding: var(--engrid__page_padding);
+  --engrid__page-customCode_padding: var(--engrid__page_padding);
+
+  // ENGRID SECTIONS MARGIN
+  // QUICK SETTINGS
+  --engrid__page_margin: 0px;
+  --engrid__content_margin: 0px;
+  --engrid__body_margin: 0px;
+  // DETAIL SETTINGS
+  --engrid__page-alert_margin: var(--engrid__page_margin);
+  --engrid__content-header_margin: var(--engrid__content_margin);
+  --engrid__body-headerOutside_margin: var(--engrid__body_margin);
+  --engrid__body-header_margin: var(--engrid__body_margin);
+  --engrid__body-title_margin: var(--engrid__body_margin);
+  --engrid__body-banner_margin: var(--engrid__body_margin);
+  --engrid__body-bannerOverlay_margin: var(--engrid__body_margin);
+  --engrid__body-top_margin: var(--engrid__body_margin);
+  --engrid__body-side_margin: var(--engrid__body_margin);
+  --engrid__body-main_margin: var(--engrid__body_margin);
+  --engrid__body-bottom_margin: var(--engrid__body_margin);
+  --engrid__body-footer_margin: var(--engrid__body_margin);
+  --engrid__body-footerOutside_margin: var(--engrid__body_margin);
+  --engrid__content-footerSpacer_margin: var(--engrid__content_margin);
+  --engrid__content-preFooter_margin: var(--engrid__content_margin);
+  --engrid__content-footer_margin: var(--engrid__content_margin);
+  --engrid__page-backgroundImage_margin: var(--engrid__page_margin);
+  --engrid__page-backgroundImageOverlay_margin: var(--engrid__page_margin);
+  --engrid__page-customCode_margin: var(--engrid__page_margin);
+
+  // LAZY LOADED BANNER IMAGE PLACEHOLDER COLOR
+  --engrid__body-banner_image-background-color: var(--color_light-gray);
+
+  // BODY BORDER RADIUS
+  // @TODO This doesn't do anything at the moment
+  --engrid__body_border-radius: 7px;
+
+  // ENGRID BACKGROUND IMAGE SECTION'S BACKGROUND PATTERN
+  // This is a background pattern that is shown before the hi-resolution background image is lazy loaded in, if at all
+  // It's background color "--engrid__page-backgroundImage_background-color" should be the average color of the image
+  // REF: (https://doodad.dev/pattern-generator/)
+  --engrid__page-backgroundImage_background-pattern: "url(data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7)"; // Invisible GIF
+
+  // REF: http://www.standardista.com/px-to-rem-conversion-if-root-font-size-is-16px/
+  --root_font-size: 14px; // Sets a baseline font size for all other REM based font-sizes to relatively build off of
+
+  --engrid__page-backgroundImage_url: "url(data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7)"; // Invisible GIF
+
+  // @TODO Revisit these spacing values and calculations
+  // @BODY Look into replicating "Teach a System of Space Visually" as a Development page that shows all styling decisions for the brand https://medium.com/eightshapes-llc/space-in-design-systems-188bcbae0d62#.fwng4aef7
+  --spacing_sm: 0.8652rem;
+  --spacing: calc(0.8652rem * 0.75);
+  --spacing_lg: calc(0.8652rem * 2.5);
+  --spacing_xlg: calc(0.8652rem * 5);
+
+  // ERRORS
+  --error__color: var(--error);
+  --error__color-grayscale: #949494;
+  --error__color-faded: #ffeae9;
+  --error__background-color: #f4ddda;
+  --error__border-width: var(--input_border-width);
+
+  // HIGHLIGHTS
+  --highlight__background-color: #227f9e;
+  --highlight__color: #ffffff;
+
+  // CLICK TO EXPAND
+  --click-to-expand__copy-area_height: 400px;
+  --click-to-expand__cta-image_url: url("https://cdn.jsdelivr.net/gh/4site-interactive-studios/Ocean-Conservancy-Engaging-Networks-Template@master/themes/parent-theme/images/collapsed-div.png");
+  --click-to-expand__cta-image_width: 107px;
+  --click-to-expand__cta-image_height: 29px;
+
+  // LABEL APPENDED TO DONTIONAL GIVING AMOUNTS BASED ON GIVING FREQUENCY
+  --give-monthly-donation-amount-appended-label: " /mo";
+  --give-annual-donation-amount-appended-label: " /yr";
+
+  // IMAGE ATTRIBUTION OVERLAY
+  --media-attribution__font-family: var(--default_font-family);
+  --media-attribution__color: #ffffff;
+  --media-attribution__text-shadow: 0px 0px 5px rgba(0, 0, 0, 0.15);
+  --media-attribution__font-size: 12px;
+  --media-attribution__font-style: normal;
+  --media-attribution__font-weight: 700;
+  --media-attribution__text-transform: uppercase;
+  --media-attribution__margin: 1.25ch 0 0 1.5ch;
+  --media-attribution__padding: 1ch 1.25ch 0.5ch 1.25ch;
+  --media-attribution__background-color: rgba(0, 0, 0, 0.25);
+
+  // ADD THEME CUSTOM CSS PROPERTIES HERE
+  // TYPOGRAPHY HEADLINE
+  --headline-font-weight: 700;
+}

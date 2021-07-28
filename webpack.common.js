@@ -1,7 +1,5 @@
-const path = require("path");
-var HtmlWebpackPlugin = require("html-webpack-plugin");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
-
 module.exports = {
   entry: {
     engrid: "./src/index.ts",
@@ -11,21 +9,36 @@ module.exports = {
     new HtmlWebpackPlugin({
       title: "Engaging Networks - Page Type Selection",
       template: "./src/index.html",
-      inject: true,
-      minify: {
-        removeComments: true,
-        collapseWhitespace: false,
-      },
+      inject: false,
+      minify: false,
     }),
     new HtmlWebpackPlugin({
-      title: "Engaging Networks Page - Donation",
-      filename: "page-donation.html",
+      title: "Brand Guide",
+      filename: "pages/brand-guide.html",
+      template: "./src/templates/page-brand-guide.html",
+      inject: false,
+      minify: false,
+    }),
+    new HtmlWebpackPlugin({
+      title: "Page - Free and Flexible",
+      filename: "pages/free-and-flexible.html",
+      template: "./src/templates/page-free-and-flexible.html",
+      inject: false,
+      minify: false,
+    }),
+    new HtmlWebpackPlugin({
+      title: "Page - Donation",
+      filename: "pages/donation.html",
       template: "./src/templates/page-donation.html",
-      inject: true,
-      minify: {
-        removeComments: true,
-        collapseWhitespace: false,
-      },
+      inject: false,
+      minify: false,
+    }),
+    new HtmlWebpackPlugin({
+      title: "Page - Thank You",
+      filename: "pages/thank-you.html",
+      template: "./src/templates/page-thank-you.html",
+      inject: false,
+      minify: false,
     }),
   ],
   module: {
@@ -57,9 +70,24 @@ module.exports = {
       },
       {
         test: /\.(html)$/,
-        use: {
-          loader: "html-loader",
-        },
+        use: [
+          {
+            loader: "html-loader",
+            options: {
+              minimize: false,
+              sources: false,
+            },
+          },
+          {
+            loader: "posthtml-loader",
+            options: {
+              ident: "posthtml",
+              // skipParse: true,
+              // parser: "PostHTML Parser",
+              plugins: [require("posthtml-include")({ encoding: "utf8" })],
+            },
+          },
+        ],
       },
     ],
   },
