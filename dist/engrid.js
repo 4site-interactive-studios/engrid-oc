@@ -11738,7 +11738,7 @@ class NeverBounce {
                     if (e.detail.result.is(window._nb.settings.getAcceptedStatusCodes())) {
                         NBClass.setEmailStatus("valid");
                         if (NBClass.nbDate)
-                            NBClass.nbDate.value = new Date().toLocaleDateString();
+                            NBClass.nbDate.value = new Date().toLocaleDateString('en-US', { year: 'numeric', month: '2-digit', day: '2-digit' });
                     }
                     else {
                         NBClass.setEmailStatus("invalid");
@@ -11861,7 +11861,7 @@ class NeverBounce {
         if (this.nbStatus) {
             this.nbStatus.value = engrid_ENGrid.getFieldValue("nb-result");
         }
-        if (!['catchall', 'valid'].indexOf(engrid_ENGrid.getFieldValue('nb-result'))) {
+        if (!['catchall', 'valid'].includes(engrid_ENGrid.getFieldValue('nb-result'))) {
             this.setEmailStatus("required");
             (_a = this.emailField) === null || _a === void 0 ? void 0 : _a.focus();
             return false;
