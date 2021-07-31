@@ -2930,7 +2930,7 @@ body:not(#en__pagebuilder) .click-to-expand.expanded .click-to-expand-text-wrapp
   --button_border-color_checked:var(--button_border-color_hover);
   --submit__button_color:var(--button_color);
   --submit__button_border-color:var(--button_border-color);
-  --submit__button_backgrond-color:var(--button_background-color);
+  --submit__button_background-color:var(--button_background-color);
   --submit__button_color_hover:var(--button_color);
   --submit__button_background-color_hover:var(--button_background-color_hover);
   --submit__button_border-color_hover:var(--button_background-color_hover);
@@ -6271,8 +6271,8 @@ body:not(#en__pagebuilder) .body-banner:empty,body:not(#en__pagebuilder) .body-b
   --submit__button_padding-bottom:0.5ch;
   --submit__button_color:var(--color_white);
   --submit__button_color_hover:var(--color_white);
-  --submit__button_backgrond-color:var(--color_primary);
-  --submit__button_backgrond-color_hover:var(--color_primary_overlay);
+  --submit__button_background-color:var(--color_primary);
+  --submit__button_background-color_hover:var(--color_primary_overlay);
   --submit__button_border-color_hover:var(--color_black);
   --a_font-family:var(--headline-font-family);
   --a_color:initial;
