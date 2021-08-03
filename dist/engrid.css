@@ -2665,6 +2665,7 @@ body[data-engrid-page-background=image][data-engrid-layout=centerright1col] .pag
 body .page-backgroundImage video{
   min-height:100vh;
   min-width:100vw;
+  object-fit:cover;
   position:fixed;
 }
 
