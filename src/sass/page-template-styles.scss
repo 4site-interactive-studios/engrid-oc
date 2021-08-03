@@ -849,7 +849,10 @@ body {
       padding: 0 0.9em;
       color: #323232;
       box-decoration-break: clone;
-      /* margin: .4em; */
+      @include mq($until: laptop) {
+        font-size: 26px;
+        padding: 0 0.5em;
+      }
     }
 
     .banner-text.blue p {
@@ -857,6 +860,9 @@ body {
       background-color: #2ba8dd;
       padding: 0.4em 0;
       box-shadow: 1em 0 0 0 #2ba8dd, -1em 0 0 0 #2ba8dd;
+      @include mq($until: laptop) {
+        padding: 0.2em 0;
+      }
     }
 
     .banner-text.red p {
@@ -864,6 +870,9 @@ body {
       background-color: #e74b3c;
       padding: 0.4em 0;
       box-shadow: 1em 0 0 0 #e74b3c, -1em 0 0 0 #e74b3c;
+      @include mq($until: laptop) {
+        padding: 0.2em 0;
+      }
     }
 
     .banner-text.black p {
@@ -871,6 +880,9 @@ body {
       background-color: #323232;
       padding: 0.4em 0;
       box-shadow: 1em 0 0 0 #323232, -1em 0 0 0 #323232;
+      @include mq($until: laptop) {
+        padding: 0.2em 0;
+      }
     }
   }
 

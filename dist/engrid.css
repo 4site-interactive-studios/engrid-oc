@@ -7017,11 +7017,24 @@ body .body-bannerOverlay .banner-text p{
   padding:0 .9em;
 }
 
+@media (max-width:63.99em){
+  body .body-bannerOverlay .banner-text p{
+    font-size:26px;
+    padding:0 .5em;
+  }
+}
+
 body .body-bannerOverlay .banner-text.blue p{
   background-color:#2ba8dd;
   box-shadow:1em 0 0 0 #2ba8dd,-1em 0 0 0 #2ba8dd;
   color:#fff;
   padding:.4em 0;
+}
+
+@media (max-width:63.99em){
+  body .body-bannerOverlay .banner-text.blue p{
+    padding:.2em 0;
+  }
 }
 
 body .body-bannerOverlay .banner-text.red p{
@@ -7031,11 +7044,23 @@ body .body-bannerOverlay .banner-text.red p{
   padding:.4em 0;
 }
 
+@media (max-width:63.99em){
+  body .body-bannerOverlay .banner-text.red p{
+    padding:.2em 0;
+  }
+}
+
 body .body-bannerOverlay .banner-text.black p{
   background-color:#323232;
   box-shadow:1em 0 0 0 #323232,-1em 0 0 0 #323232;
   color:#fff;
   padding:.4em 0;
+}
+
+@media (max-width:63.99em){
+  body .body-bannerOverlay .banner-text.black p{
+    padding:.2em 0;
+  }
 }
 
 body .body-bottom{
