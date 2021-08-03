@@ -196,6 +196,11 @@ body:not(#en__pagebuilder) {
     width: calc(100% - 1rem);
   }
 
+  /* This class shouldn't have been needed so we need to undo some of the engrid-scripts styling that happens to direct child components */
+  .content-footer.pseudo-subgrid > * {
+    display: block;
+  }
+
   @mixin on-mobile {
   }
 
