@@ -7356,16 +7356,19 @@ body .body-bannerOverlay .banner-text p{
 }
 
 body .body-bannerOverlay .banner-text.blue p{
+  background-color:#2ba8dd;
   box-shadow:1.5rem 0 0 0 #2ba8dd,-1.5rem 0 0 0 #2ba8dd;
   color:#fff;
 }
 
 body .body-bannerOverlay .banner-text.red p{
+  background-color:#e74b3c;
   box-shadow:1.5rem 0 0 0 #e74b3c,-1.5rem 0 0 0 #e74b3c;
   color:#fff;
 }
 
 body .body-bannerOverlay .banner-text.black p{
+  background-color:#323232;
   box-shadow:1.5rem 0 0 0 #323232,-1.5rem 0 0 0 #323232;
   color:#fff;
 }
