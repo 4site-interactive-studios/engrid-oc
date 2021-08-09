@@ -28,11 +28,11 @@ body:not(#en__pagebuilder) {
   .body-footerOutside,
   .content-preFooter,
   .page-backgroundImageOverlay {
-    display: none;
+    display: none !important;
   }
 
   body#en__pagebuilder .content-footerSpacer {
-    display: none;
+    display: none !important;
   }
 
   @mixin smart-trim-child-element-margin-and-padding {
