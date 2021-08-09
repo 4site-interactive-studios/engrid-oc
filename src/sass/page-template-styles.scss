@@ -280,7 +280,7 @@ body:not(#en__pagebuilder) {
     .body-header {
       justify-content: center;
       min-height: auto !important;
-      padding: 0.9375rem 1.875rem 0 1.875rem;
+      padding: 0.9375rem 1.875rem;
 
       p {
         margin: 0;
@@ -837,8 +837,11 @@ body {
     margin-bottom: 0;
   }
 
+  .en__component--advrow > .body-bannerOverlay {
+    display: flex;
+  }
+
   .body-bannerOverlay {
-    display: flex !important;
     align-items: center;
     justify-content: center;
     width: 100%;
@@ -849,43 +852,50 @@ body {
       font-style: normal;
       font-stretch: normal;
       letter-spacing: normal;
-      padding: 0 0.9em;
       color: #323232;
+      padding: 0.75rem 0;
       box-decoration-break: clone;
+      margin: 0;
       @include mq($until: laptop) {
         font-size: 26px;
-        padding: 0 0.5em;
       }
     }
 
     .banner-text.blue p {
       color: #ffffff;
-      background-color: #2ba8dd;
-      padding: 0.4em 0;
-      box-shadow: 1em 0 0 0 #2ba8dd, -1em 0 0 0 #2ba8dd;
-      @include mq($until: laptop) {
-        padding: 0.2em 0;
-      }
+      // background-color: #2ba8dd;
+      box-shadow: 1.5rem 0 0 0 #2ba8dd, -1.5rem 0 0 0 #2ba8dd;
     }
 
     .banner-text.red p {
       color: #ffffff;
-      background-color: #e74b3c;
-      padding: 0.4em 0;
-      box-shadow: 1em 0 0 0 #e74b3c, -1em 0 0 0 #e74b3c;
-      @include mq($until: laptop) {
-        padding: 0.2em 0;
-      }
+      // background-color: #e74b3c;
+      box-shadow: 1.5rem 0 0 0 #e74b3c, -1.5rem 0 0 0 #e74b3c;
     }
 
     .banner-text.black p {
       color: #ffffff;
+      // background-color: #323232;
+      box-shadow: 1.5rem 0 0 0 #323232, -1.5rem 0 0 0 #323232;
+    }
+  }
+
+  &:not([data-engrid-has-body-title]){
+
+    .banner-text.blue {
+      background-color: #2ba8dd;
+    }
+
+    .banner-text.red {
+      background-color: #e74b3c;
+    }
+
+    .banner-text.black {
       background-color: #323232;
-      padding: 0.4em 0;
-      box-shadow: 1em 0 0 0 #323232, -1em 0 0 0 #323232;
-      @include mq($until: laptop) {
-        padding: 0.2em 0;
-      }
+    }
+
+    .banner-text > *:last-child{
+      margin-bottom: 0;
     }
   }
 
