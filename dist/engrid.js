@@ -9801,29 +9801,28 @@ function dataCapture() {
       form.submit();
     }
   }
-  ;
 }
 
 const options = {
   applePay: true,
   CapitalizeFields: true,
   ClickToExpand: true,
-  CurrencySymbol: '$',
-  CurrencySeparator: '.',
+  CurrencySymbol: "$",
+  CurrencySeparator: ".",
   MediaAttribution: true,
   SkipToMainContentLink: true,
   SrcDefer: true,
   NeverBounceAPI: "public_45feb67a2317d1f97b59ba35cc2b7118",
   NeverBounceDateField: "supporter.NOT_TAGGED_116",
   NeverBounceStatusField: "supporter.NOT_TAGGED_59",
-  Debug: app_App.getUrlParameter('debug') == 'true' ? true : false,
+  Debug: app_App.getUrlParameter("debug") == "true" ? true : false,
   onLoad: () => {
     console.log("Starter Theme Loaded");
     /*dataCapture();*/
   },
   onResize: () => console.log("Starter Theme Window Resized"),
   onSubmit: () => {
-    console.log('%c Upland / Mobilecommons Script', 'font-size: 30px; background-color: #000; color: #FF0');
+    console.log("%c Upland / Mobilecommons Script", "font-size: 30px; background-color: #000; color: #FF0");
     return new Promise(function (resolve, reject) {
       let userData = getUserData();
       console.log("User Data", userData);
