@@ -770,8 +770,10 @@ body {
     }
 
     > :first-child {
+      grid-column: pc / lbc;
       display: flex;
       justify-content: flex-start;
+      margin-right: auto;
 
       img {
         height: 52px !important;
@@ -785,8 +787,10 @@ body {
     }
 
     > :last-child {
+      grid-column: rbc / pc;
       display: flex;
       justify-content: flex-end;
+      margin-left: auto;
     }
 
     @media screen and (max-width: 600px) {
@@ -840,7 +844,7 @@ body {
   }
 
   .body-bannerOverlay {
-    display: flex;
+    display: flex !important;
     align-items: center;
     justify-content: center;
     width: 100%;
@@ -901,6 +905,7 @@ body {
 
     .en__component {
       max-width: 410px;
+      margin: auto;
     }
   }
 
@@ -1762,6 +1767,12 @@ div[id^="nb-field-"] div.nb-feedback {
     letter-spacing: normal !important;
   }
 }
+
+#en_custom_field_simple_country_select_long,
+#en_custom_field_simple_country_select_short{
+  display: inline-flex;
+}
+
 #en_custom_field_simple_country_select_long a,
 #en_custom_field_simple_country_select_short a {
   color: #007eb3; // WCAG AA Compliant version of #2ba8dd
