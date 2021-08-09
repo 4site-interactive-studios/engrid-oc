@@ -30,8 +30,7 @@ function getUserData() {
     email: App.getFieldValue("supporter.emailAddress"),
     phone: phone.replace(/\D/g, ""),
     optin_path_key: "OP1AF618AA53A977C5E6EE7A033BA8BDDB",
-    donor: document.getElementsByName("transaction.donationAmt.other")
-      .length,
+    donor: document.getElementsByName("transaction.donationAmt.other").length,
     tags: "OC_EN_Form",
     source: App.getPageType(),
   };
@@ -42,27 +41,19 @@ function postAjax(url: string, data: any, success: Function) {
     typeof data == "string"
       ? data
       : Object.keys(data)
-        .map(function (k) {
-          return (
-            encodeURIComponent(k) + "=" + encodeURIComponent(data[k])
-          );
-        })
-        .join("&");
+          .map(function (k) {
+            return encodeURIComponent(k) + "=" + encodeURIComponent(data[k]);
+          })
+          .join("&");
 
   var xhr = new XMLHttpRequest();
   xhr.open("POST", url);
   xhr.onreadystatechange = function () {
-    if (
-      xhr.readyState > 3 &&
-      (xhr.status == 200 || xhr.status == 202)
-    ) {
+    if (xhr.readyState > 3 && (xhr.status == 200 || xhr.status == 202)) {
       success(xhr.responseText);
     }
   };
-  xhr.setRequestHeader(
-    "Content-Type",
-    "application/x-www-form-urlencoded"
-  );
+  xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
   xhr.send(params);
   return xhr;
 }
@@ -77,7 +68,9 @@ function dataCapture() {
     const optInCheck = document.querySelector(
       "[name='supporter.questions.20087']"
     ) as HTMLInputElement;
-    const form = document.querySelector("form.en__component") as HTMLFormElement;
+    const form = document.querySelector(
+      "form.en__component"
+    ) as HTMLFormElement;
     const inIframe = () => {
       try {
         return window.self !== window.top;
@@ -128,7 +121,10 @@ function dataCapture() {
             data
               .filter((element) => formFields.includes(element[0]))
               .map(
-                (x) => `${encodeURIComponent(x[0])}=${encodeURIComponent(x[1].toString())}`
+                (x) =>
+                  `${encodeURIComponent(x[0])}=${encodeURIComponent(
+                    x[1].toString()
+                  )}`
               )
               .join("&");
           console.log(url + asString);
@@ -146,26 +142,31 @@ function dataCapture() {
       // Send the Form
       form.submit();
     }
-  };
+  }
 }
 
 const options: Options = {
   applePay: true,
   CapitalizeFields: true,
   ClickToExpand: true,
-  CurrencySymbol: '$',
-  CurrencySeparator: '.',
+  CurrencySymbol: "$",
+  CurrencySeparator: ".",
   MediaAttribution: true,
   SkipToMainContentLink: true,
   SrcDefer: true,
   NeverBounceAPI: "public_45feb67a2317d1f97b59ba35cc2b7118",
   NeverBounceDateField: "supporter.NOT_TAGGED_116",
   NeverBounceStatusField: "supporter.NOT_TAGGED_59",
-  Debug: App.getUrlParameter('debug') == 'true' ? true : false,
-  onLoad: () => { console.log("Starter Theme Loaded"); /*dataCapture();*/ },
+  Debug: App.getUrlParameter("debug") == "true" ? true : false,
+  onLoad: () => {
+    console.log("Starter Theme Loaded"); /*dataCapture();*/
+  },
   onResize: () => console.log("Starter Theme Window Resized"),
   onSubmit: () => {
-    console.log('%c Upland / Mobilecommons Script', 'font-size: 30px; background-color: #000; color: #FF0');
+    console.log(
+      "%c Upland / Mobilecommons Script",
+      "font-size: 30px; background-color: #000; color: #FF0"
+    );
     return new Promise(function (resolve, reject) {
       let userData = getUserData();
       console.log("User Data", userData);
@@ -182,7 +183,6 @@ const options: Options = {
         }
       );
     });
-  }
-
+  },
 };
 new App(options);
