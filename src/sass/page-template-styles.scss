@@ -1044,15 +1044,6 @@ body:not(#en__pagebuilder)[data-engrid-footer-below-fold]
   background-color: var(--engrid__page-backgroundImage_background-color);
 }
 
-/************************************
-   * Utility: Give By Select Logos
-   * Assumes items are in order of Card, PayPal, Check
-   * .give-by-select
-   ***********************************/
-.give-by-select .en__field__element--radio {
-  justify-content: space-between;
-}
-
 // .give-by-select .en__field__element--radio .en__field__item {
 //   margin-right: 0 !important;
 //   max-width: calc((100% - 2rem) / 3);

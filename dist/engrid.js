@@ -75,6 +75,20 @@ __webpack_require__.d(__webpack_exports__, {
 
 // UNUSED EXPORTS: animateFill, createSingleton, delegate, followCursor, hideAll, inlinePositioning, roundArrow, sticky
 
+;// CONCATENATED MODULE: ./node_modules/@popperjs/core/lib/dom-utils/getBoundingClientRect.js
+function getBoundingClientRect(element) {
+  var rect = element.getBoundingClientRect();
+  return {
+    width: rect.width,
+    height: rect.height,
+    top: rect.top,
+    right: rect.right,
+    bottom: rect.bottom,
+    left: rect.left,
+    x: rect.left,
+    y: rect.top
+  };
+}
 ;// CONCATENATED MODULE: ./node_modules/@popperjs/core/lib/dom-utils/getWindow.js
 function getWindow(node) {
   if (node == null) {
@@ -87,6 +101,17 @@ function getWindow(node) {
   }
 
   return node;
+}
+;// CONCATENATED MODULE: ./node_modules/@popperjs/core/lib/dom-utils/getWindowScroll.js
+
+function getWindowScroll(node) {
+  var win = getWindow(node);
+  var scrollLeft = win.pageXOffset;
+  var scrollTop = win.pageYOffset;
+  return {
+    scrollLeft: scrollLeft,
+    scrollTop: scrollTop
+  };
 }
 ;// CONCATENATED MODULE: ./node_modules/@popperjs/core/lib/dom-utils/instanceOf.js
 
@@ -112,46 +137,6 @@ function isShadowRoot(node) {
 }
 
 
-;// CONCATENATED MODULE: ./node_modules/@popperjs/core/lib/dom-utils/getBoundingClientRect.js
-
-var round = Math.round;
-function getBoundingClientRect(element, includeScale) {
-  if (includeScale === void 0) {
-    includeScale = false;
-  }
-
-  var rect = element.getBoundingClientRect();
-  var scaleX = 1;
-  var scaleY = 1;
-
-  if (isHTMLElement(element) && includeScale) {
-    // Fallback to 1 in case both values are `0`
-    scaleX = rect.width / element.offsetWidth || 1;
-    scaleY = rect.height / element.offsetHeight || 1;
-  }
-
-  return {
-    width: round(rect.width / scaleX),
-    height: round(rect.height / scaleY),
-    top: round(rect.top / scaleY),
-    right: round(rect.right / scaleX),
-    bottom: round(rect.bottom / scaleY),
-    left: round(rect.left / scaleX),
-    x: round(rect.left / scaleX),
-    y: round(rect.top / scaleY)
-  };
-}
-;// CONCATENATED MODULE: ./node_modules/@popperjs/core/lib/dom-utils/getWindowScroll.js
-
-function getWindowScroll(node) {
-  var win = getWindow(node);
-  var scrollLeft = win.pageXOffset;
-  var scrollTop = win.pageYOffset;
-  return {
-    scrollLeft: scrollLeft,
-    scrollTop: scrollTop
-  };
-}
 ;// CONCATENATED MODULE: ./node_modules/@popperjs/core/lib/dom-utils/getHTMLElementScroll.js
 function getHTMLElementScroll(element) {
   return {
@@ -219,26 +204,17 @@ function isScrollParent(element) {
 
 
 
-
-
-function isElementScaled(element) {
-  var rect = element.getBoundingClientRect();
-  var scaleX = rect.width / element.offsetWidth || 1;
-  var scaleY = rect.height / element.offsetHeight || 1;
-  return scaleX !== 1 || scaleY !== 1;
-} // Returns the composite rect of an element relative to its offsetParent.
+ // Returns the composite rect of an element relative to its offsetParent.
 // Composite means it takes into account transforms as well as layout.
-
 
 function getCompositeRect(elementOrVirtualElement, offsetParent, isFixed) {
   if (isFixed === void 0) {
     isFixed = false;
   }
 
-  var isOffsetParentAnElement = isHTMLElement(offsetParent);
-  var offsetParentIsScaled = isHTMLElement(offsetParent) && isElementScaled(offsetParent);
   var documentElement = getDocumentElement(offsetParent);
-  var rect = getBoundingClientRect(elementOrVirtualElement, offsetParentIsScaled);
+  var rect = getBoundingClientRect(elementOrVirtualElement);
+  var isOffsetParentAnElement = isHTMLElement(offsetParent);
   var scroll = {
     scrollLeft: 0,
     scrollTop: 0
@@ -255,7 +231,7 @@ function getCompositeRect(elementOrVirtualElement, offsetParent, isFixed) {
     }
 
     if (isHTMLElement(offsetParent)) {
-      offsets = getBoundingClientRect(offsetParent, true);
+      offsets = getBoundingClientRect(offsetParent);
       offsets.x += offsetParent.clientLeft;
       offsets.y += offsetParent.clientTop;
     } else if (documentElement) {
@@ -918,7 +894,7 @@ function popperOffsets(_ref) {
 ;// CONCATENATED MODULE: ./node_modules/@popperjs/core/lib/utils/math.js
 var math_max = Math.max;
 var math_min = Math.min;
-var math_round = Math.round;
+var round = Math.round;
 ;// CONCATENATED MODULE: ./node_modules/@popperjs/core/lib/modifiers/computeStyles.js
 
 
@@ -943,8 +919,8 @@ function roundOffsetsByDPR(_ref) {
   var win = window;
   var dpr = win.devicePixelRatio || 1;
   return {
-    x: math_round(math_round(x * dpr) / dpr) || 0,
-    y: math_round(math_round(y * dpr) / dpr) || 0
+    x: round(round(x * dpr) / dpr) || 0,
+    y: round(round(y * dpr) / dpr) || 0
   };
 }
 
@@ -7105,7 +7081,7 @@ class app_App extends engrid_ENGrid {
 
     this.shouldScroll = () => {
       // If you find a error, scroll
-      if (document.querySelector('.en__errorHeader')) {
+      if (document.querySelector(".en__errorHeader")) {
         return true;
       } // Try to match the iframe referrer URL by testing valid EN Page URLs
 
@@ -7141,7 +7117,7 @@ class app_App extends engrid_ENGrid {
 
   run() {
     // Enable debug if available is the first thing
-    if (this.options.Debug || app_App.getUrlParameter('debug') == 'true') app_App.setBodyData('debug', ''); // IE Warning
+    if (this.options.Debug || app_App.getUrlParameter("debug") == "true") app_App.setBodyData("debug", ""); // IE Warning
 
     new IE(); // Page Background
 
@@ -7173,9 +7149,9 @@ class app_App extends engrid_ENGrid {
 
     this._frequency.onFrequencyChange.subscribe(s => console.log(`Live Frequency: ${s}`));
 
-    this._form.onSubmit.subscribe(s => console.log('Submit: ', s));
+    this._form.onSubmit.subscribe(s => console.log("Submit: ", s));
 
-    this._form.onError.subscribe(s => console.log('Error:', s));
+    this._form.onError.subscribe(s => console.log("Error:", s));
 
     window.enOnSubmit = () => {
       this._form.dispatchSubmit();
@@ -7271,7 +7247,7 @@ class app_App extends engrid_ENGrid {
     }
 
     if (this.inIframe()) {
-      sendIframeFormStatus('submit');
+      sendIframeFormStatus("submit");
     }
   }
 
@@ -7303,8 +7279,13 @@ class app_App extends engrid_ENGrid {
 
   setDataAttributes() {
     // Add a body banner data attribute if it's empty
-    if (!document.querySelector('.body-banner img')) {
-      app_App.setBodyData('body-banner', 'empty');
+    if (!document.querySelector(".body-banner img")) {
+      app_App.setBodyData("body-banner", "empty");
+    } // Add a body title data attribute if it is empty
+
+
+    if (document.querySelector(".body-title *")) {
+      app_App.setBodyData("has-body-title", "");
     }
   }
 
@@ -9254,38 +9235,43 @@ class SrcDefer {
     for (let i = 0; i < this.videoBackground.length; i++) {
       let video = this.videoBackground[i]; // Process one or more defined sources in the <video> tag
 
-      let videoBackgroundSource = video.querySelectorAll("source");
-      let videoBackgroundSourcedDataSrc = this.videoBackgroundSource[i].getAttribute("data-src");
+      this.videoBackgroundSource = video.querySelectorAll("source");
 
-      if (videoBackgroundSource) {
-        for (let i = 0; i < this.videoBackgroundSource.length; i++) {
-          // Construct the <video> tags new <source>
-          if (videoBackgroundSourcedDataSrc) {
-            this.videoBackgroundSource[i].setAttribute("src", videoBackgroundSourcedDataSrc);
-            this.videoBackgroundSource[i].setAttribute("data-engrid-data-src-processed", "true"); // Sets an attribute to mark that it has been processed by ENGrid
+      if (this.videoBackgroundSource) {
+        // loop through all the sources
+        for (let j = 0; j < this.videoBackgroundSource.length; j++) {
+          let videoSource = this.videoBackgroundSource[j];
 
-            this.videoBackgroundSource[i].removeAttribute("data-src"); // Removes the data-source
-          } // To get the browser to request the video asset defined we need to remove the <video> tag and re-add it
+          if (videoSource) {
+            let videoBackgroundSourcedDataSrc = videoSource.getAttribute("data-src");
 
+            if (videoBackgroundSourcedDataSrc) {
+              videoSource.setAttribute("src", videoBackgroundSourcedDataSrc);
+              videoSource.setAttribute("data-engrid-data-src-processed", "true"); // Sets an attribute to mark that it has been processed by ENGrid
 
-          let videoBackgroundParent = video.parentNode; // Determine the parent of the <video> tag
-
-          let copyOfVideoBackground = video; // Copy the <video> tag
-
-          if (videoBackgroundParent && copyOfVideoBackground) {
-            videoBackgroundParent.replaceChild(copyOfVideoBackground, this.videoBackground[i]); // Replace the <video> with the copy of itself
-            // Update the video to auto play, mute, loop
-
-            video.muted = true; // Mute the video by default
-
-            video.controls = false; // Hide the browser controls
-
-            video.loop = true; // Loop the video
-
-            video.playsInline = true; // Encourage the user agent to display video content within the element's playback area
-
-            video.play(); // Plays the video
+              videoSource.removeAttribute("data-src"); // Removes the data-source
+            }
           }
+        } // To get the browser to request the video asset defined we need to remove the <video> tag and re-add it
+
+
+        let videoBackgroundParent = video.parentNode; // Determine the parent of the <video> tag
+
+        let copyOfVideoBackground = video; // Copy the <video> tag
+
+        if (videoBackgroundParent && copyOfVideoBackground) {
+          videoBackgroundParent.replaceChild(copyOfVideoBackground, video); // Replace the <video> with the copy of itself
+          // Update the video to auto play, mute, loop
+
+          video.muted = true; // Mute the video by default
+
+          video.controls = false; // Hide the browser controls
+
+          video.loop = true; // Loop the video
+
+          video.playsInline = true; // Encourage the user agent to display video content within the element's playback area
+
+          video.play(); // Plays the video
         }
       }
     }
