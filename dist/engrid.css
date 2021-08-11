@@ -8093,10 +8093,6 @@ div[id^=nb-field-] div.nb-feedback span.nb-result{
   line-height:1.44 !important;
 }
 
-#en_custom_field_simple_country_select_long,#en_custom_field_simple_country_select_short{
-  display:inline-flex;
-}
-
 #en_custom_field_simple_country_select_long a,#en_custom_field_simple_country_select_short a{
   color:#007eb3;
 }

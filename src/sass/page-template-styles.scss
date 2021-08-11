@@ -880,8 +880,7 @@ body {
     }
   }
 
-  &:not([data-engrid-has-body-title]){
-
+  &:not([data-engrid-has-body-title]) {
     .banner-text.blue {
       background-color: #2ba8dd;
     }
@@ -894,7 +893,7 @@ body {
       background-color: #323232;
     }
 
-    .banner-text > *:last-child{
+    .banner-text > *:last-child {
       margin-bottom: 0;
     }
   }
@@ -1761,11 +1760,6 @@ div[id^="nb-field-"] div.nb-feedback {
     line-height: 1.44 !important;
     letter-spacing: normal !important;
   }
-}
-
-#en_custom_field_simple_country_select_long,
-#en_custom_field_simple_country_select_short{
-  display: inline-flex;
 }
 
 #en_custom_field_simple_country_select_long a,
