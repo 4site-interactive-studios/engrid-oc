@@ -75,20 +75,6 @@ __webpack_require__.d(__webpack_exports__, {
 
 // UNUSED EXPORTS: animateFill, createSingleton, delegate, followCursor, hideAll, inlinePositioning, roundArrow, sticky
 
-;// CONCATENATED MODULE: ./node_modules/@popperjs/core/lib/dom-utils/getBoundingClientRect.js
-function getBoundingClientRect(element) {
-  var rect = element.getBoundingClientRect();
-  return {
-    width: rect.width,
-    height: rect.height,
-    top: rect.top,
-    right: rect.right,
-    bottom: rect.bottom,
-    left: rect.left,
-    x: rect.left,
-    y: rect.top
-  };
-}
 ;// CONCATENATED MODULE: ./node_modules/@popperjs/core/lib/dom-utils/getWindow.js
 function getWindow(node) {
   if (node == null) {
@@ -101,17 +87,6 @@ function getWindow(node) {
   }
 
   return node;
-}
-;// CONCATENATED MODULE: ./node_modules/@popperjs/core/lib/dom-utils/getWindowScroll.js
-
-function getWindowScroll(node) {
-  var win = getWindow(node);
-  var scrollLeft = win.pageXOffset;
-  var scrollTop = win.pageYOffset;
-  return {
-    scrollLeft: scrollLeft,
-    scrollTop: scrollTop
-  };
 }
 ;// CONCATENATED MODULE: ./node_modules/@popperjs/core/lib/dom-utils/instanceOf.js
 
@@ -137,6 +112,46 @@ function isShadowRoot(node) {
 }
 
 
+;// CONCATENATED MODULE: ./node_modules/@popperjs/core/lib/dom-utils/getBoundingClientRect.js
+
+var round = Math.round;
+function getBoundingClientRect(element, includeScale) {
+  if (includeScale === void 0) {
+    includeScale = false;
+  }
+
+  var rect = element.getBoundingClientRect();
+  var scaleX = 1;
+  var scaleY = 1;
+
+  if (isHTMLElement(element) && includeScale) {
+    // Fallback to 1 in case both values are `0`
+    scaleX = rect.width / element.offsetWidth || 1;
+    scaleY = rect.height / element.offsetHeight || 1;
+  }
+
+  return {
+    width: round(rect.width / scaleX),
+    height: round(rect.height / scaleY),
+    top: round(rect.top / scaleY),
+    right: round(rect.right / scaleX),
+    bottom: round(rect.bottom / scaleY),
+    left: round(rect.left / scaleX),
+    x: round(rect.left / scaleX),
+    y: round(rect.top / scaleY)
+  };
+}
+;// CONCATENATED MODULE: ./node_modules/@popperjs/core/lib/dom-utils/getWindowScroll.js
+
+function getWindowScroll(node) {
+  var win = getWindow(node);
+  var scrollLeft = win.pageXOffset;
+  var scrollTop = win.pageYOffset;
+  return {
+    scrollLeft: scrollLeft,
+    scrollTop: scrollTop
+  };
+}
 ;// CONCATENATED MODULE: ./node_modules/@popperjs/core/lib/dom-utils/getHTMLElementScroll.js
 function getHTMLElementScroll(element) {
   return {
@@ -204,17 +219,26 @@ function isScrollParent(element) {
 
 
 
- // Returns the composite rect of an element relative to its offsetParent.
+
+
+function isElementScaled(element) {
+  var rect = element.getBoundingClientRect();
+  var scaleX = rect.width / element.offsetWidth || 1;
+  var scaleY = rect.height / element.offsetHeight || 1;
+  return scaleX !== 1 || scaleY !== 1;
+} // Returns the composite rect of an element relative to its offsetParent.
 // Composite means it takes into account transforms as well as layout.
+
 
 function getCompositeRect(elementOrVirtualElement, offsetParent, isFixed) {
   if (isFixed === void 0) {
     isFixed = false;
   }
 
-  var documentElement = getDocumentElement(offsetParent);
-  var rect = getBoundingClientRect(elementOrVirtualElement);
   var isOffsetParentAnElement = isHTMLElement(offsetParent);
+  var offsetParentIsScaled = isHTMLElement(offsetParent) && isElementScaled(offsetParent);
+  var documentElement = getDocumentElement(offsetParent);
+  var rect = getBoundingClientRect(elementOrVirtualElement, offsetParentIsScaled);
   var scroll = {
     scrollLeft: 0,
     scrollTop: 0
@@ -231,7 +255,7 @@ function getCompositeRect(elementOrVirtualElement, offsetParent, isFixed) {
     }
 
     if (isHTMLElement(offsetParent)) {
-      offsets = getBoundingClientRect(offsetParent);
+      offsets = getBoundingClientRect(offsetParent, true);
       offsets.x += offsetParent.clientLeft;
       offsets.y += offsetParent.clientTop;
     } else if (documentElement) {
@@ -894,7 +918,7 @@ function popperOffsets(_ref) {
 ;// CONCATENATED MODULE: ./node_modules/@popperjs/core/lib/utils/math.js
 var math_max = Math.max;
 var math_min = Math.min;
-var round = Math.round;
+var math_round = Math.round;
 ;// CONCATENATED MODULE: ./node_modules/@popperjs/core/lib/modifiers/computeStyles.js
 
 
@@ -919,8 +943,8 @@ function roundOffsetsByDPR(_ref) {
   var win = window;
   var dpr = win.devicePixelRatio || 1;
   return {
-    x: round(round(x * dpr) / dpr) || 0,
-    y: round(round(y * dpr) / dpr) || 0
+    x: math_round(math_round(x * dpr) / dpr) || 0,
+    y: math_round(math_round(y * dpr) / dpr) || 0
   };
 }
 
@@ -7278,14 +7302,137 @@ class app_App extends engrid_ENGrid {
 
 
   setDataAttributes() {
-    // Add a body banner data attribute if it's empty
+    // Add a body banner data attribute if the banner contains no image
+    // @TODO Should this account for video?
+    // @TODO Should we merge this with the script that checks the background image?
     if (!document.querySelector(".body-banner img")) {
       app_App.setBodyData("body-banner", "empty");
-    } // Add a body title data attribute if it is empty
+    } // Add a page-alert data attribute if it is empty
+
+
+    if (document.querySelector(".page-alert *")) {
+      app_App.setBodyData("has-page-alert", "");
+    } else {
+      app_App.setBodyData("does-not-have-page-alert", "");
+    } // Add a content-header data attribute if it is empty
+
+
+    if (document.querySelector(".content-header *")) {
+      app_App.setBodyData("has-content-header", "");
+    } else {
+      app_App.setBodyData("does-not-have-content-header", "");
+    } // Add a body-headerOutside data attribute if it is empty
+
+
+    if (document.querySelector(".body-headerOutside *")) {
+      app_App.setBodyData("has-body-headerOutside", "");
+    } else {
+      app_App.setBodyData("does-not-have-body-headerOutside", "");
+    } // Add a body-header data attribute if it is empty
+
+
+    if (document.querySelector(".body-header *")) {
+      app_App.setBodyData("has-body-header", "");
+    } else {
+      app_App.setBodyData("does-not-have-body-header", "");
+    } // Add a body-title data attribute if it is empty
 
 
     if (document.querySelector(".body-title *")) {
       app_App.setBodyData("has-body-title", "");
+    } else {
+      app_App.setBodyData("does-not-have-body-title", "");
+    } // Add a body-banner data attribute if it is empty
+
+
+    if (document.querySelector(".body-banner *")) {
+      app_App.setBodyData("has-body-banner", "");
+    } else {
+      app_App.setBodyData("does-not-have-body-banner", "");
+    } // Add a body-bannerOverlay data attribute if it is empty
+
+
+    if (document.querySelector(".body-bannerOverlay *")) {
+      app_App.setBodyData("has-body-bannerOverlay", "");
+    } else {
+      app_App.setBodyData("does-not-have-body-bannerOverlay", "");
+    } // Add a body-top data attribute if it is empty
+
+
+    if (document.querySelector(".body-top *")) {
+      app_App.setBodyData("has-body-top", "");
+    } else {
+      app_App.setBodyData("does-not-have-body-top", "");
+    } // Add a body-main data attribute if it is empty
+
+
+    if (document.querySelector(".body-main *")) {
+      app_App.setBodyData("has-body-main", "");
+    } else {
+      app_App.setBodyData("does-not-have-body-main", "");
+    } // Add a body-bottom data attribute if it is empty
+
+
+    if (document.querySelector(".body-bottom *")) {
+      app_App.setBodyData("has-body-bottom", "");
+    } else {
+      app_App.setBodyData("does-not-have-body-bottom", "");
+    } // Add a body-footer data attribute if it is empty
+
+
+    if (document.querySelector(".body-footer *")) {
+      app_App.setBodyData("has-body-footer", "");
+    } else {
+      app_App.setBodyData("does-not-have-body-footer", "");
+    } // Add a body-footerOutside data attribute if it is empty
+
+
+    if (document.querySelector(".body-footerOutside *")) {
+      app_App.setBodyData("has-body-footerOutside", "");
+    } else {
+      app_App.setBodyData("does-not-have-body-footerOutside", "");
+    } // Add a content-footerSpacer data attribute if it is empty
+
+
+    if (document.querySelector(".content-footerSpacer *")) {
+      app_App.setBodyData("has-content-footerSpacer", "");
+    } else {
+      app_App.setBodyData("does-not-have-content-footerSpacer", "");
+    } // Add a content-preFooter data attribute if it is empty
+
+
+    if (document.querySelector(".content-preFooter *")) {
+      app_App.setBodyData("has-content-preFooter", "");
+    } else {
+      app_App.setBodyData("does-not-have-content-preFooter", "");
+    } // Add a content-footer data attribute if it is empty
+
+
+    if (document.querySelector(".content-footer *")) {
+      app_App.setBodyData("has-content-footer", "");
+    } else {
+      app_App.setBodyData("does-not-have-content-footer", "");
+    } // Add a page-backgroundImage data attribute if it is empty
+
+
+    if (document.querySelector(".page-backgroundImage *")) {
+      app_App.setBodyData("has-page-backgroundImage", "");
+    } else {
+      app_App.setBodyData("does-not-have-page-backgroundImage", "");
+    } // Add a page-backgroundImageOverlay data attribute if it is empty
+
+
+    if (document.querySelector(".page-backgroundImageOverlay *")) {
+      app_App.setBodyData("has-page-backgroundImageOverlay", "");
+    } else {
+      app_App.setBodyData("does-not-have-page-backgroundImageOverlay", "");
+    } // Add a page-customCode data attribute if it is empty
+
+
+    if (document.querySelector(".page-customCode *")) {
+      app_App.setBodyData("has-page-customCode", "");
+    } else {
+      app_App.setBodyData("does-not-have-page-customCode", "");
     }
   }
 
@@ -8818,7 +8965,7 @@ class UpsellLightbox {
                 </p>
                 <!-- YES BUTTON -->
                 <div id="upsellYesButton">
-                  <a href="#">
+                  <a class="pseduo__en__submit_button" href="#">
                     <div>
                     <span class='loader-wrapper'><span class='loader loader-quart'></span></span>
                     <span class='label'>${yes}</span>
