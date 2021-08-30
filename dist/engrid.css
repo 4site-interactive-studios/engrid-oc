@@ -1217,8 +1217,8 @@ body[data-engrid-debug]:before{
 
 .en__ecarditems__prevclose{
   color:var(--color_black);
+  font-family:Arial,sans-serif;
   line-height:1.5625rem;
-  font:Arial,sans-serif;
   width:1.5625rem;
   z-index:9999;
 }
@@ -1609,7 +1609,7 @@ body[data-engrid-debug]:before{
 }
 
 .en__pg__imageSelector label{
-  font-weight:.75rem;
+  font-weight:400;
   width:.75rem;
 }
 
@@ -2041,19 +2041,28 @@ a:focus,a:hover{
   --radio_border-width:var(--input_border-width);
   --radio_border-radius:50%;
   --radio_box-shadow:none;
+  --radio_font-family:var(--p_font-family);
+  --radio_font-size:var(--p_font-size);
+  --radio_font-weight:var(--p_font-weight);
+  --radio_line-height:var(--p_line-height);
   --radio_width:20px;
   --radio_height:20px;
   --radio_top:0px;
+  --radio_text-transform:initial;
   --radio_box-shadow_hover:inset 0 0 0 6px #f5f5f5;
   --radio_box-shadow_selected:inset 0 0 0 6px #000;
   --checkbox_border-width:var(--input_border-width);
   --checkbox_border-radius:var(--input_border-radius);
-  --checkbox_font-weight:700;
+  --checkbox_font-family:var(--radio_font-family);
+  --checkbox_font-size:var(--radio_font-size);
+  --checkbox_font-weight:var(--radio_font-weight);
+  --checkbox_line-height:var(--radio_line-height);
   --checkbox_width:var(--radio_width);
   --checkbox_height:var(--radio_height);
   --checkbox_top:0px;
   --checkbox_padding-top:0px;
   --checkbox_padding-left:0px;
+  --checkbox_text-transform:var(--radio_text-transform);
   --checkbox_content_checked:"\2713";
   --select_font-family:var(--input_font-family);
   --select_font-size:var(--input_font-size);
@@ -2216,7 +2225,12 @@ input[type=radio]+label{
   align-items:center;
   cursor:pointer;
   display:flex;
+  font-family:var(--radio_font-family);
+  font-size:var(--radio_font-size);
+  font-weight:var(--radio_font-weight);
+  line-height:var(--radio_line-height);
   padding-top:MAX(0px, calc(var(--radio_top)*-1));
+  text-transform:var(--radio_text-transform);
 }
 
 input[type=radio]+label:before{
@@ -2258,7 +2272,12 @@ input[type=checkbox]+label{
   content:"";
   cursor:pointer;
   display:flex;
+  font-family:var(--checkbox_font-family);
+  font-size:var(--checkbox_font-size);
+  font-weight:var(--checkbox_font-weight);
+  line-height:var(--checkbox_line-height);
   padding-top:MAX(0px, calc(var(--checkbox_top)*-1));
+  text-transform:var(--checkbox_text-transform);
 }
 
 input[type=checkbox]+label:before{
@@ -2270,7 +2289,6 @@ input[type=checkbox]+label:before{
   content:" ";
   display:flex;
   flex:1 0 auto;
-  font-weight:var(--checkbox_font-weight);
   height:var(--checkbox_height);
   justify-content:center;
   margin-right:MAX(var(--fields_spacing-inline), 1ch, .5rem);
@@ -2313,8 +2331,6 @@ input[type=checkbox]:checked+label:before{
   color:var(--checkbox_color);
   content:" ";
   display:flex;
-  font-size:.99936rem;
-  font-weight:var(--checkbox_font-weight);
   height:var(--checkbox_height);
   justify-content:center;
   padding-left:var(--checkbox_padding-left);
@@ -2547,8 +2563,6 @@ select.en__field__input--select:focus,select.en__field__input--select:hover,sele
   color:var(--checkbox_color_checked);
   content:var(--checkbox_content_checked);
   cursor:pointer;
-  font-size:.99936rem;
-  font-weight:var(--checkbox_font-weight);
   left:4px;
   position:absolute;
   top:5px;
@@ -2738,7 +2752,7 @@ body{
   --submit__button_font-size:var(--button_font-size);
   --submit__button_text-transform:var(--button_text-transform);
 }
-.button,button,button.en__eventOccurrence__select,button.en__ticketRecurring__select,button.en__ticketSummary__checkout{
+.button,.pseduo__en__submit_button,button,button.en__eventOccurrence__select,button.en__ticketRecurring__select,button.en__ticketSummary__checkout{
   -webkit-appearance:none;
   background-color:var(--button_background-color);
   border:var(--button_border-width) solid var(--button_border-color);
@@ -2757,13 +2771,13 @@ body{
   transition:background-color .2s ease-out,color .2s ease-out,border-color .2s ease-out;
 }
 
-.button:focus,.button:hover,button.en__eventOccurrence__select:focus,button.en__eventOccurrence__select:hover,button.en__ticketRecurring__select:focus,button.en__ticketRecurring__select:hover,button.en__ticketSummary__checkout:focus,button.en__ticketSummary__checkout:hover,button:focus,button:hover{
+.button:focus,.button:hover,.pseduo__en__submit_button:focus,.pseduo__en__submit_button:hover,button.en__eventOccurrence__select:focus,button.en__eventOccurrence__select:hover,button.en__ticketRecurring__select:focus,button.en__ticketRecurring__select:hover,button.en__ticketSummary__checkout:focus,button.en__ticketSummary__checkout:hover,button:focus,button:hover{
   background-color:var(--button_background-color_hover);
   border-color:var(--button_border-color_hover);
   color:var(--button_color_hover);
 }
 
-.button:active,button.en__eventOccurrence__select:active,button.en__ticketRecurring__select:active,button.en__ticketSummary__checkout:active,button:active{
+.button:active,.pseduo__en__submit_button:active,button.en__eventOccurrence__select:active,button.en__ticketRecurring__select:active,button.en__ticketSummary__checkout:active,button:active{
   background-color:var(--button_background-color_checked);
   border-color:var(--button_border-color_checked);
   color:var(--button_color_checked);
@@ -3163,25 +3177,29 @@ body:not(#en__pagebuilder) .i1-hide-label .en__field:first-of-type>label,body:no
   display:none;
 }
 
-.en__field--give-by-select>.en__field__element .en__field__item--other,.en__field--give-by-select>.en__field__element .en__field__item:not(.en__field__item--other),.radio-to-buttons>.en__field>.en__field__element>.en__field__item--other,.radio-to-buttons>.en__field>.en__field__element>.en__field__item:not(.en__field__item--other),.radio-to-buttons_donationAmt>.en__field>.en__field__element .en__field__item--other,.radio-to-buttons_donationAmt>.en__field>.en__field__element .en__field__item:not(.en__field__item--other),.radio-to-buttons_recurrfreq>.en__field>.en__field__element .en__field__item--other,.radio-to-buttons_recurrfreq>.en__field>.en__field__element .en__field__item:not(.en__field__item--other){
+.en__field--give-by-select>.en__field__element .en__field__item--other,.en__field--give-by-select>.en__field__element .en__field__item:not(.en__field__item--other),.radio-to-buttons>.en__field>.en__field__element>.en__field__item--other,.radio-to-buttons>.en__field>.en__field__element>.en__field__item:not(.en__field__item--other),.radio-to-buttons_donationAmt .en__field--donationAmt.en__field--radio>.en__field__element .en__field__item--other,.radio-to-buttons_donationAmt .en__field--donationAmt.en__field--radio>.en__field__element .en__field__item:not(.en__field__item--other),.radio-to-buttons_recurrfreq .en__field--recurrfreq.en__field--radio>.en__field__element .en__field__item--other,.radio-to-buttons_recurrfreq .en__field--recurrfreq.en__field--radio>.en__field__element .en__field__item:not(.en__field__item--other){
   flex-shrink:1;
   justify-content:center;
 }
 
 .radio-to-buttons>.en__field>.en__field__element>.en__field__input--other{
   border-radius:var(--button_border-radius);
+  border-width:var(--button_border-width);
 }
 
 .en__field--give-by-select>.en__field__element .en__field__input--other{
   border-radius:var(--give-by-select__button_border-radius);
+  border-width:var(--give-by-select__button_border-width);
 }
 
-.radio-to-buttons_donationAmt>.en__field>.en__field__element .en__field__input--other{
+.radio-to-buttons_donationAmt .en__field--donationAmt.en__field--radio>.en__field__element .en__field__input--other{
   border-radius:var(--donation-amount__button_border-radius);
+  border-width:var(--donation-amount__button_border-width);
 }
 
-.radio-to-buttons_recurrfreq>.en__field>.en__field__element .en__field__input--other{
+.radio-to-buttons_recurrfreq .en__field--recurrfreq.en__field--radio>.en__field__element .en__field__input--other{
   border-radius:var(--recurring-frequency__button_border-radius);
+  border-width:var(--recurring-frequency__button_border-width);
 }
 .radio-to-buttons .en__field--radio input[type=radio]+label{
   background-color:var(--button_background-color);
@@ -3281,7 +3299,7 @@ body:not(#en__pagebuilder) .i1-hide-label .en__field:first-of-type>label,body:no
   text-transform:var(--donation-amount__button_text-transform);
 }
 
-.radio-to-buttons_donationAmt>.en__field--donationAmt>.en__field__element .en__field__item{
+.radio-to-buttons_donationAmt .en__field--donationAmt.en__field--radio>.en__field__element .en__field__item{
   flex-basis:calc(100%/var(--donation-amount__button_count));
   flex-grow:var(--donation-amount__flex-grow);
 }
@@ -3322,7 +3340,7 @@ body:not(#en__pagebuilder) .i1-hide-label .en__field:first-of-type>label,body:no
   text-transform:var(--recurring-frequency__button_text-transform);
 }
 
-.radio-to-buttons_recurrfreq>.en__field--recurrfreq>.en__field__element .en__field__item{
+.radio-to-buttons_recurrfreq .en__field--recurrfreq.en__field--radio>.en__field__element .en__field__item{
   flex-basis:calc(100%/var(--recurring-frequency__button_count));
   flex-grow:var(--recurring-frequency__flex-grow);
 }
@@ -3504,13 +3522,18 @@ button.en__ecarditems__addrecipient{
 }
 
 button.en__ecarditems__prevclose{
-  background-color:initial;
+  align-items:center;
+  background-color:#fff;
   border:none;
+  display:flex;
   font-size:2rem;
+  height:auto;
+  justify-content:center;
   margin:0;
-  padding:0;
-  right:-29px;
-  top:5px;
+  padding:.35ch;
+  right:0;
+  top:0;
+  width:auto;
 }
 
 .en__ecarditems__showprev{
@@ -4014,6 +4037,14 @@ img:not([width]),video:not([width]){
   width:100%;
 }
 
+img{
+  color:#0000;
+}
+
+body:not(#en__pagebuilder) img:not([src]):not([srcset]){
+  visibility:hidden;
+}
+
 #enModal{
   align-items:center;
   background-color:#000000d9;
@@ -4336,6 +4367,7 @@ h2.en__pg__name{
 
 .en__pg__optionType{
   display:flex;
+  flex-direction:column;
 }
 
 .en__pg__optionType select{
@@ -4999,7 +5031,7 @@ body:not(#en__pagebuilder)[data-engrid-does-not-have-body-banner] .en__component
     grid-column:rbc;
   }
   [data-engrid-layout=centercenter2col] form>.en__component--advrow .body-top{
-    grid-row:body-top-start /  body-main-end;
+    grid-row:body-top-start /  body-footer-start;
   }
   [data-engrid-layout=centercenter2col] form>.en__component--advrow .body-main{
     grid-row:body-header-end /  body-main-end;
@@ -6170,7 +6202,7 @@ body:not([data-engrid-debug]) #debug-bar{
   visibility:visible;
 }
 
-#en__pagebuilder .messageOverlay.hidden:only-child .messageOverlay__message{
+#en__pagebuilder .en__pg__imageSelector,#en__pagebuilder .messageOverlay.hidden:only-child .messageOverlay__message{
   display:none;
 }
 
@@ -6391,6 +6423,7 @@ body:not([data-engrid-debug]) #debug-bar{
   background-position:50%;
   background-repeat:no-repeat;
   background-size:contain;
+  display:inline-block;
 }
 
 #en__pagebuilder img[data-src]{
