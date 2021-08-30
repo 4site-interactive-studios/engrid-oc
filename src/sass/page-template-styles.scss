@@ -288,46 +288,46 @@ body:not(#en__pagebuilder) {
     }
   }
 
-  .en__field--recurrfreq {
-    padding-bottom: 0;
-  }
+  // .en__field--recurrfreq {
+  //   padding-bottom: 0;
+  // }
 
   .en__field--recurrfreq .en__field__item {
     flex-grow: 0;
   }
 
-  .en__field--recurrfreq.en__field--radio input[type="radio"] + label {
-    justify-content: flex-start;
-    margin-left: 3rem;
-  }
+  // .en__field--recurrfreq.en__field--radio input[type="radio"] + label {
+  //   justify-content: flex-start;
+  //   margin-left: 3rem;
+  // }
 
-  .en__field--recurrfreq
-    .en__field__input--radio:checked
-    + .en__field__label:before {
-    border-color: #323232;
-    background-color: #323232;
-  }
+  // .en__field--recurrfreq
+  //   .en__field__input--radio:checked
+  //   + .en__field__label:before {
+  //   border-color: #323232;
+  //   background-color: #323232;
+  // }
 
   .en__field--recurrfreq .en__field__input--radio + .en__field__label::before {
     border-radius: 50%;
   }
 
   .en__field--recurrfreq .en__field__input--radio + .en__field__label::before {
-    content: "";
-    position: absolute;
-    height: calc(1.4rem - 2px);
-    width: calc(1.4rem - 2px);
-    left: -2rem;
-    display: inline-block;
-    vertical-align: middle;
-    border: 1px solid #c3c3c3;
-    -webkit-box-shadow: inset 0 0 0 5px #fff;
-    box-shadow: inset 0 0 0 5px #fff;
-    cursor: pointer;
-    -webkit-transition-duration: 0.25s;
-    transition-duration: 0.25s;
-    -webkit-transition-property: border-color, background-color;
-    transition-property: border-color, background-color;
+    // content: "";
+    // position: absolute;
+    // height: calc(1.4rem - 2px);
+    // width: calc(1.4rem - 2px);
+    // left: -2rem;
+    // display: inline-block;
+    // vertical-align: middle;
+    // border: 1px solid #c3c3c3;
+    // -webkit-box-shadow: inset 0 0 0 5px #fff;
+    // box-shadow: inset 0 0 0 5px #fff;
+    // cursor: pointer;
+    // -webkit-transition-duration: 0.25s;
+    // transition-duration: 0.25s;
+    // -webkit-transition-property: border-color, background-color;
+    // transition-property: border-color, background-color;
   }
 
   // Make the outline branded
@@ -1167,22 +1167,22 @@ body:not(#en__pagebuilder)[data-engrid-footer-below-fold]
   margin-top: 0.25rem;
 }
 
-.en__field__input--checkbox + .en__field__label:before,
-.en__contactDetails__rows:before {
-  border-radius: var(--checkbox_border-radius);
-}
-.en__field__input--checkbox:checked + .en__field__label:before,
-.en__contactDetails__select:checked + .en__contactDetails__rows:before {
-  background-color: var(--color_black);
-  box-shadow: none;
-}
+// .en__field__input--checkbox + .en__field__label:before,
+// .en__contactDetails__rows:before {
+//   border-radius: var(--checkbox_border-radius);
+// }
+// .en__field__input--checkbox:checked + .en__field__label:before,
+// .en__contactDetails__select:checked + .en__contactDetails__rows:before {
+//   background-color: var(--color_black);
+//   box-shadow: none;
+// }
 
-.en__field__input--checkbox:checked + .en__field__label::after,
-.en__contactDetails__select:checked + .en__contactDetails__rows::after {
-  color: var(--color_white);
-  left: -31px;
-  top: 1px;
-}
+// .en__field__input--checkbox:checked + .en__field__label::after,
+// .en__contactDetails__select:checked + .en__contactDetails__rows::after {
+//   color: var(--color_white);
+//   left: -31px;
+//   top: 1px;
+// }
 
 // Couldn't find the cause of this spacing issue https://d.pr/i/1W9vTl
 .en__field--giveBySelect div div.en__field__item:last-child {
@@ -1243,12 +1243,12 @@ body:not(#en__pagebuilder)[data-engrid-footer-below-fold]
 
 .en__field__input--checkbox + .en__field__label,
 .en__contactDetails__rows {
-  font-size: 14px;
-  font-weight: 400;
-  text-transform: none;
-  letter-spacing: 0.4px;
-  display: inline-block;
-  line-height: 1.4;
+  // font-size: 14px;
+  // font-weight: 400;
+  // text-transform: none;
+  // letter-spacing: 0.4px;
+  // display: inline-block;
+  // line-height: 1.4;
   .highlight {
     font-weight: 700;
     margin-top: -0.5rem;

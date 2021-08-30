@@ -117,30 +117,30 @@
 
   // TYPOGRAPHY RADIO INPUT:CHECKED
   --radio_color_selected_selected: var(--radio_background-color);
-  --radio_background-color_selected: var(--color_white);
+  --radio_background-color_selected: var(--color_black);
   --radio_border-color_selected: var(--radio_border-color);
-  --radio_box-shadow_selected: inset 0 0 0 6px var(--color_black);
+  --radio_box-shadow_selected: inset 0 0 0 5px var(--color_white);
 
   // TYPOGRAPHY CHECKBOX
-  --checkbox_color: var(--color_white);
-  --checkbox_background-color: var(--color_white);
-  --checkbox_border-width: 1px;
-  --checkbox_border-color: var(--color_black);
+  // --checkbox_color: var(--color_white);
+  // --checkbox_background-color: var(--color_white);
+  // --checkbox_border-width: 1px;
+  // --checkbox_border-color: var(--color_black);
   --checkbox_border-radius: 50%;
-  --checkbox_height: 1.35rem;
-  --checkbox_width: var(--checkbox_height);
+  // --checkbox_height: 1.35rem;
+  // --checkbox_width: var(--checkbox_height);
 
   // TYPOGRAPHY CHECKBOX INPUT:FOCUS
   // TYPOGRAPHY CHECKBOX INPUT:HOVER
-  --checkbox_color_hover: var(--checkbox_color);
-  --checkbox_background-color_hover: var(--checkbox_background-color);
-  --checkbox_border-color_hover: var(--checkbox_border-color);
+  // --checkbox_color_hover: var(--checkbox_color);
+  // --checkbox_background-color_hover: var(--checkbox_background-color);
+  // --checkbox_border-color_hover: var(--checkbox_border-color);
 
   // TYPOGRAPHY CHECKBOX INPUT:CHECKED
-  --checkbox_content_checked: "✓";
-  --checkbox_color_checked: var(--checkbox_background-color);
+  // --checkbox_content_checked: "✓";
+  // --checkbox_color_checked: var(--radio_background-color_selected);
   --checkbox_background-color_checked: var(--color_black);
-  --checkbox_border-color_checked: var(--checkbox_border-color);
+  --checkbox_color_checked: var(--color_white);
 
   // TYPOGRAPHY SELECT
   --select_font-family: var(--default_font-family);
