@@ -1,5 +1,5 @@
-// import { Options, App } from "@4site/engrid-common"; // Uses ENGrid via NPM
-import { Options, App } from "../../engrid-scripts/packages/common"; // Uses ENGrid via Visual Studio Workspace
+import { Options, App } from "@4site/engrid-common"; // Uses ENGrid via NPM
+// import { Options, App } from "../../engrid-scripts/packages/common"; // Uses ENGrid via Visual Studio Workspace
 import "./sass/main.scss";
 import "./scripts/main.js";
 
@@ -150,7 +150,7 @@ const options: Options = {
   CapitalizeFields: true,
   ClickToExpand: true,
   CurrencySymbol: "$",
-  CurrencySeparator: ".",
+  DecimalSeparator: ".",
   MediaAttribution: true,
   SkipToMainContentLink: true,
   SrcDefer: true,
