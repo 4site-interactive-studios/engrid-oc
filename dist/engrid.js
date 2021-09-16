@@ -12230,7 +12230,7 @@ class NeverBounce {
         if (this.nbStatus) {
             this.nbStatus.value = engrid_ENGrid.getFieldValue("nb-result");
         }
-        if (!["catchall", "valid"].includes(engrid_ENGrid.getFieldValue("nb-result"))) {
+        if (!["catchall", "unknown", "valid"].includes(engrid_ENGrid.getFieldValue("nb-result"))) {
             this.setEmailStatus("required");
             (_a = this.emailField) === null || _a === void 0 ? void 0 : _a.focus();
             return false;
