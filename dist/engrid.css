@@ -8523,17 +8523,6 @@ input{
   display:none !important;
 }
 
-[data-engrid-theme=oc] div[id^=nb-wrapper].nb-error input,[data-engrid-theme=oc] div[id^=nb-wrapper] .nb-loading input,[data-engrid-theme=oc] div[id^=nb-wrapper].nb-success input{
-  border-bottom-left-radius:0 !important;
-  border-bottom-right-radius:0 !important;
-  margin-bottom:0 !important;
-}
-
-[data-engrid-theme=oc] div[id^=nb-wrapper].nb-error div.nb-feedback,[data-engrid-theme=oc] div[id^=nb-wrapper] .nb-loading.nb-feedback,[data-engrid-theme=oc] div[id^=nb-wrapper].nb-success div.nb-feedback{
-  border-top-left-radius:0 !important;
-  border-top-right-radius:0 !important;
-}
-
 [data-engrid-theme=oc] div[id^=nb-wrapper].nb-error #en__field_supporter_emailAddress,[data-engrid-theme=oc] div[id^=nb-wrapper] .nb-loading #en__field_supporter_emailAddress,[data-engrid-theme=oc] div[id^=nb-wrapper].nb-success #en__field_supporter_emailAddress{
   outline:none;
 }

@@ -1891,15 +1891,15 @@
   div[id^="nb-wrapper"] .nb-loading input,
   div[id^="nb-wrapper"].nb-error input,
   div[id^="nb-wrapper"].nb-success input {
-    margin-bottom: 0 !important;
-    border-bottom-right-radius: 0 !important;
-    border-bottom-left-radius: 0 !important;
+    // margin-bottom: 0 !important;
+    // border-bottom-right-radius: 0 !important;
+    // border-bottom-left-radius: 0 !important;
   }
   div[id^="nb-wrapper"] .nb-loading.nb-feedback,
   div[id^="nb-wrapper"].nb-error div.nb-feedback,
   div[id^="nb-wrapper"].nb-success div.nb-feedback {
-    border-top-right-radius: 0 !important;
-    border-top-left-radius: 0 !important;
+    // border-top-right-radius: 0 !important;
+    // border-top-left-radius: 0 !important;
   }
 
   div[id^="nb-wrapper"] .nb-loading #en__field_supporter_emailAddress,
