@@ -1,12 +1,11 @@
 /* Add your custom theme styles here */
 [data-engrid-theme="oc"] {
-
   @include mq($until: tablet) {
     // Remove down arrow when giving frequency wraps
-      .monthly-gift-upsell-tooltip .highlight:after {
-        display: none;
-      }
-      --engrid__body_padding: 0px 30px;
+    .monthly-gift-upsell-tooltip .highlight:after {
+      display: none;
+    }
+    --engrid__body_padding: 0px 30px;
   }
 
   &:not(#en__pagebuilder) {
@@ -201,6 +200,9 @@
   }
 
   @mixin on-mobile {
+    .body-header p {
+      margin: 1rem auto;
+    }
   }
 
   @mixin on-desktop {
@@ -273,23 +275,6 @@
       @include on-desktop;
     }
   }
-
-  // On smaller displays center the logo
-  @media screen and (max-width: 600px) {
-    .body-header {
-      justify-content: center;
-      min-height: auto !important;
-      padding: 0.9375rem 1.875rem;
-
-      p {
-        margin: 0;
-      }
-    }
-  }
-
-  // .en__field--recurrfreq {
-  //   padding-bottom: 0;
-  // }
 
   .en__field--recurrfreq .en__field__item {
     flex-grow: 0;
@@ -423,7 +408,6 @@
     margin-bottom: 0;
     border-radius: 0;
   }
-
 
   --background-image: url("https://aaf1a18515da0e792f78-c27fdabe952dfc357fe25ebf5c8897ee.ssl.cf5.rackcdn.com/1991/gray_pattern-optimized-2.jpg?v=1598492702000");
   --engrid__page-backgroundImage_background-color: #f3f3f3;
@@ -693,7 +677,6 @@
     }
   }
 
-
   .page-alert,
   .content-header,
   .body-headerOutside,
@@ -829,6 +812,7 @@
       padding: 0.75rem 0;
       box-decoration-break: clone;
       margin: 0;
+      text-align: center;
       @include mq($until: laptop) {
         font-size: 26px;
       }
@@ -1030,7 +1014,11 @@
   }
 
   /* Paypal */
-  .give-by-select .en__field__element--radio .en__field__item.paypal label span {
+  .give-by-select
+    .en__field__element--radio
+    .en__field__item.paypal
+    label
+    span {
     display: inline-block;
     height: 20px;
     width: 20px;
@@ -1395,7 +1383,8 @@
   }
 
   // This field had a highlight applied to it that causes the checbox to show up off center
-  #en__field_supporter_monthly_upsell_checkbox:checked + .en__field__label:after {
+  #en__field_supporter_monthly_upsell_checkbox:checked
+    + .en__field__label:after {
     top: 0.25rem;
   }
 
@@ -2117,9 +2106,9 @@
     background-color: var(--color_primary_overlay);
   }
 
-  &[data-engrid-embedded]{
+  &[data-engrid-embedded] {
     .body-header,
-    .content-footer{
+    .content-footer {
       display: none;
     }
   }
