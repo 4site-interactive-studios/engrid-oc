@@ -1,3 +1,32 @@
+/*!
+ * 
+ *                ((((
+ *          ((((((((
+ *       (((((((
+ *     (((((((           ****
+ *   (((((((          *******
+ *  ((((((((       **********     *********       ****    ***
+ *  ((((((((    ************   **************     ***    ****
+ *  ((((((   *******  *****   *****        *     **    ******        *****
+ *  (((   *******    ******   ******            ****  ********   ************
+ *      *******      *****     **********      ****    ****     ****      ****
+ *    *********************         *******   *****   ****     ***************
+ *     ********************            ****   ****    ****    ****
+ *                 *****    *****   *******  *****   *****     *****     **
+ *                *****     *************    ****    *******     **********
+ *
+ *  ENGRID PAGE TEMPLATE ASSETS
+ *
+ *  Date: Sunday, September 26, 2021 @ 23:44:51 ET
+ *  By: fe
+ *  ENGrid styles: v0.3.38
+ *  ENGrid scripts: v0.3.39
+ *
+ *  Created by 4Site Studios
+ *  Come work with us or join our team, we would love to hear from you
+ *  https://www.4sitestudios.com/en
+ *
+ */
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
@@ -1472,7 +1501,7 @@ __webpack_unused_export__ = ({ enumerable: true, get: function () { return ste_p
 
 /***/ }),
 
-/***/ 3237:
+/***/ 4747:
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
 const tippy = __webpack_require__(3861)/* ["default"] */ .ZP;
@@ -9129,6 +9158,7 @@ const UpsellOptionsDefaults = {
         { max: 300, suggestion: 29 },
         { max: 500, suggestion: "Math.ceil((amount / 12)/5)*5" },
     ],
+    minAmount: 0,
     canClose: true,
     submitOnClose: false,
 };
@@ -9648,18 +9678,20 @@ class ProcessingFees {
         this._fee = value;
         this._onFeeChange.dispatch(this._fee);
     }
-    calculateFees() {
+    calculateFees(amount = 0) {
         var _a;
         if (this._field instanceof HTMLInputElement && this._field.checked) {
             if (this.isENfeeCover()) {
-                return window.EngagingNetworks.require._defined.enjs.getDonationFee();
+                return amount > 0
+                    ? window.EngagingNetworks.require._defined.enjs.feeCover.fee(amount)
+                    : window.EngagingNetworks.require._defined.enjs.getDonationFee();
             }
             const fees = Object.assign({
                 processingfeepercentadded: "0",
                 processingfeefixedamountadded: "0",
             }, (_a = this._field) === null || _a === void 0 ? void 0 : _a.dataset);
-            const processing_fee = (parseFloat(fees.processingfeepercentadded) / 100) *
-                this._amount.amount +
+            const amountToFee = amount > 0 ? amount : this._amount.amount;
+            const processing_fee = (parseFloat(fees.processingfeepercentadded) / 100) * amountToFee +
                 parseFloat(fees.processingfeefixedamountadded);
             return Math.round(processing_fee * 100) / 100;
         }
@@ -10010,7 +10042,6 @@ var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _argume
     });
 };
 
-
 /*global window */
 const ApplePaySession = window.ApplePaySession;
 const merchantIdentifier = window.merchantIdentifier;
@@ -10029,6 +10060,7 @@ class ApplePay {
     constructor() {
         this.applePay = document.querySelector('.en__field__input.en__field__input--radio[value="applepay"]');
         this._amount = DonationAmount.getInstance();
+        this._fees = ProcessingFees.getInstance();
         this._form = EnForm.getInstance();
         this.checkApplePay();
     }
@@ -10113,7 +10145,7 @@ class ApplePay {
         // Only work if Payment Type is Apple Pay
         if (enFieldPaymentType.value == "applepay" && applePayToken.value == "") {
             try {
-                let donationAmount = this._amount.amount;
+                let donationAmount = this._amount.amount + this._fees.fee;
                 var request = {
                     supportedNetworks: merchantSupportedNetworks,
                     merchantCapabilities: merchantCapabilities,
@@ -11496,10 +11528,17 @@ class UpsellLightbox {
                 </h1>
                 ${this.options.otherAmount
             ? `
-                <p>
-                  <span>${this.options.otherLabel}</span>
-                  <input href="#" id="secondOtherField" name="secondOtherField" size="12" type="number" inputmode="numeric" step="1" value="">
-                </p>
+                <div class="upsellOtherAmount">
+                  <div class="upsellOtherAmountLabel">
+                    <p>
+                      ${this.options.otherLabel}
+                    </p>
+                  </div>
+                  <div class="upsellOtherAmountInput">
+                    <input href="#" id="secondOtherField" name="secondOtherField" size="12" type="number" inputmode="numeric" step="1" value="" autocomplete="off">
+                    <small>Minimum ${this.getAmountTxt(this.options.minAmount)}</small>
+                  </div>
+                </div>
                 `
             : ``}
 
@@ -11570,17 +11609,20 @@ class UpsellLightbox {
         var _a, _b;
         const value = parseFloat((_b = (_a = this.overlay.querySelector("#secondOtherField")) === null || _a === void 0 ? void 0 : _a.value) !== null && _b !== void 0 ? _b : "");
         const live_upsell_amount = document.querySelectorAll("#upsellYesButton .upsell_suggestion");
+        const upsellAmount = this.getUpsellAmount();
         if (!isNaN(value) && value > 0) {
-            live_upsell_amount.forEach((elem) => (elem.innerHTML = this.getAmountTxt(value)));
+            this.checkOtherAmount(value);
         }
         else {
-            live_upsell_amount.forEach((elem) => (elem.innerHTML = this.getAmountTxt(this.getUpsellAmount())));
+            this.checkOtherAmount(upsellAmount);
         }
+        live_upsell_amount.forEach((elem) => (elem.innerHTML = this.getAmountTxt(upsellAmount + this._fees.calculateFees(upsellAmount))));
     }
     liveAmounts() {
         const live_upsell_amount = document.querySelectorAll(".upsell_suggestion");
         const live_amount = document.querySelectorAll(".upsell_amount");
-        const suggestedAmount = this.getUpsellAmount() + this._fees.fee;
+        const upsellAmount = this.getUpsellAmount();
+        const suggestedAmount = upsellAmount + this._fees.calculateFees(upsellAmount);
         live_upsell_amount.forEach((elem) => (elem.innerHTML = this.getAmountTxt(suggestedAmount)));
         live_amount.forEach((elem) => (elem.innerHTML = this.getAmountTxt(this._amount.amount + this._fees.fee)));
     }
@@ -11590,7 +11632,9 @@ class UpsellLightbox {
         const amount = this._amount.amount;
         const otherAmount = parseFloat((_b = (_a = this.overlay.querySelector("#secondOtherField")) === null || _a === void 0 ? void 0 : _a.value) !== null && _b !== void 0 ? _b : "");
         if (otherAmount > 0) {
-            return otherAmount;
+            return otherAmount > this.options.minAmount
+                ? otherAmount
+                : this.options.minAmount;
         }
         let upsellAmount = 0;
         for (let i = 0; i < this.options.amountRange.length; i++) {
@@ -11604,7 +11648,9 @@ class UpsellLightbox {
                 break;
             }
         }
-        return upsellAmount;
+        return upsellAmount > this.options.minAmount
+            ? upsellAmount
+            : this.options.minAmount;
     }
     shouldOpen() {
         const freq = this._frequency.frequency;
@@ -11712,6 +11758,17 @@ class UpsellLightbox {
         const dec_places = amount % 1 == 0 ? 0 : (_d = engrid_ENGrid.getOption("DecimalPlaces")) !== null && _d !== void 0 ? _d : 2;
         const amountTxt = engrid_ENGrid.formatNumber(amount, dec_places, dec_separator, thousands_separator);
         return amount > 0 ? symbol + amountTxt : "";
+    }
+    checkOtherAmount(value) {
+        const otherInput = document.querySelector(".upsellOtherAmountInput");
+        if (otherInput) {
+            if (value >= this.options.minAmount) {
+                otherInput.classList.remove("is-invalid");
+            }
+            else {
+                otherInput.classList.add("is-invalid");
+            }
+        }
     }
 }
 
@@ -12378,7 +12435,7 @@ class ProgressBar {
 
 
 // EXTERNAL MODULE: ./src/scripts/main.js
-var main = __webpack_require__(3237);
+var main = __webpack_require__(4747);
 ;// CONCATENATED MODULE: ./src/index.ts
  // Uses ENGrid via NPM
 // import { Options, App } from "../../engrid-scripts/packages/common"; // Uses ENGrid via Visual Studio Workspace
