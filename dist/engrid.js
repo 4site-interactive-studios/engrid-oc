@@ -17,10 +17,10 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Sunday, October 10, 2021 @ 15:13:35 ET
+ *  Date: Tuesday, October 12, 2021 @ 14:39:51 ET
  *  By: fe
- *  ENGrid styles: v0.4.3
- *  ENGrid scripts: v0.4.1
+ *  ENGrid styles: v0.4.4
+ *  ENGrid scripts: v0.4.4
  *
  *  Created by 4Site Studios
  *  Come work with us or join our team, we would love to hear from you
@@ -10116,6 +10116,9 @@ class ApplePay {
         return __awaiter(this, void 0, void 0, function* () {
             const pageform = document.querySelector("form.en__component--page");
             if (!this.applePay || !window.hasOwnProperty("ApplePaySession")) {
+                const applePayContainer = document.querySelector(".en__field__item.applepay");
+                if (applePayContainer)
+                    applePayContainer.remove();
                 if (engrid_ENGrid.debug)
                     console.log("Apple Pay DISABLED");
                 return false;
