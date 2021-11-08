@@ -1668,8 +1668,7 @@
     }
   }
 
-  #en_custom_field_simple_country_select_long a,
-  #en_custom_field_simple_country_select_short a {
+  .simple_country_select .en__field--address1 label a {
     color: #007eb3; // WCAG AA Compliant version of #2ba8dd
   }
 
@@ -1994,7 +1993,7 @@
       .body-banner,
       .body-bannerOverlay {
         // grid-row: body-title-end / body-banner-end;
-        grid-column: bc;
+        // grid-column: bc;
       }
 
       .body-top {
@@ -2002,7 +2001,7 @@
       }
 
       .body-main {
-        grid-row: body-title-start / body-bottom-start;
+        // grid-row: body-title-start / body-bottom-start;
       }
 
       .body-bottom {
@@ -2034,17 +2033,6 @@
   }
 
   &[data-engrid-layout="centercenter2col"] {
-    form > .en__component--advrow {
-      .body-banner,
-      .body-bannerOverlay {
-        grid-column: bc;
-      }
-
-      .body-main {
-        grid-row-start: body-banner-end;
-      }
-    }
-
     --engrid__body_padding: 0px 50px;
 
     .body-main:not(:empty) {

@@ -21,7 +21,7 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Monday, November 8, 2021 @ 09:52:30 ET
+ *  Date: Monday, November 8, 2021 @ 13:21:44 ET
  *  By: bryancasler
  *  ENGrid styles: v0.5.2
  *  ENGrid scripts: v0.5.4
@@ -4750,36 +4750,24 @@ a.skip-link:not(:focus):not(:active){
   position:absolute !important;
   width:1px !important;
 }
-#en_custom_field_simple_country_select_long a,#en_custom_field_simple_country_select_short a{
+body:not(#en__pagebuilder)
+.simple_country_select:not(.country-select-visible)
+.en__field--country{
+  display:none;
+}
+
+.simple_country_select .en__field--address1 label{
+  flex-wrap:wrap;
+}
+
+.simple_country_select .en__field--address1 label a{
+  color:var(--a_color);
   cursor:pointer;
+  text-align:right;
 }
 
-#en_custom_field_simple_country_select_short{
-  display:none;
-}
-
-@media (max-width:600px){
-  #en_custom_field_simple_country_select_short{
-    display:initial;
-  }
-}
-
-.en__component--formblock.country-select-visible .en__field--address1 span,body:not(#en__pagebuilder) .simple_country_select .en__field--country{
-  display:none;
-}
-
-body:not(#en__pagebuilder) .simple_country_select.country-select-visible .en__field--country{
-  display:flex;
-}
-
-.country-select-visible #en_custom_field_simple_country_select_long,.country-select-visible #en_custom_field_simple_country_select_short{
-  display:none;
-}
-
-@media (max-width:600px){
-  #en_custom_field_simple_country_select_long{
-    display:none;
-  }
+.simple_country_select .en__field--address1 label a:focus,.simple_country_select .en__field--address1 label a:hover{
+  color:var(--a_color_hover);
 }
 
 .en__component--socialshareblock{
@@ -6146,7 +6134,6 @@ body:not(#en__pagebuilder)[data-engrid-no-body-banner]
   outline:0;
   position:relative;
   transition-property:transform,visibility,opacity;
-  white-space:normal;
 }
 
 .tippy-box[data-placement^=top]>.tippy-arrow{
@@ -8702,7 +8689,7 @@ label:hover{
   line-height:1.44 !important;
 }
 
-[data-engrid-theme=oc] #en_custom_field_simple_country_select_long a,[data-engrid-theme=oc] #en_custom_field_simple_country_select_short a{
+[data-engrid-theme=oc] .simple_country_select .en__field--address1 label a{
   color:#007eb3;
 }
 
@@ -8933,12 +8920,6 @@ input{
   [data-engrid-theme=oc][data-engrid-layout=centercenter2col] .body-header{
     margin-bottom:0;
   }
-  [data-engrid-theme=oc][data-engrid-layout=centercenter2col] .body-banner,[data-engrid-theme=oc][data-engrid-layout=centercenter2col] .body-bannerOverlay{
-    grid-column:bc;
-  }
-  [data-engrid-theme=oc][data-engrid-layout=centercenter2col] .body-main{
-    grid-row:body-title-start /  body-bottom-start;
-  }
 }
 
 @media screen and (max-width:999px){
@@ -8955,14 +8936,6 @@ input{
 
 [data-engrid-theme=oc][data-engrid-layout=centercenter2col]{
   --engrid__body_padding:0px 50px;
-}
-
-[data-engrid-theme=oc][data-engrid-layout=centercenter2col] form>.en__component--advrow .body-banner,[data-engrid-theme=oc][data-engrid-layout=centercenter2col] form>.en__component--advrow .body-bannerOverlay{
-  grid-column:bc;
-}
-
-[data-engrid-theme=oc][data-engrid-layout=centercenter2col] form>.en__component--advrow .body-main{
-  grid-row-start:body-banner-end;
 }
 
 [data-engrid-theme=oc][data-engrid-layout=centercenter2col] .body-main:not(:empty){
