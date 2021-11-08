@@ -2034,6 +2034,17 @@
   }
 
   &[data-engrid-layout="centercenter2col"] {
+    form > .en__component--advrow {
+      .body-banner,
+      .body-bannerOverlay {
+        grid-column: bc;
+      }
+
+      .body-main {
+        grid-row-start: body-banner-end;
+      }
+    }
+
     --engrid__body_padding: 0px 50px;
 
     .body-main:not(:empty) {

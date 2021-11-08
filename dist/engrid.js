@@ -17,10 +17,10 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Tuesday, November 2, 2021 @ 15:05:38 ET
- *  By: fe
+ *  Date: Monday, November 8, 2021 @ 09:52:30 ET
+ *  By: bryancasler
  *  ENGrid styles: v0.5.2
- *  ENGrid scripts: v0.5.3
+ *  ENGrid scripts: v0.5.4
  *
  *  Created by 4Site Studios
  *  Come work with us or join our team, we would love to hear from you
@@ -1504,7 +1504,7 @@ __webpack_unused_export__ = ({ enumerable: true, get: function () { return ste_p
 /***/ 4747:
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
-const tippy = __webpack_require__(3861)/* ["default"] */ .ZP;
+const tippy = (__webpack_require__(3861)/* ["default"] */ .ZP);
 
 document.onreadystatechange = () => {
   if (document.readyState === "interactive" || document.readyState === "complete") {
@@ -4685,6 +4685,45 @@ __webpack_require__.d(__webpack_exports__, {
 
 // UNUSED EXPORTS: animateFill, createSingleton, delegate, followCursor, hideAll, inlinePositioning, roundArrow, sticky
 
+;// CONCATENATED MODULE: ./node_modules/@popperjs/core/lib/dom-utils/getBoundingClientRect.js
+// import { isHTMLElement } from './instanceOf';
+function getBoundingClientRect(element, // eslint-disable-next-line unused-imports/no-unused-vars
+includeScale) {
+  if (includeScale === void 0) {
+    includeScale = false;
+  }
+
+  var rect = element.getBoundingClientRect();
+  var scaleX = 1;
+  var scaleY = 1; // FIXME:
+  // `offsetWidth` returns an integer while `getBoundingClientRect`
+  // returns a float. This results in `scaleX` or `scaleY` being
+  // non-1 when it should be for elements that aren't a full pixel in
+  // width or height.
+  // if (isHTMLElement(element) && includeScale) {
+  //   const offsetHeight = element.offsetHeight;
+  //   const offsetWidth = element.offsetWidth;
+  //   // Do not attempt to divide by 0, otherwise we get `Infinity` as scale
+  //   // Fallback to 1 in case both values are `0`
+  //   if (offsetWidth > 0) {
+  //     scaleX = rect.width / offsetWidth || 1;
+  //   }
+  //   if (offsetHeight > 0) {
+  //     scaleY = rect.height / offsetHeight || 1;
+  //   }
+  // }
+
+  return {
+    width: rect.width / scaleX,
+    height: rect.height / scaleY,
+    top: rect.top / scaleY,
+    right: rect.right / scaleX,
+    bottom: rect.bottom / scaleY,
+    left: rect.left / scaleX,
+    x: rect.left / scaleX,
+    y: rect.top / scaleY
+  };
+}
 ;// CONCATENATED MODULE: ./node_modules/@popperjs/core/lib/dom-utils/getWindow.js
 function getWindow(node) {
   if (node == null) {
@@ -4697,6 +4736,17 @@ function getWindow(node) {
   }
 
   return node;
+}
+;// CONCATENATED MODULE: ./node_modules/@popperjs/core/lib/dom-utils/getWindowScroll.js
+
+function getWindowScroll(node) {
+  var win = getWindow(node);
+  var scrollLeft = win.pageXOffset;
+  var scrollTop = win.pageYOffset;
+  return {
+    scrollLeft: scrollLeft,
+    scrollTop: scrollTop
+  };
 }
 ;// CONCATENATED MODULE: ./node_modules/@popperjs/core/lib/dom-utils/instanceOf.js
 
@@ -4722,54 +4772,6 @@ function isShadowRoot(node) {
 }
 
 
-;// CONCATENATED MODULE: ./node_modules/@popperjs/core/lib/dom-utils/getBoundingClientRect.js
-
-var round = Math.round;
-function getBoundingClientRect(element, includeScale) {
-  if (includeScale === void 0) {
-    includeScale = false;
-  }
-
-  var rect = element.getBoundingClientRect();
-  var scaleX = 1;
-  var scaleY = 1;
-
-  if (isHTMLElement(element) && includeScale) {
-    var offsetHeight = element.offsetHeight;
-    var offsetWidth = element.offsetWidth; // Do not attempt to divide by 0, otherwise we get `Infinity` as scale
-    // Fallback to 1 in case both values are `0`
-
-    if (offsetWidth > 0) {
-      scaleX = rect.width / offsetWidth || 1;
-    }
-
-    if (offsetHeight > 0) {
-      scaleY = rect.height / offsetHeight || 1;
-    }
-  }
-
-  return {
-    width: round(rect.width / scaleX),
-    height: round(rect.height / scaleY),
-    top: round(rect.top / scaleY),
-    right: round(rect.right / scaleX),
-    bottom: round(rect.bottom / scaleY),
-    left: round(rect.left / scaleX),
-    x: round(rect.left / scaleX),
-    y: round(rect.top / scaleY)
-  };
-}
-;// CONCATENATED MODULE: ./node_modules/@popperjs/core/lib/dom-utils/getWindowScroll.js
-
-function getWindowScroll(node) {
-  var win = getWindow(node);
-  var scrollLeft = win.pageXOffset;
-  var scrollTop = win.pageYOffset;
-  return {
-    scrollLeft: scrollLeft,
-    scrollTop: scrollTop
-  };
-}
 ;// CONCATENATED MODULE: ./node_modules/@popperjs/core/lib/dom-utils/getHTMLElementScroll.js
 function getHTMLElementScroll(element) {
   return {
@@ -5537,7 +5539,7 @@ function popperOffsets(_ref) {
 ;// CONCATENATED MODULE: ./node_modules/@popperjs/core/lib/utils/math.js
 var math_max = Math.max;
 var math_min = Math.min;
-var math_round = Math.round;
+var round = Math.round;
 ;// CONCATENATED MODULE: ./node_modules/@popperjs/core/lib/modifiers/computeStyles.js
 
 
@@ -5563,8 +5565,8 @@ function roundOffsetsByDPR(_ref) {
   var win = window;
   var dpr = win.devicePixelRatio || 1;
   return {
-    x: math_round(math_round(x * dpr) / dpr) || 0,
-    y: math_round(math_round(y * dpr) / dpr) || 0
+    x: round(round(x * dpr) / dpr) || 0,
+    y: round(round(y * dpr) / dpr) || 0
   };
 }
 
@@ -6618,7 +6620,7 @@ var popper_createPopper = /*#__PURE__*/popperGenerator({
 
 ;// CONCATENATED MODULE: ./node_modules/tippy.js/dist/tippy.esm.js
 /**!
-* tippy.js v6.3.1
+* tippy.js v6.3.5
 * (c) 2017-2021 atomiks
 * MIT License
 */
@@ -6633,6 +6635,9 @@ var SVG_ARROW_CLASS = "tippy-svg-arrow";
 var TOUCH_OPTIONS = {
   passive: true,
   capture: true
+};
+var TIPPY_DEFAULT_APPEND_TO = function TIPPY_DEFAULT_APPEND_TO() {
+  return document.body;
 };
 
 function tippy_esm_hasOwnProperty(obj, key) {
@@ -6759,7 +6764,7 @@ function getOwnerDocument(elementOrElements) {
       element = _normalizeToArray[0]; // Elements created via a <template> have an ownerDocument with no reference to the body
 
 
-  return (element == null ? void 0 : (_element$ownerDocumen = element.ownerDocument) == null ? void 0 : _element$ownerDocumen.body) ? element.ownerDocument : document;
+  return element != null && (_element$ownerDocumen = element.ownerDocument) != null && _element$ownerDocumen.body ? element.ownerDocument : document;
 }
 function isCursorOutsideInteractiveBorder(popperTreeData, event) {
   var clientX = event.clientX,
@@ -6794,6 +6799,26 @@ function updateTransitionEndListener(box, action, listener) {
   ['transitionend', 'webkitTransitionEnd'].forEach(function (event) {
     box[method](event, listener);
   });
+}
+/**
+ * Compared to xxx.contains, this function works for dom structures with shadow
+ * dom
+ */
+
+function actualContains(parent, child) {
+  var target = child;
+
+  while (target) {
+    var _target$getRootNode;
+
+    if (parent.contains(target)) {
+      return true;
+    }
+
+    target = target.getRootNode == null ? void 0 : (_target$getRootNode = target.getRootNode()) == null ? void 0 : _target$getRootNode.host;
+  }
+
+  return false;
 }
 
 var currentInput = {
@@ -6858,8 +6883,8 @@ function bindGlobalEventListeners() {
 }
 
 var isBrowser = typeof window !== 'undefined' && typeof document !== 'undefined';
-var ua = isBrowser ? navigator.userAgent : '';
-var isIE = /MSIE |Trident\//.test(ua);
+var isIE11 = isBrowser ? // @ts-ignore
+!!window.msCrypto : false;
 
 function createMemoryLeakWarning(method) {
   var txt = method === 'destroy' ? 'n already-' : ' ';
@@ -6932,9 +6957,7 @@ var renderProps = {
   zIndex: 9999
 };
 var defaultProps = Object.assign({
-  appendTo: function appendTo() {
-    return document.body;
-  },
+  appendTo: TIPPY_DEFAULT_APPEND_TO,
   aria: {
     content: 'auto',
     expanded: 'auto'
@@ -6969,7 +6992,7 @@ var defaultProps = Object.assign({
   touch: true,
   trigger: 'mouseenter focus',
   triggerTarget: null
-}, pluginProps, {}, renderProps);
+}, pluginProps, renderProps);
 var defaultKeys = Object.keys(defaultProps);
 var setDefaultProps = function setDefaultProps(partialProps) {
   /* istanbul ignore else */
@@ -6987,12 +7010,14 @@ function getExtendedPassedProps(passedProps) {
         defaultValue = plugin.defaultValue;
 
     if (name) {
-      acc[name] = passedProps[name] !== undefined ? passedProps[name] : defaultValue;
+      var _name;
+
+      acc[name] = passedProps[name] !== undefined ? passedProps[name] : (_name = defaultProps[name]) != null ? _name : defaultValue;
     }
 
     return acc;
   }, {});
-  return Object.assign({}, passedProps, {}, pluginProps);
+  return Object.assign({}, passedProps, pluginProps);
 }
 function getDataAttributeProps(reference, plugins) {
   var propKeys = plugins ? Object.keys(getExtendedPassedProps(Object.assign({}, defaultProps, {
@@ -7023,7 +7048,7 @@ function evaluateProps(reference, props) {
   var out = Object.assign({}, props, {
     content: invokeWithArgsOrReturn(props.content, [reference])
   }, props.ignoreAttributes ? {} : getDataAttributeProps(reference, props.plugins));
-  out.aria = Object.assign({}, defaultProps.aria, {}, out.aria);
+  out.aria = Object.assign({}, defaultProps.aria, out.aria);
   out.aria = {
     expanded: out.aria.expanded === 'auto' ? props.interactive : out.aria.expanded,
     content: out.aria.content === 'auto' ? props.interactive ? null : 'describedby' : out.aria.content
@@ -7184,7 +7209,7 @@ var mouseMoveListeners = []; // Used by `hideAll()`
 
 var mountedInstances = [];
 function createTippy(reference, passedProps) {
-  var props = evaluateProps(reference, Object.assign({}, defaultProps, {}, getExtendedPassedProps(removeUndefinedProps(passedProps)))); // ===========================================================================
+  var props = evaluateProps(reference, Object.assign({}, defaultProps, getExtendedPassedProps(removeUndefinedProps(passedProps)))); // ===========================================================================
   // 🔒 Private members
   // ===========================================================================
 
@@ -7282,10 +7307,9 @@ function createTippy(reference, passedProps) {
       instance.clearDelayTimeouts();
     }
   });
-  popper.addEventListener('mouseleave', function (event) {
+  popper.addEventListener('mouseleave', function () {
     if (instance.props.interactive && instance.props.trigger.indexOf('mouseenter') >= 0) {
       getDocument().addEventListener('mousemove', debouncedOnMouseMove);
-      debouncedOnMouseMove(event);
     }
   });
   return instance; // ===========================================================================
@@ -7305,7 +7329,7 @@ function createTippy(reference, passedProps) {
     var _instance$props$rende;
 
     // @ts-ignore
-    return !!((_instance$props$rende = instance.props.render) == null ? void 0 : _instance$props$rende.$$tippy);
+    return !!((_instance$props$rende = instance.props.render) != null && _instance$props$rende.$$tippy);
   }
 
   function getCurrentTarget() {
@@ -7344,7 +7368,7 @@ function createTippy(reference, passedProps) {
 
     pluginsHooks.forEach(function (pluginHooks) {
       if (pluginHooks[hook]) {
-        pluginHooks[hook].apply(void 0, args);
+        pluginHooks[hook].apply(pluginHooks, args);
       }
     });
 
@@ -7410,15 +7434,16 @@ function createTippy(reference, passedProps) {
       if (didTouchMove || event.type === 'mousedown') {
         return;
       }
-    } // Clicked on interactive popper
+    }
 
+    var actualTarget = event.composedPath && event.composedPath()[0] || event.target; // Clicked on interactive popper
 
-    if (instance.props.interactive && popper.contains(event.target)) {
+    if (instance.props.interactive && actualContains(popper, actualTarget)) {
       return;
     } // Clicked on the event listeners target
 
 
-    if (getCurrentTarget().contains(event.target)) {
+    if (normalizeToArray(instance.props.triggerTarget || reference).indexOf(actualTarget) !== -1) {
       if (currentInput.isTouch) {
         return;
       }
@@ -7546,7 +7571,7 @@ function createTippy(reference, passedProps) {
           break;
 
         case 'focus':
-          on(isIE ? 'focusout' : 'blur', onBlurOrFocusOut);
+          on(isIE11 ? 'focusout' : 'blur', onBlurOrFocusOut);
           break;
 
         case 'focusin':
@@ -7772,7 +7797,7 @@ function createTippy(reference, passedProps) {
 
     var node = getCurrentTarget();
 
-    if (instance.props.interactive && appendTo === defaultProps.appendTo || appendTo === 'parent') {
+    if (instance.props.interactive && appendTo === TIPPY_DEFAULT_APPEND_TO || appendTo === 'parent') {
       parentNode = node.parentNode;
     } else {
       parentNode = invokeWithArgsOrReturn(appendTo, [node]);
@@ -7886,7 +7911,7 @@ function createTippy(reference, passedProps) {
     invokeHook('onBeforeUpdate', [instance, partialProps]);
     removeListeners();
     var prevProps = instance.props;
-    var nextProps = evaluateProps(reference, Object.assign({}, instance.props, {}, partialProps, {
+    var nextProps = evaluateProps(reference, Object.assign({}, prevProps, removeUndefinedProps(partialProps), {
       ignoreAttributes: true
     }));
     instance.props = nextProps;
@@ -8244,10 +8269,19 @@ var createSingleton = function createSingleton(tippyInstances, optionalProps) {
 
   var individualInstances = tippyInstances;
   var references = [];
+  var triggerTargets = [];
   var currentTarget;
   var overrides = optionalProps.overrides;
   var interceptSetPropsCleanups = [];
   var shownOnCreate = false;
+
+  function setTriggerTargets() {
+    triggerTargets = individualInstances.map(function (instance) {
+      return normalizeToArray(instance.props.triggerTarget || instance.reference);
+    }).reduce(function (acc, item) {
+      return acc.concat(item);
+    }, []);
+  }
 
   function setReferences() {
     references = individualInstances.map(function (instance) {
@@ -8285,7 +8319,7 @@ var createSingleton = function createSingleton(tippyInstances, optionalProps) {
 
 
   function prepareInstance(singleton, target) {
-    var index = references.indexOf(target); // bail-out
+    var index = triggerTargets.indexOf(target); // bail-out
 
     if (target === currentTarget) {
       return;
@@ -8298,13 +8332,14 @@ var createSingleton = function createSingleton(tippyInstances, optionalProps) {
     }, {});
     singleton.setProps(Object.assign({}, overrideProps, {
       getReferenceClientRect: typeof overrideProps.getReferenceClientRect === 'function' ? overrideProps.getReferenceClientRect : function () {
-        return target.getBoundingClientRect();
+        return references[index].getBoundingClientRect();
       }
     }));
   }
 
   enableInstances(false);
   setReferences();
+  setTriggerTargets();
   var plugin = {
     fn: function fn() {
       return {
@@ -8334,7 +8369,7 @@ var createSingleton = function createSingleton(tippyInstances, optionalProps) {
   };
   var singleton = tippy(div(), Object.assign({}, removeProperties(optionalProps, ['overrides']), {
     plugins: [plugin].concat(optionalProps.plugins || []),
-    triggerTarget: references,
+    triggerTarget: triggerTargets,
     popperOptions: Object.assign({}, optionalProps.popperOptions, {
       modifiers: [].concat(((_optionalProps$popper = optionalProps.popperOptions) == null ? void 0 : _optionalProps$popper.modifiers) || [], [applyStylesModifier])
     })
@@ -8361,13 +8396,13 @@ var createSingleton = function createSingleton(tippyInstances, optionalProps) {
     } // target is a child tippy instance
 
 
-    if (individualInstances.includes(target)) {
+    if (individualInstances.indexOf(target) >= 0) {
       var ref = target.reference;
       return prepareInstance(singleton, ref);
     } // target is a ReferenceElement
 
 
-    if (references.includes(target)) {
+    if (references.indexOf(target) >= 0) {
       return prepareInstance(singleton, target);
     }
   };
@@ -8410,9 +8445,10 @@ var createSingleton = function createSingleton(tippyInstances, optionalProps) {
     individualInstances = nextInstances;
     enableInstances(false);
     setReferences();
-    interceptSetProps(singleton);
+    setTriggerTargets();
+    interceptSetPropsCleanups = interceptSetProps(singleton);
     singleton.setProps({
-      triggerTarget: references
+      triggerTarget: triggerTargets
     });
   };
 
@@ -8443,7 +8479,7 @@ function delegate(targets, props) {
     trigger: 'manual',
     touch: false
   });
-  var childProps = Object.assign({}, nativeProps, {
+  var childProps = Object.assign({}, defaultProps, nativeProps, {
     showOnCreate: true
   });
   var returnValue = tippy(targets, parentProps);
@@ -8569,7 +8605,7 @@ var animateFill = {
     var _instance$props$rende;
 
     // @ts-ignore
-    if (!((_instance$props$rende = instance.props.render) == null ? void 0 : _instance$props$rende.$$tippy)) {
+    if (!((_instance$props$rende = instance.props.render) != null && _instance$props$rende.$$tippy)) {
       if (false) {}
 
       return {};
@@ -8692,6 +8728,7 @@ var followCursor = {
 
       if (isCursorOverReference || !instance.props.interactive) {
         instance.setProps({
+          // @ts-ignore - unneeded DOMRect properties
           getReferenceClientRect: function getReferenceClientRect() {
             var rect = reference.getBoundingClientRect();
             var x = clientX;
@@ -8828,6 +8865,7 @@ var inlinePositioning = {
     var placement;
     var cursorRectIndex = -1;
     var isInternalUpdate = false;
+    var triedPlacements = [];
     var modifier = {
       name: 'tippyInlinePositioning',
       enabled: true,
@@ -8836,8 +8874,14 @@ var inlinePositioning = {
         var state = _ref2.state;
 
         if (isEnabled()) {
-          if (placement !== state.placement) {
+          if (triedPlacements.indexOf(state.placement) !== -1) {
+            triedPlacements = [];
+          }
+
+          if (placement !== state.placement && triedPlacements.indexOf(state.placement) === -1) {
+            triedPlacements.push(state.placement);
             instance.setProps({
+              // @ts-ignore - unneeded DOMRect properties
               getReferenceClientRect: function getReferenceClientRect() {
                 return _getReferenceClientRect(state.placement);
               }
@@ -8874,10 +8918,11 @@ var inlinePositioning = {
           var cursorRect = rects.find(function (rect) {
             return rect.left - 2 <= event.clientX && rect.right + 2 >= event.clientX && rect.top - 2 <= event.clientY && rect.bottom + 2 >= event.clientY;
           });
-          cursorRectIndex = rects.indexOf(cursorRect);
+          var index = rects.indexOf(cursorRect);
+          cursorRectIndex = index > -1 ? index : cursorRectIndex;
         }
       },
-      onUntrigger: function onUntrigger() {
+      onHidden: function onHidden() {
         cursorRectIndex = -1;
       }
     };
@@ -9589,6 +9634,20 @@ class engrid_ENGrid {
             .replace(/YY/g, dateAray[2].substr(2, 2));
         return dateString;
     }
+    /**
+     * Check if the provided object has ALL the provided properties
+     * Example: checkNested(EngagingNetworks, 'require', '_defined', 'enjs', 'checkSubmissionFailed')
+     * will return true if EngagingNetworks.require._defined.enjs.checkSubmissionFailed is defined
+     */
+    static checkNested(obj, ...args) {
+        for (let i = 0; i < args.length; i++) {
+            if (!obj || !obj.hasOwnProperty(args[i])) {
+                return false;
+            }
+            obj = obj[args[i]];
+        }
+        return true;
+    }
 }
 
 ;// CONCATENATED MODULE: ./node_modules/@4site/engrid-common/dist/events/donation-frequency.js
@@ -9824,8 +9883,12 @@ class app_App extends engrid_ENGrid {
             });
         }
         // Window Load
-        window.onload = () => {
+        let onLoad = typeof window.onload === "function" ? window.onload : null;
+        window.onload = (e) => {
             this.onLoad();
+            if (onLoad) {
+                onLoad.bind(window, e);
+            }
         };
         // Window Resize
         window.onresize = () => {
@@ -12334,6 +12397,7 @@ class TranslateFields {
 ;// CONCATENATED MODULE: ./node_modules/@4site/engrid-common/dist/simple-country-select.js
 // This class works when the user has added ".simple_country_select" as a class in page builder for the Country select
 
+
 class SimpleCountrySelect {
     constructor() {
         this.countryWrapper = document.querySelector(".simple_country_select");
@@ -12343,10 +12407,10 @@ class SimpleCountrySelect {
         });
         this.country = null;
         const engridAutofill = get("engrid-autofill");
+        const submissionFailed = !!(engrid_ENGrid.checkNested(window.EngagingNetworks, "require", "_defined", "enjs", "checkSubmissionFailed") && window.EngagingNetworks.require._defined.enjs.checkSubmissionFailed());
         // Only run if there's no engrid-autofill cookie
-        if (!engridAutofill &&
-            !window.EngagingNetworks.require._defined.enjs.checkSubmissionFailed()) {
-            fetch("https://www.cloudflare.com/cdn-cgi/trace")
+        if (!engridAutofill && !submissionFailed) {
+            fetch(`https://${window.location.hostname}/cdn-cgi/trace`)
                 .then((res) => res.text())
                 .then((t) => {
                 let data = t.replace(/[\r\n]+/g, '","').replace(/\=+/g, '":"');
@@ -12955,7 +13019,7 @@ class ProgressBar {
 ;// CONCATENATED MODULE: ./node_modules/@4site/engrid-common/dist/remember-me.js
 
 
-const tippy = __webpack_require__(3861)/* ["default"] */ .ZP;
+const tippy = (__webpack_require__(3861)/* ["default"] */ .ZP);
 class RememberMe {
     constructor(options) {
         this._form = EnForm.getInstance();
