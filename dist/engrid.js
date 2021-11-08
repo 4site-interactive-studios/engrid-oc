@@ -17,7 +17,7 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Monday, November 8, 2021 @ 13:32:01 ET
+ *  Date: Monday, November 8, 2021 @ 13:52:56 ET
  *  By: bryancasler
  *  ENGrid styles: v0.5.2
  *  ENGrid scripts: v0.5.4
@@ -14993,7 +14993,7 @@ class SimpleCountrySelect {
           let labelText = addressLabel.innerHTML; // Add our link INSIDE the address label
 
           let newEl = document.createElement("span");
-          newEl.innerHTML = '<label><a href="javascript:void(0)">(Outside ' + countrySelectLabel + "?)</a>";
+          newEl.innerHTML = '<label><a href="javascript:void(0)">(Outside ' + countrySelectValue + "?)</a>";
           addressLabel.innerHTML = `${labelText}${newEl.innerHTML}`;
           addressLabel.querySelectorAll("a").forEach(el => {
             el.addEventListener("click", this.showCountrySelect.bind(this));
