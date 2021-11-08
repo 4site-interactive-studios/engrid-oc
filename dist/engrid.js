@@ -17,7 +17,7 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Monday, November 8, 2021 @ 13:21:44 ET
+ *  Date: Monday, November 8, 2021 @ 13:32:01 ET
  *  By: bryancasler
  *  ENGrid styles: v0.5.2
  *  ENGrid scripts: v0.5.4
@@ -14976,12 +14976,8 @@ class SimpleCountrySelect {
       let countrySelectLabel = this.countrySelect.options[this.countrySelect.selectedIndex].innerHTML;
       let countrySelectValue = this.countrySelect.options[this.countrySelect.selectedIndex].value; // @TODO Update so that it reads "(Outside X?)" where X is the Value of the Country Select. No need for long form version of it.
 
-      if (countrySelectValue.toUpperCase() == "US" || countrySelectValue.toUpperCase() == "USA") {
-        countrySelectValue = " US";
-      }
-
-      if (countrySelectValue.toUpperCase() == "UNITED STATES") {
-        countrySelectLabel = "the US";
+      if (countrySelectValue.toUpperCase() == "US" || countrySelectValue.toUpperCase() == "USA" || countrySelectValue.toUpperCase() == "UNITED STATES") {
+        countrySelectValue = "the US";
       }
 
       let countryWrapper = document.querySelector(".simple_country_select");
@@ -14994,17 +14990,14 @@ class SimpleCountrySelect {
         // @TODO Update so that this follows the same pattern / HTML structure as the Tippy tooltips which are added to labels. REF: https://github.com/4site-interactive-studios/engrid-aiusa/blob/6e4692d4f9a28b9668d6c1bfed5622ac0cc5bdb9/src/scripts/main.js#L42
 
         if (addressLabel) {
-          let labelText = addressLabel.innerHTML; // Wrap the address label in a div to break out of the flexbox
-
-          this.wrap(addressLabel, document.createElement("div")); // Add our link INSIDE the address label
-          // Includes both long form and short form variants
+          let labelText = addressLabel.innerHTML; // Add our link INSIDE the address label
 
           let newEl = document.createElement("span");
-          newEl.innerHTML = ' <label id="en_custom_field_simple_country_select_long" class="en__field__label"><a href="javascript:void(0)">(Outside ' + countrySelectLabel + '?)</a></label><label id="en_custom_field_simple_country_select_short" class="en__field__label"><a href="javascript:void(0)">(Outside ' + countrySelectValue + "?)</a></label>";
+          newEl.innerHTML = '<label><a href="javascript:void(0)">(Outside ' + countrySelectLabel + "?)</a>";
           addressLabel.innerHTML = `${labelText}${newEl.innerHTML}`;
           addressLabel.querySelectorAll("a").forEach(el => {
             el.addEventListener("click", this.showCountrySelect.bind(this));
-          }); //this.insertAfter(newEl, addressLabel);
+          });
         }
       }
     }
