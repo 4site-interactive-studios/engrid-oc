@@ -17,10 +17,10 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Thursday, November 11, 2021 @ 16:19:10 ET
- *  By: bryancasler
+ *  Date: Monday, November 15, 2021 @ 11:21:45 ET
+ *  By: fe
  *  ENGrid styles: v0.6.0
- *  ENGrid scripts: v0.6.0
+ *  ENGrid scripts: v0.6.3
  *
  *  Created by 4Site Studios
  *  Come work with us or join our team, we would love to hear from you
@@ -9256,7 +9256,7 @@ const TranslateOptionsDefaults = {
 };
 
 ;// CONCATENATED MODULE: ./node_modules/@4site/engrid-common/dist/loader.js
-// This class is a basic TS implementation of Engrid Loader
+// Ref: https://app.getguru.com/card/iMgx968T/ENgrid-Loader
 
 class Loader {
     constructor() {
@@ -9283,10 +9283,6 @@ class Loader {
         const engrid_repo_owner = this.getOption("repo-owner");
         let engrid_js_url = "";
         let engrid_css_url = "";
-        let engrid_en_assets_url = this.getOption("en-assets-url");
-        if ((engrid_en_assets_url === null || engrid_en_assets_url === void 0 ? void 0 : engrid_en_assets_url.substr(-1)) === "/") {
-            engrid_en_assets_url = engrid_en_assets_url.slice(0, -1);
-        }
         switch (assets) {
             case "local":
                 if (engrid_ENGrid.debug)
@@ -10016,8 +10012,6 @@ class app_App extends engrid_ENGrid {
         // Enable debug if available is the first thing
         if (this.options.Debug || app_App.getUrlParameter("debug") == "true")
             app_App.setBodyData("debug", "");
-        // IE Warning
-        new IE();
         // Page Background
         new PageBackground();
         // TODO: Abstract everything to the App class so we can remove custom-methods
@@ -10081,6 +10075,8 @@ class app_App extends engrid_ENGrid {
         new setRecurrFreq();
         // Upsell Lightbox
         new UpsellLightbox();
+        // Amount Labels
+        new AmountLabel();
         // On the end of the script, after all subscribers defined, let's load the current value
         this._amount.load();
         this._frequency.load();
@@ -10284,6 +10280,36 @@ class app_App extends engrid_ENGrid {
                 app_App.setBodyData("country", countrySelect.value);
             });
         }
+    }
+}
+
+;// CONCATENATED MODULE: ./node_modules/@4site/engrid-common/dist/amount-label.js
+// This script checks if the donations amounts are numbers and if they are, appends the correct currency symbol
+
+class AmountLabel {
+    constructor() {
+        this._frequency = DonationFrequency.getInstance();
+        if (!this.shouldRun()) {
+            // If we're not on a Donation Page, get out
+            return;
+        }
+        this._frequency.onFrequencyChange.subscribe((s) => window.setTimeout(this.fixAmountLabels.bind(this), 100));
+        // Run the main function on page load so we can analyze the amounts of the current frequency
+        window.setTimeout(this.fixAmountLabels.bind(this), 300);
+    }
+    // Should we run the script?
+    shouldRun() {
+        return engrid_ENGrid.getPageType() === "DONATION";
+    }
+    // Fix Amount Labels
+    fixAmountLabels() {
+        let amounts = document.querySelectorAll(".en__field--donationAmt label");
+        amounts.forEach((element) => {
+            if (!isNaN(element.innerText)) {
+                element.innerText =
+                    engrid_ENGrid.getOption("CurrencySymbol") + element.innerText;
+            }
+        });
     }
 }
 
@@ -11357,136 +11383,6 @@ else {
         .setAttribute("data-engrid-footer-below-fold", "");
 }
 
-;// CONCATENATED MODULE: ./node_modules/@4site/engrid-common/dist/cookie.js
-/**
-Example:
-import * as cookie from "./cookie";
-
-cookie.set('name', 'value');
-cookie.get('name'); // => 'value'
-cookie.remove('name');
-cookie.set('name', 'value', { expires: 7 }); // 7 Days cookie
-cookie.set('name', 'value', { expires: 7, path: '' }); // Set Path
-cookie.remove('name', { path: '' });
- */
-function stringifyAttribute(name, value) {
-    if (!value) {
-        return "";
-    }
-    let stringified = "; " + name;
-    if (value === true) {
-        return stringified; // boolean attributes shouldn't have a value
-    }
-    return stringified + "=" + value;
-}
-function stringifyAttributes(attributes) {
-    if (typeof attributes.expires === "number") {
-        let expires = new Date();
-        expires.setMilliseconds(expires.getMilliseconds() + attributes.expires * 864e5);
-        attributes.expires = expires;
-    }
-    return (stringifyAttribute("Expires", attributes.expires ? attributes.expires.toUTCString() : "") +
-        stringifyAttribute("Domain", attributes.domain) +
-        stringifyAttribute("Path", attributes.path) +
-        stringifyAttribute("Secure", attributes.secure) +
-        stringifyAttribute("SameSite", attributes.sameSite));
-}
-function encode(name, value, attributes) {
-    return (encodeURIComponent(name)
-        .replace(/%(23|24|26|2B|5E|60|7C)/g, decodeURIComponent) // allowed special characters
-        .replace(/\(/g, "%28")
-        .replace(/\)/g, "%29") + // replace opening and closing parens
-        "=" +
-        encodeURIComponent(value)
-            // allowed special characters
-            .replace(/%(23|24|26|2B|3A|3C|3E|3D|2F|3F|40|5B|5D|5E|60|7B|7D|7C)/g, decodeURIComponent) +
-        stringifyAttributes(attributes));
-}
-function parse(cookieString) {
-    let result = {};
-    let cookies = cookieString ? cookieString.split("; ") : [];
-    let rdecode = /(%[\dA-F]{2})+/gi;
-    for (let i = 0; i < cookies.length; i++) {
-        let parts = cookies[i].split("=");
-        let cookie = parts.slice(1).join("=");
-        if (cookie.charAt(0) === '"') {
-            cookie = cookie.slice(1, -1);
-        }
-        try {
-            let name = parts[0].replace(rdecode, decodeURIComponent);
-            result[name] = cookie.replace(rdecode, decodeURIComponent);
-        }
-        catch (e) {
-            // ignore cookies with invalid name/value encoding
-        }
-    }
-    return result;
-}
-function getAll() {
-    return parse(document.cookie);
-}
-function get(name) {
-    return getAll()[name];
-}
-function set(name, value, attributes) {
-    document.cookie = encode(name, value, Object.assign({ path: "/" }, attributes));
-}
-function remove(name, attributes) {
-    set(name, "", Object.assign(Object.assign({}, attributes), { expires: -1 }));
-}
-
-;// CONCATENATED MODULE: ./node_modules/@4site/engrid-common/dist/ie.js
-
-class IE {
-    constructor() {
-        this.debug = false;
-        this.overlay = document.createElement("div");
-        const isIE = () => {
-            return (navigator.userAgent.indexOf("MSIE") !== -1 ||
-                navigator.appVersion.indexOf("Trident/") > -1);
-        };
-        // If it's not IE, get out!
-        if (!isIE())
-            return;
-        const markup = `
-    <div class="ieModal-container">
-        <a href="#" class="button-close"></a>
-        <div id="ieModalContent">
-        <strong>Attention: </strong>
-        Your browser is no longer supported and will not receive any further security updates. Websites may no longer display or behave correctly as they have in the past. 
-        Please transition to using <a href="https://www.microsoft.com/edge">Microsoft Edge</a>, Microsoft's latest browser, to continue enjoying the modern web.
-        </div>
-    </div>`;
-        let overlay = document.createElement("div");
-        overlay.id = "ieModal";
-        overlay.classList.add("is-hidden");
-        overlay.innerHTML = markup;
-        const closeButton = overlay.querySelector(".button-close");
-        closeButton.addEventListener("click", this.close.bind(this));
-        document.addEventListener("keyup", (e) => {
-            if (e.key === "Escape") {
-                closeButton.click();
-            }
-        });
-        this.overlay = overlay;
-        document.body.appendChild(overlay);
-        this.open();
-    }
-    open() {
-        const hideModal = get("hide_ieModal"); // Get cookie
-        // If we have a cookie AND no Debug, get out
-        if (hideModal && !this.debug)
-            return;
-        // Show Modal
-        this.overlay.classList.remove("is-hidden");
-    }
-    close(e) {
-        e.preventDefault();
-        set("hide_ieModal", "1", { expires: 1 }); // Create one day cookie
-        this.overlay.classList.add("is-hidden");
-    }
-}
-
 ;// CONCATENATED MODULE: ./node_modules/@4site/engrid-common/dist/iframe.js
 
 const sendIframeHeight = () => {
@@ -12078,6 +11974,84 @@ class ShowHideRadioCheckboxes {
     }
 }
 
+;// CONCATENATED MODULE: ./node_modules/@4site/engrid-common/dist/cookie.js
+/**
+Example:
+import * as cookie from "./cookie";
+
+cookie.set('name', 'value');
+cookie.get('name'); // => 'value'
+cookie.remove('name');
+cookie.set('name', 'value', { expires: 7 }); // 7 Days cookie
+cookie.set('name', 'value', { expires: 7, path: '' }); // Set Path
+cookie.remove('name', { path: '' });
+ */
+function stringifyAttribute(name, value) {
+    if (!value) {
+        return "";
+    }
+    let stringified = "; " + name;
+    if (value === true) {
+        return stringified; // boolean attributes shouldn't have a value
+    }
+    return stringified + "=" + value;
+}
+function stringifyAttributes(attributes) {
+    if (typeof attributes.expires === "number") {
+        let expires = new Date();
+        expires.setMilliseconds(expires.getMilliseconds() + attributes.expires * 864e5);
+        attributes.expires = expires;
+    }
+    return (stringifyAttribute("Expires", attributes.expires ? attributes.expires.toUTCString() : "") +
+        stringifyAttribute("Domain", attributes.domain) +
+        stringifyAttribute("Path", attributes.path) +
+        stringifyAttribute("Secure", attributes.secure) +
+        stringifyAttribute("SameSite", attributes.sameSite));
+}
+function encode(name, value, attributes) {
+    return (encodeURIComponent(name)
+        .replace(/%(23|24|26|2B|5E|60|7C)/g, decodeURIComponent) // allowed special characters
+        .replace(/\(/g, "%28")
+        .replace(/\)/g, "%29") + // replace opening and closing parens
+        "=" +
+        encodeURIComponent(value)
+            // allowed special characters
+            .replace(/%(23|24|26|2B|3A|3C|3E|3D|2F|3F|40|5B|5D|5E|60|7B|7D|7C)/g, decodeURIComponent) +
+        stringifyAttributes(attributes));
+}
+function parse(cookieString) {
+    let result = {};
+    let cookies = cookieString ? cookieString.split("; ") : [];
+    let rdecode = /(%[\dA-F]{2})+/gi;
+    for (let i = 0; i < cookies.length; i++) {
+        let parts = cookies[i].split("=");
+        let cookie = parts.slice(1).join("=");
+        if (cookie.charAt(0) === '"') {
+            cookie = cookie.slice(1, -1);
+        }
+        try {
+            let name = parts[0].replace(rdecode, decodeURIComponent);
+            result[name] = cookie.replace(rdecode, decodeURIComponent);
+        }
+        catch (e) {
+            // ignore cookies with invalid name/value encoding
+        }
+    }
+    return result;
+}
+function getAll() {
+    return parse(document.cookie);
+}
+function get(name) {
+    return getAll()[name];
+}
+function set(name, value, attributes) {
+    document.cookie = encode(name, value, Object.assign({ path: "/" }, attributes));
+}
+function remove(name, attributes) {
+    set(name, "", Object.assign(Object.assign({}, attributes), { expires: -1 }));
+}
+
 ;// CONCATENATED MODULE: ./node_modules/@4site/engrid-common/dist/translate-fields.js
 
 
@@ -12519,14 +12493,12 @@ class SimpleCountrySelect {
     constructor() {
         this.countryWrapper = document.querySelector(".simple_country_select");
         this.countrySelect = document.querySelector("#en__field_supporter_country");
-        this.countriesNames = new Intl.DisplayNames(["en"], {
-            type: "region",
-        });
         this.country = null;
         const engridAutofill = get("engrid-autofill");
         const submissionFailed = !!(engrid_ENGrid.checkNested(window.EngagingNetworks, "require", "_defined", "enjs", "checkSubmissionFailed") && window.EngagingNetworks.require._defined.enjs.checkSubmissionFailed());
-        // Only run if there's no engrid-autofill cookie
-        if (!engridAutofill && !submissionFailed) {
+        const hasIntlSupport = !!engrid_ENGrid.checkNested(window.Intl, "DisplayNames");
+        // Only run if there's no engrid-autofill cookie && if it has Intl support
+        if (!engridAutofill && !submissionFailed && hasIntlSupport) {
             fetch(`https://${window.location.hostname}/cdn-cgi/trace`)
                 .then((res) => res.text())
                 .then((t) => {
@@ -12542,8 +12514,11 @@ class SimpleCountrySelect {
     init() {
         if (this.countrySelect) {
             if (this.country) {
+                const countriesNames = new Intl.DisplayNames(["en"], {
+                    type: "region",
+                });
                 // We are setting the country by Name because the ISO code is not always the same. They have 2 and 3 letter codes.
-                this.setCountryByName(this.countriesNames.of(this.country));
+                this.setCountryByName(countriesNames.of(this.country));
             }
             let countrySelectLabel = this.countrySelect.options[this.countrySelect.selectedIndex].innerHTML;
             let countrySelectValue = this.countrySelect.options[this.countrySelect.selectedIndex].value;
