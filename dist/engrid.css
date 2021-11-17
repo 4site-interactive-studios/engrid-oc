@@ -21,10 +21,10 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Monday, November 15, 2021 @ 11:21:45 ET
+ *  Date: Wednesday, November 17, 2021 @ 13:40:40 ET
  *  By: fe
- *  ENGrid styles: v0.6.0
- *  ENGrid scripts: v0.6.3
+ *  ENGrid styles: v0.6.4
+ *  ENGrid scripts: v0.6.4
  *
  *  Created by 4Site Studios
  *  Come work with us or join our team, we would love to hear from you
@@ -1961,26 +1961,32 @@ body[data-engrid-debug]:before{
   --h1_font-size:calc(var(--default_font-size)*var(--scale-up_160pct));
   --h1_font-weight:initial;
   --h1_line-height:initial;
+  --h1_text-transform:initial;
   --h2_font-family:var(--h1_font-family);
   --h2_font-size:calc(var(--default_font-size)*var(--scale-up_80pct));
   --h2_font-weight:initial;
   --h2_line-height:initial;
+  --h2_text-transform:initial;
   --h3_font-family:var(--h1_font-family);
   --h3_font-size:calc(var(--default_font-size)*var(--scale-up_40pct));
   --h3_font-weight:initial;
   --h3_line-height:initial;
+  --h3_text-transform:initial;
   --h4_font-family:var(--h1_font-family);
   --h4_font-size:calc(var(--default_font-size)*var(--scale-up_40pct));
   --h4_font-weight:initial;
   --h4_line-height:initial;
+  --h4_text-transform:initial;
   --h5_font-family:var(--h1_font-family);
   --h5_font-size:calc(var(--default_font-size)*var(--scale-up_40pct));
   --h5_font-weight:initial;
   --h5_line-height:initial;
+  --h5_text-transform:initial;
   --h6_font-family:var(--h1_font-family);
   --h6_font-size:calc(var(--default_font-size)*var(--scale-up_40pct));
   --h6_font-weight:initial;
   --h6_line-height:initial;
+  --h6_text-transform:initial;
   --p_font-family:var(--default_font-family);
   --p_font-size:var(--default_font-size);
   --p_font-weight:initial;
@@ -2006,6 +2012,7 @@ h1{
   line-height:var(--h1_line-height);
   margin-bottom:1rem;
   margin-top:2rem;
+  text-transform:var(--h1_text-transform);
 }
 
 h2{
@@ -2016,12 +2023,14 @@ h2{
   line-height:var(--h2_line-height);
   margin-bottom:calc(1rem*var(--scale-down_20pct));
   margin-top:calc(2rem*var(--scale-down_20pct));
+  text-transform:var(--h2_text-transform);
 }
 
 h3{
   font-size:var(--h3_font-size);
   margin-bottom:calc(1rem*var(--scale-down_40pct));
   margin-top:calc(2rem*var(--scale-down_40pct));
+  text-transform:var(--h3_text-transform);
 }
 
 h3,h4,h5,h6{
@@ -2035,6 +2044,7 @@ h4,h5,h6{
   font-size:calc(var(--h3_font-size)*var(--scale-down_20pct));
   margin-bottom:calc(1rem*var(--scale-down_80pct));
   margin-top:calc(2rem*var(--scale-down_80pct));
+  text-transform:var(--h4_text-transform);
 }
 
 p{

@@ -17,10 +17,10 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Monday, November 15, 2021 @ 11:21:45 ET
+ *  Date: Wednesday, November 17, 2021 @ 13:40:40 ET
  *  By: fe
- *  ENGrid styles: v0.6.0
- *  ENGrid scripts: v0.6.3
+ *  ENGrid styles: v0.6.4
+ *  ENGrid scripts: v0.6.4
  *
  *  Created by 4Site Studios
  *  Come work with us or join our team, we would love to hear from you
@@ -12112,6 +12112,11 @@ class TranslateFields {
             const fieldWrapper = field.closest(".en__field");
             if (fieldWrapper) {
                 const fieldLabel = fieldWrapper.querySelector(".en__field__label");
+                // Check if there's the simple country select class
+                const simpleCountrySelect = fieldLabel.querySelector(".engrid-simple-country");
+                let simpleCountrySelectClone = simpleCountrySelect
+                    ? simpleCountrySelect.cloneNode(true)
+                    : null;
                 if (field instanceof HTMLInputElement && field.placeholder != "") {
                     if (!fieldLabel || fieldLabel.innerHTML == field.placeholder) {
                         field.dataset.original = field.placeholder;
@@ -12121,6 +12126,9 @@ class TranslateFields {
                 if (fieldLabel) {
                     fieldLabel.dataset.original = fieldLabel.innerHTML;
                     fieldLabel.innerHTML = translation;
+                    if (simpleCountrySelectClone) {
+                        fieldLabel.appendChild(simpleCountrySelectClone);
+                    }
                 }
             }
         }
@@ -12132,7 +12140,15 @@ class TranslateFields {
                 field.placeholder = field.dataset.original;
             }
             else {
+                // Check if there's the simple country select class
+                const simpleCountrySelect = field.querySelector(".engrid-simple-country");
+                let simpleCountrySelectClone = simpleCountrySelect
+                    ? simpleCountrySelect.cloneNode(true)
+                    : null;
                 field.innerHTML = field.dataset.original;
+                if (simpleCountrySelectClone) {
+                    field.appendChild(simpleCountrySelectClone);
+                }
             }
             field.removeAttribute("data-original");
         });
@@ -12510,6 +12526,9 @@ class SimpleCountrySelect {
                 // console.log("Country:", this.country);
             });
         }
+        else {
+            this.init();
+        }
     }
     init() {
         if (this.countrySelect) {
@@ -12520,7 +12539,6 @@ class SimpleCountrySelect {
                 // We are setting the country by Name because the ISO code is not always the same. They have 2 and 3 letter codes.
                 this.setCountryByName(countriesNames.of(this.country));
             }
-            let countrySelectLabel = this.countrySelect.options[this.countrySelect.selectedIndex].innerHTML;
             let countrySelectValue = this.countrySelect.options[this.countrySelect.selectedIndex].value;
             // @TODO Update so that it reads "(Outside X?)" where X is the Value of the Country Select. No need for long form version of it.
             if (countrySelectValue.toUpperCase() == "US" ||
@@ -12541,27 +12559,22 @@ class SimpleCountrySelect {
                     // Add our link INSIDE the address label
                     let newEl = document.createElement("span");
                     newEl.innerHTML =
-                        '<label><a href="javascript:void(0)">(Outside ' +
+                        '<label class="engrid-simple-country"><a href="javascript:void(0)">(Outside ' +
                             countrySelectValue +
                             "?)</a></label>";
                     addressLabel.innerHTML = `${labelText}${newEl.innerHTML}`;
-                    addressLabel.querySelectorAll("a").forEach((el) => {
-                        el.addEventListener("click", this.showCountrySelect.bind(this));
+                    addressLabel.addEventListener("click", (ev) => {
+                        var _a;
+                        ev.preventDefault();
+                        if (((_a = ev.target) === null || _a === void 0 ? void 0 : _a.tagName) === "A") {
+                            this.showCountrySelect(ev);
+                        }
                     });
                 }
             }
+            // Deal with the auto-fill for the country
+            this.countrySelect.addEventListener("change", this.writeLink.bind(this));
         }
-    }
-    // Helper function to insert HTML after a node
-    insertAfter(el, referenceNode) {
-        const parentElement = referenceNode.parentNode;
-        parentElement.insertBefore(el, referenceNode.nextSibling);
-    }
-    // Helper function to wrap a target in a new element
-    wrap(el, wrapper) {
-        const parentElement = el.parentNode;
-        parentElement.insertBefore(wrapper, el);
-        wrapper.appendChild(el);
     }
     showCountrySelect(e) {
         var _a;
@@ -12573,6 +12586,14 @@ class SimpleCountrySelect {
         this.countrySelect.focus();
         // Reinstate Country Select tab index
         this.countrySelect.removeAttribute("tabIndex");
+    }
+    writeLink() {
+        let countryName = this.countrySelect.options[this.countrySelect.selectedIndex].value;
+        let addressLabel = document.querySelector(".engrid-simple-country");
+        if (addressLabel) {
+            let labelLink = `<a href="javascript:void(0)">(Outside ${countryName}?)</a>`;
+            addressLabel.innerHTML = labelLink;
+        }
     }
     setCountryByName(countryName) {
         if (this.countrySelect) {
