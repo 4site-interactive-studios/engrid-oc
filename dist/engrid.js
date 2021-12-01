@@ -17,10 +17,10 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Wednesday, November 17, 2021 @ 13:40:40 ET
+ *  Date: Wednesday, December 1, 2021 @ 16:20:24 ET
  *  By: fe
- *  ENGrid styles: v0.6.4
- *  ENGrid scripts: v0.6.4
+ *  ENGrid styles: v0.6.6
+ *  ENGrid scripts: v0.6.6
  *
  *  Created by 4Site Studios
  *  Come work with us or join our team, we would love to hear from you
@@ -10097,6 +10097,8 @@ class app_App extends engrid_ENGrid {
         // Auto Year Class
         if (this.options.AutoYear)
             new AutoYear();
+        // Credit Card Numbers Only
+        new CreditCardNumbers();
         // Autocomplete Class
         new Autocomplete();
         // Ecard Class
@@ -10116,6 +10118,7 @@ class app_App extends engrid_ENGrid {
             new RememberMe(this.options.RememberMe);
         if (this.options.NeverBounceAPI)
             new NeverBounce(this.options.NeverBounceAPI, this.options.NeverBounceDateField, this.options.NeverBounceStatusField, this.options.NeverBounceDateFormat);
+        new ShowIfAmount();
         this.setDataAttributes();
     }
     onLoad() {
@@ -10500,6 +10503,24 @@ class CapitalizeFields {
             if (engrid_ENGrid.debug)
                 console.log("Capitalized", field.value);
         }
+        return true;
+    }
+}
+
+;// CONCATENATED MODULE: ./node_modules/@4site/engrid-common/dist/credit-card-numbers.js
+// This class removes any non-numeric characters from the credit card field
+
+class CreditCardNumbers {
+    constructor() {
+        this._form = EnForm.getInstance();
+        this.ccField = document.getElementById("en__field_transaction_ccnumber");
+        if (this.ccField) {
+            this._form.onSubmit.subscribe(() => this.onlyNumbersCC());
+        }
+    }
+    onlyNumbersCC() {
+        const onlyNumbers = this.ccField.value.replace(/\D/g, "");
+        this.ccField.value = onlyNumbers;
         return true;
     }
 }
@@ -13399,8 +13420,133 @@ class RememberMe {
     }
 }
 
+;// CONCATENATED MODULE: ./node_modules/@4site/engrid-common/dist/show-if-amount.js
+
+
+class ShowIfAmount {
+    constructor() {
+        this._amount = DonationAmount.getInstance();
+        this._elements = document.querySelectorAll('[class*="showifamount"]');
+        if (this._elements.length > 0) {
+            this._amount.onAmountChange.subscribe(() => this.init());
+            this.init();
+            return;
+        }
+        if (engrid_ENGrid.debug)
+            console.log("Show If Amount: NO ELEMENTS FOUND");
+    }
+    init() {
+        const amount = this._amount.amount;
+        this._elements.forEach((element) => {
+            this.lessthan(amount, element);
+            this.lessthanorequalto(amount, element);
+            this.equalto(amount, element);
+            this.greaterthanorequalto(amount, element);
+            this.greaterthan(amount, element);
+            this.between(amount, element);
+        });
+    }
+    getClassNameByOperand(classList, operand) {
+        let myClass = null;
+        classList.forEach((className) => {
+            if (className.includes(`showifamount-${operand}-`)) {
+                myClass = className;
+            }
+        });
+        return myClass;
+    }
+    lessthan(amount, element) {
+        const showifamountClass = this.getClassNameByOperand(element.classList, "lessthan");
+        if (showifamountClass) {
+            let amountCheck = showifamountClass.split("-").slice(-1)[0];
+            if (amount < Number(amountCheck)) {
+                if (engrid_ENGrid.debug)
+                    console.log("Show If Amount (lessthan):", element);
+                element.classList.add("engrid-open");
+            }
+            else {
+                element.classList.remove("engrid-open");
+            }
+        }
+    }
+    lessthanorequalto(amount, element) {
+        const showifamountClass = this.getClassNameByOperand(element.classList, "lessthanorequalto");
+        if (showifamountClass) {
+            let amountCheck = showifamountClass.split("-").slice(-1)[0];
+            if (amount <= Number(amountCheck)) {
+                if (engrid_ENGrid.debug)
+                    console.log("Show If Amount (lessthanorequalto):", element);
+                element.classList.add("engrid-open");
+            }
+            else {
+                element.classList.remove("engrid-open");
+            }
+        }
+    }
+    equalto(amount, element) {
+        const showifamountClass = this.getClassNameByOperand(element.classList, "equalto");
+        if (showifamountClass) {
+            let amountCheck = showifamountClass.split("-").slice(-1)[0];
+            if (amount == Number(amountCheck)) {
+                if (engrid_ENGrid.debug)
+                    console.log("Show If Amount (equalto):", element);
+                element.classList.add("engrid-open");
+            }
+            else {
+                element.classList.remove("engrid-open");
+            }
+        }
+    }
+    greaterthanorequalto(amount, element) {
+        const showifamountClass = this.getClassNameByOperand(element.classList, "greaterthanorequalto");
+        if (showifamountClass) {
+            let amountCheck = showifamountClass.split("-").slice(-1)[0];
+            if (amount >= Number(amountCheck)) {
+                if (engrid_ENGrid.debug)
+                    console.log("Show If Amount (greaterthanorequalto):", element);
+                element.classList.add("engrid-open");
+            }
+            else {
+                element.classList.remove("engrid-open");
+            }
+        }
+    }
+    greaterthan(amount, element) {
+        const showifamountClass = this.getClassNameByOperand(element.classList, "greaterthan");
+        if (showifamountClass) {
+            let amountCheck = showifamountClass.split("-").slice(-1)[0];
+            if (amount > Number(amountCheck)) {
+                if (engrid_ENGrid.debug)
+                    console.log("Show If Amount (greaterthan):", element);
+                element.classList.add("engrid-open");
+            }
+            else {
+                element.classList.remove("engrid-open");
+            }
+        }
+    }
+    between(amount, element) {
+        const showifamountClass = this.getClassNameByOperand(element.classList, "between");
+        if (showifamountClass) {
+            let amountCheckMin = showifamountClass.split("-").slice(-2, -1)[0];
+            let amountCheckMax = showifamountClass.split("-").slice(-1)[0];
+            if (amount >= Number(amountCheckMin) &&
+                amount <= Number(amountCheckMax)) {
+                if (engrid_ENGrid.debug)
+                    console.log("Show If Amount (between):", element);
+                element.classList.add("engrid-open");
+            }
+            else {
+                element.classList.remove("engrid-open");
+            }
+        }
+    }
+}
+
 ;// CONCATENATED MODULE: ./node_modules/@4site/engrid-common/dist/index.js
  // Runs first so it can change the DOM markup before any markup dependent code fires
+
+
 
 
 

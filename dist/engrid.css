@@ -21,10 +21,10 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Wednesday, November 17, 2021 @ 13:40:40 ET
+ *  Date: Wednesday, December 1, 2021 @ 16:20:24 ET
  *  By: fe
- *  ENGrid styles: v0.6.4
- *  ENGrid scripts: v0.6.4
+ *  ENGrid styles: v0.6.6
+ *  ENGrid scripts: v0.6.6
  *
  *  Created by 4Site Studios
  *  Come work with us or join our team, we would love to hear from you
@@ -4986,6 +4986,16 @@ header .indicator__percentage{
   header .indicator__percentage{
     color:#fff;
   }
+}
+
+[class*=showifamount]{
+  max-height:0;
+  overflow:hidden;
+  transition:max-height .3s ease-in-out;
+}
+
+[class*=showifamount].engrid-open{
+  max-height:100%;
 }
 [data-engrid-theme]{
   --engrid__page_padding:0px;
