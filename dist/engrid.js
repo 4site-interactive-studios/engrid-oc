@@ -17,10 +17,10 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Wednesday, December 1, 2021 @ 16:20:24 ET
+ *  Date: Thursday, December 2, 2021 @ 09:17:53 ET
  *  By: fe
  *  ENGrid styles: v0.6.6
- *  ENGrid scripts: v0.6.6
+ *  ENGrid scripts: v0.6.7
  *
  *  Created by 4Site Studios
  *  Come work with us or join our team, we would love to hear from you
@@ -12090,6 +12090,7 @@ class TranslateFields {
         }
         if (this.countrySelect) {
             this.countrySelect.addEventListener("change", this.translateFields.bind(this));
+            this.translateFields();
         }
         if (this.stateField) {
             this.stateField.addEventListener("change", this.rememberState.bind(this));
