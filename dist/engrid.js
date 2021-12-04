@@ -17,10 +17,10 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Thursday, December 2, 2021 @ 09:17:53 ET
+ *  Date: Friday, December 3, 2021 @ 19:49:42 ET
  *  By: fe
- *  ENGrid styles: v0.6.6
- *  ENGrid scripts: v0.6.7
+ *  ENGrid styles: v0.6.8
+ *  ENGrid scripts: v0.6.8
  *
  *  Created by 4Site Studios
  *  Come work with us or join our team, we would love to hear from you
@@ -13531,8 +13531,8 @@ class ShowIfAmount {
         if (showifamountClass) {
             let amountCheckMin = showifamountClass.split("-").slice(-2, -1)[0];
             let amountCheckMax = showifamountClass.split("-").slice(-1)[0];
-            if (amount >= Number(amountCheckMin) &&
-                amount <= Number(amountCheckMax)) {
+            if (amount > Number(amountCheckMin) &&
+                amount < Number(amountCheckMax)) {
                 if (engrid_ENGrid.debug)
                     console.log("Show If Amount (between):", element);
                 element.classList.add("engrid-open");
