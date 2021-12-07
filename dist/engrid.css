@@ -21,9 +21,9 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Friday, December 3, 2021 @ 19:49:42 ET
+ *  Date: Tuesday, December 7, 2021 @ 14:33:43 ET
  *  By: fe
- *  ENGrid styles: v0.6.8
+ *  ENGrid styles: v0.6.9
  *  ENGrid scripts: v0.6.8
  *
  *  Created by 4Site Studios
@@ -4989,17 +4989,50 @@ header .indicator__percentage{
 }
 
 [class*=showifamount]{
+  display:none;
+}
+
+[class*=showifamount].animate-replace{
+  display:initial;
   max-height:0;
   overflow:hidden;
-  transition:max-height .15s ease-in-out;
+  transform:scaleY(0);
+  transform-origin:top;
+  transition:transform .3s cubic-bezier(1, 0, 0, 1);
+}
+
+[class*=showifamount].animate-replace.engrid-open{
+  max-height:100%;
+  transform:scaleY(1);
+}
+
+[class*=showifamount].animate-vertical-slide{
+  display:initial;
+  max-height:0;
+  overflow:hidden;
+  transition:max-height .3s ease-in-out;
+}
+
+[class*=showifamount].animate-vertical-slide.engrid-open{
+  max-height:100%;
+}
+
+[class*=showifamount] img,[class*=showifamount] picture,[class*=showifamount] video{
+  opacity:0;
+  transition:opacity .15s cubic-bezier(1, 0, 0, 1) ease-in;
 }
 
 [class*=showifamount].engrid-open{
-  max-height:100%;
+  display:initial;
+}
+
+[class*=showifamount].engrid-open img,[class*=showifamount].engrid-open picture,[class*=showifamount].engrid-open video{
+  opacity:1;
 }
 
 #en__pagebuilder [class*=showifamount],[data-engrid-debug] [class*=showifamount]{
   background-color:#0000ff1a !important;
+  display:initial;
   max-height:100%;
 }
 [data-engrid-theme]{
