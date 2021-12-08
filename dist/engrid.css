@@ -21,9 +21,9 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Tuesday, December 7, 2021 @ 14:33:43 ET
+ *  Date: Wednesday, December 8, 2021 @ 08:09:37 ET
  *  By: fe
- *  ENGrid styles: v0.6.9
+ *  ENGrid styles: v0.6.10
  *  ENGrid scripts: v0.6.8
  *
  *  Created by 4Site Studios
@@ -4988,51 +4988,45 @@ header .indicator__percentage{
   }
 }
 
-[class*=showifamount]{
+body:not(#en__pagebuilder):not([data-engrid-debug]) [class*=showifamount]:not(.engrid-open):not([class*=animate-]){
   display:none;
 }
 
-[class*=showifamount].animate-replace{
-  display:initial;
+body:not(#en__pagebuilder):not([data-engrid-debug]) [class*=showifamount].animate-replace{
+  transition:opacity .3s cubic-bezier(.4, 0, 1, 1),transform .3s cubic-bezier(1, 0, 0, 1);
+}
+
+body:not(#en__pagebuilder):not([data-engrid-debug]) [class*=showifamount].animate-replace audio,body:not(#en__pagebuilder):not([data-engrid-debug]) [class*=showifamount].animate-replace iframe,body:not(#en__pagebuilder):not([data-engrid-debug]) [class*=showifamount].animate-replace img,body:not(#en__pagebuilder):not([data-engrid-debug]) [class*=showifamount].animate-replace picture,body:not(#en__pagebuilder):not([data-engrid-debug]) [class*=showifamount].animate-replace video{
+  transition:opacity .15s cubic-bezier(.4, 0, 1, 1) .2s;
+}
+
+body:not(#en__pagebuilder):not([data-engrid-debug]) [class*=showifamount].animate-replace:not(.engrid-open){
   max-height:0;
+  opacity:0;
   overflow:hidden;
   transform:scaleY(0);
-  transform-origin:top;
-  transition:transform .3s cubic-bezier(1, 0, 0, 1);
 }
 
-[class*=showifamount].animate-replace.engrid-open{
+body:not(#en__pagebuilder):not([data-engrid-debug]) [class*=showifamount].animate-replace:not(.engrid-open) audio,body:not(#en__pagebuilder):not([data-engrid-debug]) [class*=showifamount].animate-replace:not(.engrid-open) iframe,body:not(#en__pagebuilder):not([data-engrid-debug]) [class*=showifamount].animate-replace:not(.engrid-open) img,body:not(#en__pagebuilder):not([data-engrid-debug]) [class*=showifamount].animate-replace:not(.engrid-open) picture,body:not(#en__pagebuilder):not([data-engrid-debug]) [class*=showifamount].animate-replace:not(.engrid-open) video{
+  opacity:0;
+}
+
+body:not(#en__pagebuilder):not([data-engrid-debug]) [class*=showifamount].animate-replace.engrid-open{
   max-height:100%;
   transform:scaleY(1);
+  transform-origin:top;
 }
 
-[class*=showifamount].animate-vertical-slide{
-  display:initial;
-  max-height:0;
-  overflow:hidden;
+body:not(#en__pagebuilder):not([data-engrid-debug]) [class*=showifamount].animate-vertical-slide{
   transition:max-height .3s ease-in-out;
 }
 
-[class*=showifamount].animate-vertical-slide.engrid-open{
-  max-height:100%;
+body:not(#en__pagebuilder):not([data-engrid-debug]) [class*=showifamount].animate-vertical-slide:not(.engrid-open){
+  max-height:0;
+  overflow:hidden;
 }
 
-[class*=showifamount] img,[class*=showifamount] picture,[class*=showifamount] video{
-  opacity:0;
-  transition:opacity .15s cubic-bezier(1, 0, 0, 1) ease-in;
-}
-
-[class*=showifamount].engrid-open{
-  display:initial;
-}
-
-[class*=showifamount].engrid-open img,[class*=showifamount].engrid-open picture,[class*=showifamount].engrid-open video{
-  opacity:1;
-}
-
-#en__pagebuilder [class*=showifamount],[data-engrid-debug] [class*=showifamount]{
-  background-color:#0000ff1a !important;
-  display:initial;
+body:not(#en__pagebuilder):not([data-engrid-debug]) [class*=showifamount].animate-vertical-slide.engrid-open{
   max-height:100%;
 }
 [data-engrid-theme]{
@@ -7048,6 +7042,10 @@ body:not([data-engrid-debug]) #debug-bar{
 
 #EN__RootElement div:not(.pboAdvancedRow__preview)>.en__component--advrow>.page-backgroundImage,#EN__RootElement div:not(.pboAdvancedRow__preview)>.en__component--advrow>.page-customCode{
   background-color:var(--color_transparent) !important;
+}
+
+#en__pagebuilder [class*=showifamount],[data-engrid-debug] [class*=showifamount]{
+  background-color:#0000ff1a !important;
 }
 #en__pagebuilder
 .edit-warning.en__component.en__component--active.en__component--activeTarget{

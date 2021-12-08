@@ -17,9 +17,9 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Tuesday, December 7, 2021 @ 14:33:43 ET
+ *  Date: Wednesday, December 8, 2021 @ 08:09:37 ET
  *  By: fe
- *  ENGrid styles: v0.6.9
+ *  ENGrid styles: v0.6.10
  *  ENGrid scripts: v0.6.8
  *
  *  Created by 4Site Studios
