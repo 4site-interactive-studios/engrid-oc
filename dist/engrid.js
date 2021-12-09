@@ -17,10 +17,10 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Wednesday, December 8, 2021 @ 08:09:37 ET
+ *  Date: Thursday, December 9, 2021 @ 13:56:16 ET
  *  By: fe
- *  ENGrid styles: v0.6.10
- *  ENGrid scripts: v0.6.8
+ *  ENGrid styles: v0.6.13
+ *  ENGrid scripts: v0.6.12
  *
  *  Created by 4Site Studios
  *  Come work with us or join our team, we would love to hear from you
@@ -9268,8 +9268,14 @@ class Loader {
     reload() {
         var _a, _b, _c;
         const isLoaded = engrid_ENGrid.getBodyData("loaded");
-        const assets = this.getOption("assets");
-        if (!assets || isLoaded) {
+        let assets = this.getOption("assets");
+        const enIsLoaded = engrid_ENGrid.checkNested(window.EngagingNetworks, "require", "_defined", "enjs");
+        if (!enIsLoaded) {
+            if (engrid_ENGrid.debug)
+                console.log("ENgrid Loader: EngagingNetworks Script NOT LOADED");
+            assets = "flush";
+        }
+        else if (!assets || isLoaded) {
             if (engrid_ENGrid.debug)
                 console.log("ENgrid Loader: LOADED");
             return false;
@@ -10053,7 +10059,12 @@ class app_App extends engrid_ENGrid {
         this._form.onValidate.subscribe(() => this.onValidate());
         // Event Listener Examples
         this._amount.onAmountChange.subscribe((s) => console.log(`Live Amount: ${s}`));
-        this._frequency.onFrequencyChange.subscribe((s) => console.log(`Live Frequency: ${s}`));
+        this._frequency.onFrequencyChange.subscribe((s) => {
+            console.log(`Live Frequency: ${s}`);
+            setTimeout(() => {
+                this._amount.load();
+            }, 150);
+        });
         this._form.onSubmit.subscribe((s) => console.log("Submit: ", s));
         this._form.onError.subscribe((s) => console.log("Error:", s));
         window.enOnSubmit = () => {

@@ -21,10 +21,10 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Wednesday, December 8, 2021 @ 08:09:37 ET
+ *  Date: Thursday, December 9, 2021 @ 13:56:16 ET
  *  By: fe
- *  ENGrid styles: v0.6.10
- *  ENGrid scripts: v0.6.8
+ *  ENGrid styles: v0.6.13
+ *  ENGrid scripts: v0.6.12
  *
  *  Created by 4Site Studios
  *  Come work with us or join our team, we would love to hear from you
@@ -2446,6 +2446,15 @@ input[type=checkbox]:checked+label:before{
   border-color:var(--radio_border-color_selected);
   box-shadow:var(--radio_box-shadow_selected);
   color:var(--radio_color_selected);
+}
+
+@-moz-document url-prefix(){
+  .en__pg__select input[type=radio]{
+    accent-color:var(--radio_color_selected);
+    transform:scale(1.4);
+    visibility:visible !important;
+    width:var(--radio_height);
+  }
 }
 input.en__contactDetails__select,input.en__field__input--checkbox,input.en__field__input--radio{
   clip:rect(0 0 0 0);
