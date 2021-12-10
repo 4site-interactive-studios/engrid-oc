@@ -17,10 +17,10 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Thursday, December 9, 2021 @ 13:56:16 ET
+ *  Date: Friday, December 10, 2021 @ 15:44:44 ET
  *  By: fe
  *  ENGrid styles: v0.6.13
- *  ENGrid scripts: v0.6.12
+ *  ENGrid scripts: v0.6.16
  *
  *  Created by 4Site Studios
  *  Come work with us or join our team, we would love to hear from you
@@ -9270,15 +9270,22 @@ class Loader {
         const isLoaded = engrid_ENGrid.getBodyData("loaded");
         let assets = this.getOption("assets");
         const enIsLoaded = engrid_ENGrid.checkNested(window.EngagingNetworks, "require", "_defined", "enjs");
-        if (!enIsLoaded) {
-            if (engrid_ENGrid.debug)
-                console.log("ENgrid Loader: EngagingNetworks Script NOT LOADED");
-            assets = "flush";
-        }
-        else if (!assets || isLoaded) {
+        if (isLoaded) {
             if (engrid_ENGrid.debug)
                 console.log("ENgrid Loader: LOADED");
             return false;
+        }
+        if (!assets) {
+            if (!enIsLoaded) {
+                if (engrid_ENGrid.debug)
+                    console.log("ENgrid Loader: EngagingNetworks Script NOT LOADED");
+                assets = "flush";
+            }
+            else {
+                if (engrid_ENGrid.debug)
+                    console.log("ENgrid Loader: LOADED");
+                return false;
+            }
         }
         // Load the right ENgrid
         if (engrid_ENGrid.debug)
@@ -9308,9 +9315,12 @@ class Loader {
                 if (engrid_ENGrid.debug)
                     console.log("ENgrid Loader: FLUSHING CACHE");
                 const timestamp = Date.now();
-                engrid_js_url = ((_a = this.jsElement) === null || _a === void 0 ? void 0 : _a.getAttribute("src")) + "?v=" + timestamp;
-                engrid_css_url =
-                    ((_b = this.cssElement) === null || _b === void 0 ? void 0 : _b.getAttribute("href")) + "?v=" + timestamp;
+                const jsCurrentURL = new URL(((_a = this.jsElement) === null || _a === void 0 ? void 0 : _a.getAttribute("src")) || "");
+                jsCurrentURL.searchParams.set("v", timestamp.toString());
+                engrid_js_url = jsCurrentURL.toString();
+                const cssCurrentURL = new URL(((_b = this.cssElement) === null || _b === void 0 ? void 0 : _b.getAttribute("href")) || "");
+                cssCurrentURL.searchParams.set("v", timestamp.toString());
+                engrid_css_url = cssCurrentURL.toString();
                 break;
             default:
                 if (engrid_ENGrid.debug)
@@ -11071,7 +11081,6 @@ const watchGiveBySelectField = () => {
                 removeClassesByPrefix(enGrid, prefix);
                 enGrid.classList.add("has-give-by-ach");
             }
-            enFieldPaymentType.value = "ach";
             enFieldPaymentType.value = "ACH";
         }
         else if (enFieldGiveBySelectCurrentValue &&
@@ -11109,7 +11118,6 @@ const watchGiveBySelectField = () => {
                 removeClassesByPrefix(enGrid, prefix);
                 enGrid.classList.add("has-give-by-check");
             }
-            enFieldPaymentType.value = "ach";
             enFieldPaymentType.value = "ACH";
         }
         else if (enFieldGiveBySelectCurrentValue &&
@@ -11119,7 +11127,6 @@ const watchGiveBySelectField = () => {
                 enGrid.classList.add("has-give-by-paypal");
             }
             enFieldPaymentType.value = "paypal";
-            enFieldPaymentType.value = "Paypal";
         }
         else if (enFieldGiveBySelectCurrentValue &&
             enFieldGiveBySelectCurrentValue.value.toLowerCase() == "applepay") {
@@ -11232,9 +11239,13 @@ const handleCCUpdate = () => {
         mastercard: ["mastercard", "master card", "mc"],
         discover: ["discover", "di"],
     };
-    const payment_text = field_payment_type.options[field_payment_type.selectedIndex].text;
-    if (card_type && payment_text != card_type) {
-        field_payment_type.value = Array.from(field_payment_type.options).filter((d) => card_values[card_type].includes(d.value.toLowerCase()))[0].value;
+    const selected_card_value = card_type
+        ? Array.from(field_payment_type.options).filter((d) => card_values[card_type].includes(d.value.toLowerCase()))[0].value
+        : "";
+    if (field_payment_type.value != selected_card_value) {
+        field_payment_type.value = selected_card_value;
+        const paymentTypeChangeEvent = new Event("change", { bubbles: true });
+        field_payment_type.dispatchEvent(paymentTypeChangeEvent);
     }
 };
 const handleExpUpdate = (e) => {
