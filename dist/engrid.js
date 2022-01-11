@@ -17,10 +17,10 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Friday, December 10, 2021 @ 15:44:44 ET
+ *  Date: Tuesday, January 11, 2022 @ 09:32:54 ET
  *  By: fe
- *  ENGrid styles: v0.6.13
- *  ENGrid scripts: v0.6.16
+ *  ENGrid styles: v0.8.1
+ *  ENGrid scripts: v0.8.0
  *
  *  Created by 4Site Studios
  *  Come work with us or join our team, we would love to hear from you
@@ -4685,45 +4685,6 @@ __webpack_require__.d(__webpack_exports__, {
 
 // UNUSED EXPORTS: animateFill, createSingleton, delegate, followCursor, hideAll, inlinePositioning, roundArrow, sticky
 
-;// CONCATENATED MODULE: ./node_modules/@popperjs/core/lib/dom-utils/getBoundingClientRect.js
-// import { isHTMLElement } from './instanceOf';
-function getBoundingClientRect(element, // eslint-disable-next-line unused-imports/no-unused-vars
-includeScale) {
-  if (includeScale === void 0) {
-    includeScale = false;
-  }
-
-  var rect = element.getBoundingClientRect();
-  var scaleX = 1;
-  var scaleY = 1; // FIXME:
-  // `offsetWidth` returns an integer while `getBoundingClientRect`
-  // returns a float. This results in `scaleX` or `scaleY` being
-  // non-1 when it should be for elements that aren't a full pixel in
-  // width or height.
-  // if (isHTMLElement(element) && includeScale) {
-  //   const offsetHeight = element.offsetHeight;
-  //   const offsetWidth = element.offsetWidth;
-  //   // Do not attempt to divide by 0, otherwise we get `Infinity` as scale
-  //   // Fallback to 1 in case both values are `0`
-  //   if (offsetWidth > 0) {
-  //     scaleX = rect.width / offsetWidth || 1;
-  //   }
-  //   if (offsetHeight > 0) {
-  //     scaleY = rect.height / offsetHeight || 1;
-  //   }
-  // }
-
-  return {
-    width: rect.width / scaleX,
-    height: rect.height / scaleY,
-    top: rect.top / scaleY,
-    right: rect.right / scaleX,
-    bottom: rect.bottom / scaleY,
-    left: rect.left / scaleX,
-    x: rect.left / scaleX,
-    y: rect.top / scaleY
-  };
-}
 ;// CONCATENATED MODULE: ./node_modules/@popperjs/core/lib/dom-utils/getWindow.js
 function getWindow(node) {
   if (node == null) {
@@ -4736,17 +4697,6 @@ function getWindow(node) {
   }
 
   return node;
-}
-;// CONCATENATED MODULE: ./node_modules/@popperjs/core/lib/dom-utils/getWindowScroll.js
-
-function getWindowScroll(node) {
-  var win = getWindow(node);
-  var scrollLeft = win.pageXOffset;
-  var scrollTop = win.pageYOffset;
-  return {
-    scrollLeft: scrollLeft,
-    scrollTop: scrollTop
-  };
 }
 ;// CONCATENATED MODULE: ./node_modules/@popperjs/core/lib/dom-utils/instanceOf.js
 
@@ -4772,6 +4722,58 @@ function isShadowRoot(node) {
 }
 
 
+;// CONCATENATED MODULE: ./node_modules/@popperjs/core/lib/utils/math.js
+var math_max = Math.max;
+var math_min = Math.min;
+var round = Math.round;
+;// CONCATENATED MODULE: ./node_modules/@popperjs/core/lib/dom-utils/getBoundingClientRect.js
+
+
+function getBoundingClientRect(element, includeScale) {
+  if (includeScale === void 0) {
+    includeScale = false;
+  }
+
+  var rect = element.getBoundingClientRect();
+  var scaleX = 1;
+  var scaleY = 1;
+
+  if (isHTMLElement(element) && includeScale) {
+    var offsetHeight = element.offsetHeight;
+    var offsetWidth = element.offsetWidth; // Do not attempt to divide by 0, otherwise we get `Infinity` as scale
+    // Fallback to 1 in case both values are `0`
+
+    if (offsetWidth > 0) {
+      scaleX = round(rect.width) / offsetWidth || 1;
+    }
+
+    if (offsetHeight > 0) {
+      scaleY = round(rect.height) / offsetHeight || 1;
+    }
+  }
+
+  return {
+    width: rect.width / scaleX,
+    height: rect.height / scaleY,
+    top: rect.top / scaleY,
+    right: rect.right / scaleX,
+    bottom: rect.bottom / scaleY,
+    left: rect.left / scaleX,
+    x: rect.left / scaleX,
+    y: rect.top / scaleY
+  };
+}
+;// CONCATENATED MODULE: ./node_modules/@popperjs/core/lib/dom-utils/getWindowScroll.js
+
+function getWindowScroll(node) {
+  var win = getWindow(node);
+  var scrollLeft = win.pageXOffset;
+  var scrollTop = win.pageYOffset;
+  return {
+    scrollLeft: scrollLeft,
+    scrollTop: scrollTop
+  };
+}
 ;// CONCATENATED MODULE: ./node_modules/@popperjs/core/lib/dom-utils/getHTMLElementScroll.js
 function getHTMLElementScroll(element) {
   return {
@@ -4841,10 +4843,11 @@ function isScrollParent(element) {
 
 
 
+
 function isElementScaled(element) {
   var rect = element.getBoundingClientRect();
-  var scaleX = rect.width / element.offsetWidth || 1;
-  var scaleY = rect.height / element.offsetHeight || 1;
+  var scaleX = round(rect.width) / element.offsetWidth || 1;
+  var scaleY = round(rect.height) / element.offsetHeight || 1;
   return scaleX !== 1 || scaleY !== 1;
 } // Returns the composite rect of an element relative to its offsetParent.
 // Composite means it takes into account transforms as well as layout.
@@ -5536,10 +5539,6 @@ function popperOffsets(_ref) {
   fn: popperOffsets,
   data: {}
 });
-;// CONCATENATED MODULE: ./node_modules/@popperjs/core/lib/utils/math.js
-var math_max = Math.max;
-var math_min = Math.min;
-var round = Math.round;
 ;// CONCATENATED MODULE: ./node_modules/@popperjs/core/lib/modifiers/computeStyles.js
 
 
@@ -5565,8 +5564,8 @@ function roundOffsetsByDPR(_ref) {
   var win = window;
   var dpr = win.devicePixelRatio || 1;
   return {
-    x: round(round(x * dpr) / dpr) || 0,
-    y: round(round(y * dpr) / dpr) || 0
+    x: round(x * dpr) / dpr || 0,
+    y: round(y * dpr) / dpr || 0
   };
 }
 
@@ -5581,14 +5580,23 @@ function mapToStyles(_ref2) {
       position = _ref2.position,
       gpuAcceleration = _ref2.gpuAcceleration,
       adaptive = _ref2.adaptive,
-      roundOffsets = _ref2.roundOffsets;
+      roundOffsets = _ref2.roundOffsets,
+      isFixed = _ref2.isFixed;
+  var _offsets$x = offsets.x,
+      x = _offsets$x === void 0 ? 0 : _offsets$x,
+      _offsets$y = offsets.y,
+      y = _offsets$y === void 0 ? 0 : _offsets$y;
 
-  var _ref3 = roundOffsets === true ? roundOffsetsByDPR(offsets) : typeof roundOffsets === 'function' ? roundOffsets(offsets) : offsets,
-      _ref3$x = _ref3.x,
-      x = _ref3$x === void 0 ? 0 : _ref3$x,
-      _ref3$y = _ref3.y,
-      y = _ref3$y === void 0 ? 0 : _ref3$y;
+  var _ref3 = typeof roundOffsets === 'function' ? roundOffsets({
+    x: x,
+    y: y
+  }) : {
+    x: x,
+    y: y
+  };
 
+  x = _ref3.x;
+  y = _ref3.y;
   var hasX = offsets.hasOwnProperty('x');
   var hasY = offsets.hasOwnProperty('y');
   var sideX = left;
@@ -5613,16 +5621,18 @@ function mapToStyles(_ref2) {
     offsetParent = offsetParent;
 
     if (placement === enums_top || (placement === left || placement === right) && variation === end) {
-      sideY = bottom; // $FlowFixMe[prop-missing]
-
-      y -= offsetParent[heightProp] - popperRect.height;
+      sideY = bottom;
+      var offsetY = isFixed && win.visualViewport ? win.visualViewport.height : // $FlowFixMe[prop-missing]
+      offsetParent[heightProp];
+      y -= offsetY - popperRect.height;
       y *= gpuAcceleration ? 1 : -1;
     }
 
     if (placement === left || (placement === enums_top || placement === bottom) && variation === end) {
-      sideX = right; // $FlowFixMe[prop-missing]
-
-      x -= offsetParent[widthProp] - popperRect.width;
+      sideX = right;
+      var offsetX = isFixed && win.visualViewport ? win.visualViewport.width : // $FlowFixMe[prop-missing]
+      offsetParent[widthProp];
+      x -= offsetX - popperRect.width;
       x *= gpuAcceleration ? 1 : -1;
     }
   }
@@ -5630,6 +5640,17 @@ function mapToStyles(_ref2) {
   var commonStyles = Object.assign({
     position: position
   }, adaptive && unsetSides);
+
+  var _ref4 = roundOffsets === true ? roundOffsetsByDPR({
+    x: x,
+    y: y
+  }) : {
+    x: x,
+    y: y
+  };
+
+  x = _ref4.x;
+  y = _ref4.y;
 
   if (gpuAcceleration) {
     var _Object$assign;
@@ -5640,9 +5661,9 @@ function mapToStyles(_ref2) {
   return Object.assign({}, commonStyles, (_Object$assign2 = {}, _Object$assign2[sideY] = hasY ? y + "px" : '', _Object$assign2[sideX] = hasX ? x + "px" : '', _Object$assign2.transform = '', _Object$assign2));
 }
 
-function computeStyles(_ref4) {
-  var state = _ref4.state,
-      options = _ref4.options;
+function computeStyles(_ref5) {
+  var state = _ref5.state,
+      options = _ref5.options;
   var _options$gpuAccelerat = options.gpuAcceleration,
       gpuAcceleration = _options$gpuAccelerat === void 0 ? true : _options$gpuAccelerat,
       _options$adaptive = options.adaptive,
@@ -5657,7 +5678,8 @@ function computeStyles(_ref4) {
     variation: getVariation(state.placement),
     popper: state.elements.popper,
     popperRect: state.rects.popper,
-    gpuAcceleration: gpuAcceleration
+    gpuAcceleration: gpuAcceleration,
+    isFixed: state.options.strategy === 'fixed'
   };
 
   if (state.modifiersData.popperOffsets != null) {
@@ -5778,6 +5800,7 @@ function applyStyles_effect(_ref2) {
 });
 ;// CONCATENATED MODULE: ./node_modules/@popperjs/core/lib/modifiers/offset.js
 
+ // eslint-disable-next-line import/no-unused-modules
 
 function distanceAndSkiddingToXY(placement, rects, offset) {
   var basePlacement = getBasePlacement(placement);
@@ -5986,7 +6009,7 @@ function getInnerBoundingClientRect(element) {
 }
 
 function getClientRectFromMixedType(element, clippingParent) {
-  return clippingParent === viewport ? rectToClientRect(getViewportRect(element)) : isHTMLElement(clippingParent) ? getInnerBoundingClientRect(clippingParent) : rectToClientRect(getDocumentRect(getDocumentElement(element)));
+  return clippingParent === viewport ? rectToClientRect(getViewportRect(element)) : isElement(clippingParent) ? getInnerBoundingClientRect(clippingParent) : rectToClientRect(getDocumentRect(getDocumentElement(element)));
 } // A "clipping parent" is an overflowable container with the characteristic of
 // clipping (or hiding) overflowing elements with a position different from
 // `initial`
@@ -6315,6 +6338,10 @@ function getAltAxis(axis) {
 function within(min, value, max) {
   return math_max(min, math_min(value, max));
 }
+function withinMaxClamp(min, value, max) {
+  var v = within(min, value, max);
+  return v > max ? max : v;
+}
 ;// CONCATENATED MODULE: ./node_modules/@popperjs/core/lib/modifiers/preventOverflow.js
 
 
@@ -6361,6 +6388,14 @@ function preventOverflow(_ref) {
   var tetherOffsetValue = typeof tetherOffset === 'function' ? tetherOffset(Object.assign({}, state.rects, {
     placement: state.placement
   })) : tetherOffset;
+  var normalizedTetherOffsetValue = typeof tetherOffsetValue === 'number' ? {
+    mainAxis: tetherOffsetValue,
+    altAxis: tetherOffsetValue
+  } : Object.assign({
+    mainAxis: 0,
+    altAxis: 0
+  }, tetherOffsetValue);
+  var offsetModifierState = state.modifiersData.offset ? state.modifiersData.offset[state.placement] : null;
   var data = {
     x: 0,
     y: 0
@@ -6370,13 +6405,15 @@ function preventOverflow(_ref) {
     return;
   }
 
-  if (checkMainAxis || checkAltAxis) {
+  if (checkMainAxis) {
+    var _offsetModifierState$;
+
     var mainSide = mainAxis === 'y' ? enums_top : left;
     var altSide = mainAxis === 'y' ? bottom : right;
     var len = mainAxis === 'y' ? 'height' : 'width';
     var offset = popperOffsets[mainAxis];
-    var min = popperOffsets[mainAxis] + overflow[mainSide];
-    var max = popperOffsets[mainAxis] - overflow[altSide];
+    var min = offset + overflow[mainSide];
+    var max = offset - overflow[altSide];
     var additive = tether ? -popperRect[len] / 2 : 0;
     var minLen = variation === start ? referenceRect[len] : popperRect[len];
     var maxLen = variation === start ? -popperRect[len] : -referenceRect[len]; // We need to include the arrow in the calculation so the arrow doesn't go
@@ -6396,36 +6433,45 @@ function preventOverflow(_ref) {
     // width or height)
 
     var arrowLen = within(0, referenceRect[len], arrowRect[len]);
-    var minOffset = isBasePlacement ? referenceRect[len] / 2 - additive - arrowLen - arrowPaddingMin - tetherOffsetValue : minLen - arrowLen - arrowPaddingMin - tetherOffsetValue;
-    var maxOffset = isBasePlacement ? -referenceRect[len] / 2 + additive + arrowLen + arrowPaddingMax + tetherOffsetValue : maxLen + arrowLen + arrowPaddingMax + tetherOffsetValue;
+    var minOffset = isBasePlacement ? referenceRect[len] / 2 - additive - arrowLen - arrowPaddingMin - normalizedTetherOffsetValue.mainAxis : minLen - arrowLen - arrowPaddingMin - normalizedTetherOffsetValue.mainAxis;
+    var maxOffset = isBasePlacement ? -referenceRect[len] / 2 + additive + arrowLen + arrowPaddingMax + normalizedTetherOffsetValue.mainAxis : maxLen + arrowLen + arrowPaddingMax + normalizedTetherOffsetValue.mainAxis;
     var arrowOffsetParent = state.elements.arrow && getOffsetParent(state.elements.arrow);
     var clientOffset = arrowOffsetParent ? mainAxis === 'y' ? arrowOffsetParent.clientTop || 0 : arrowOffsetParent.clientLeft || 0 : 0;
-    var offsetModifierValue = state.modifiersData.offset ? state.modifiersData.offset[state.placement][mainAxis] : 0;
-    var tetherMin = popperOffsets[mainAxis] + minOffset - offsetModifierValue - clientOffset;
-    var tetherMax = popperOffsets[mainAxis] + maxOffset - offsetModifierValue;
+    var offsetModifierValue = (_offsetModifierState$ = offsetModifierState == null ? void 0 : offsetModifierState[mainAxis]) != null ? _offsetModifierState$ : 0;
+    var tetherMin = offset + minOffset - offsetModifierValue - clientOffset;
+    var tetherMax = offset + maxOffset - offsetModifierValue;
+    var preventedOffset = within(tether ? math_min(min, tetherMin) : min, offset, tether ? math_max(max, tetherMax) : max);
+    popperOffsets[mainAxis] = preventedOffset;
+    data[mainAxis] = preventedOffset - offset;
+  }
 
-    if (checkMainAxis) {
-      var preventedOffset = within(tether ? math_min(min, tetherMin) : min, offset, tether ? math_max(max, tetherMax) : max);
-      popperOffsets[mainAxis] = preventedOffset;
-      data[mainAxis] = preventedOffset - offset;
-    }
+  if (checkAltAxis) {
+    var _offsetModifierState$2;
 
-    if (checkAltAxis) {
-      var _mainSide = mainAxis === 'x' ? enums_top : left;
+    var _mainSide = mainAxis === 'x' ? enums_top : left;
 
-      var _altSide = mainAxis === 'x' ? bottom : right;
+    var _altSide = mainAxis === 'x' ? bottom : right;
 
-      var _offset = popperOffsets[altAxis];
+    var _offset = popperOffsets[altAxis];
 
-      var _min = _offset + overflow[_mainSide];
+    var _len = altAxis === 'y' ? 'height' : 'width';
 
-      var _max = _offset - overflow[_altSide];
+    var _min = _offset + overflow[_mainSide];
 
-      var _preventedOffset = within(tether ? math_min(_min, tetherMin) : _min, _offset, tether ? math_max(_max, tetherMax) : _max);
+    var _max = _offset - overflow[_altSide];
 
-      popperOffsets[altAxis] = _preventedOffset;
-      data[altAxis] = _preventedOffset - _offset;
-    }
+    var isOriginSide = [enums_top, left].indexOf(basePlacement) !== -1;
+
+    var _offsetModifierValue = (_offsetModifierState$2 = offsetModifierState == null ? void 0 : offsetModifierState[altAxis]) != null ? _offsetModifierState$2 : 0;
+
+    var _tetherMin = isOriginSide ? _min : _offset - referenceRect[_len] - popperRect[_len] - _offsetModifierValue + normalizedTetherOffsetValue.altAxis;
+
+    var _tetherMax = isOriginSide ? _offset + referenceRect[_len] + popperRect[_len] - _offsetModifierValue - normalizedTetherOffsetValue.altAxis : _max;
+
+    var _preventedOffset = tether && isOriginSide ? withinMaxClamp(_tetherMin, _offset, _tetherMax) : within(tether ? _tetherMin : _min, _offset, tether ? _tetherMax : _max);
+
+    popperOffsets[altAxis] = _preventedOffset;
+    data[altAxis] = _preventedOffset - _offset;
   }
 
   state.modifiersData[name] = data;
@@ -6620,7 +6666,7 @@ var popper_createPopper = /*#__PURE__*/popperGenerator({
 
 ;// CONCATENATED MODULE: ./node_modules/tippy.js/dist/tippy.esm.js
 /**!
-* tippy.js v6.3.5
+* tippy.js v6.3.7
 * (c) 2017-2021 atomiks
 * MIT License
 */
@@ -7356,8 +7402,12 @@ function createTippy(reference, passedProps) {
     return getValueAtIndexOrReturn(instance.props.delay, isShow ? 0 : 1, defaultProps.delay);
   }
 
-  function handleStyles() {
-    popper.style.pointerEvents = instance.props.interactive && instance.state.isVisible ? '' : 'none';
+  function handleStyles(fromHide) {
+    if (fromHide === void 0) {
+      fromHide = false;
+    }
+
+    popper.style.pointerEvents = instance.props.interactive && !fromHide ? '' : 'none';
     popper.style.zIndex = "" + instance.props.zIndex;
   }
 
@@ -7443,7 +7493,9 @@ function createTippy(reference, passedProps) {
     } // Clicked on the event listeners target
 
 
-    if (normalizeToArray(instance.props.triggerTarget || reference).indexOf(actualTarget) !== -1) {
+    if (normalizeToArray(instance.props.triggerTarget || reference).some(function (el) {
+      return actualContains(el, actualTarget);
+    })) {
       if (currentInput.isTouch) {
         return;
       }
@@ -7809,6 +7861,7 @@ function createTippy(reference, passedProps) {
       parentNode.appendChild(popper);
     }
 
+    instance.state.isMounted = true;
     createPopperInstance();
     /* istanbul ignore else */
 
@@ -8038,7 +8091,6 @@ function createTippy(reference, passedProps) {
       // popper has been positioned for the first time
 
       (_instance$popperInsta2 = instance.popperInstance) == null ? void 0 : _instance$popperInsta2.forceUpdate();
-      instance.state.isMounted = true;
       invokeHook('onMount', [instance]);
 
       if (instance.props.animation && getIsDefaultRenderFn()) {
@@ -8083,7 +8135,7 @@ function createTippy(reference, passedProps) {
 
     cleanupInteractiveMouseListeners();
     removeDocumentPress();
-    handleStyles();
+    handleStyles(true);
 
     if (getIsDefaultRenderFn()) {
       var _getDefaultTemplateCh4 = getDefaultTemplateChildren(),
@@ -8332,7 +8384,9 @@ var createSingleton = function createSingleton(tippyInstances, optionalProps) {
     }, {});
     singleton.setProps(Object.assign({}, overrideProps, {
       getReferenceClientRect: typeof overrideProps.getReferenceClientRect === 'function' ? overrideProps.getReferenceClientRect : function () {
-        return references[index].getBoundingClientRect();
+        var _references$index;
+
+        return (_references$index = references[index]) == null ? void 0 : _references$index.getBoundingClientRect();
       }
     }));
   }
@@ -8479,7 +8533,9 @@ function delegate(targets, props) {
     trigger: 'manual',
     touch: false
   });
-  var childProps = Object.assign({}, defaultProps, nativeProps, {
+  var childProps = Object.assign({
+    touch: defaultProps.touch
+  }, nativeProps, {
     showOnCreate: true
   });
   var returnValue = tippy(targets, parentProps);
@@ -9260,6 +9316,7 @@ const TranslateOptionsDefaults = {
 
 class Loader {
     constructor() {
+        this.logger = new EngridLogger("Logger", "gold", "black", "🔁");
         this.cssElement = document.querySelector('link[href*="engrid."][rel="stylesheet"]');
         this.jsElement = document.querySelector('script[src*="engrid."]');
     }
@@ -9269,27 +9326,12 @@ class Loader {
         var _a, _b, _c;
         const isLoaded = engrid_ENGrid.getBodyData("loaded");
         let assets = this.getOption("assets");
-        const enIsLoaded = engrid_ENGrid.checkNested(window.EngagingNetworks, "require", "_defined", "enjs");
-        if (isLoaded) {
-            if (engrid_ENGrid.debug)
-                console.log("ENgrid Loader: LOADED");
+        if (isLoaded || !assets) {
+            this.logger.success("ENgrid Loader: LOADED");
             return false;
         }
-        if (!assets) {
-            if (!enIsLoaded) {
-                if (engrid_ENGrid.debug)
-                    console.log("ENgrid Loader: EngagingNetworks Script NOT LOADED");
-                assets = "flush";
-            }
-            else {
-                if (engrid_ENGrid.debug)
-                    console.log("ENgrid Loader: LOADED");
-                return false;
-            }
-        }
         // Load the right ENgrid
-        if (engrid_ENGrid.debug)
-            console.log("ENgrid Loader: RELOADING");
+        this.logger.log("ENgrid Loader: RELOADING");
         engrid_ENGrid.setBodyData("loaded", "true"); // Set the loaded flag, so the next time we don't reload
         // Fetch the desired repo, assets location, and override JS/CSS
         const engrid_repo = this.getOption("repo-name");
@@ -9298,8 +9340,7 @@ class Loader {
         let engrid_css_url = "";
         switch (assets) {
             case "local":
-                if (engrid_ENGrid.debug)
-                    console.log("ENgrid Loader: LOADING LOCAL");
+                this.logger.log("ENgrid Loader: LOADING LOCAL");
                 // Find a way to guess local URL if there's no engrid_repo
                 if (!engrid_repo) {
                     const theme = engrid_ENGrid.getBodyData("theme");
@@ -9312,8 +9353,7 @@ class Loader {
                 }
                 break;
             case "flush":
-                if (engrid_ENGrid.debug)
-                    console.log("ENgrid Loader: FLUSHING CACHE");
+                this.logger.log("ENgrid Loader: FLUSHING CACHE");
                 const timestamp = Date.now();
                 const jsCurrentURL = new URL(((_a = this.jsElement) === null || _a === void 0 ? void 0 : _a.getAttribute("src")) || "");
                 jsCurrentURL.searchParams.set("v", timestamp.toString());
@@ -9323,8 +9363,7 @@ class Loader {
                 engrid_css_url = cssCurrentURL.toString();
                 break;
             default:
-                if (engrid_ENGrid.debug)
-                    console.log("ENgrid Loader: LOADING EXTERNAL");
+                this.logger.log("ENgrid Loader: LOADING EXTERNAL");
                 engrid_js_url =
                     "https://cdn.jsdelivr.net/gh/" +
                         engrid_repo_owner +
@@ -9388,6 +9427,7 @@ var dist = __webpack_require__(5363);
 
 class EnForm {
     constructor() {
+        this.logger = new EngridLogger("EnForm");
         this._onSubmit = new dist/* SignalDispatcher */.nz();
         this._onValidate = new dist/* SignalDispatcher */.nz();
         this._onError = new dist/* SignalDispatcher */.nz();
@@ -9402,18 +9442,15 @@ class EnForm {
     }
     dispatchSubmit() {
         this._onSubmit.dispatch();
-        if (engrid_ENGrid.debug)
-            console.log("dispatchSubmit");
+        this.logger.log("dispatchSubmit");
     }
     dispatchValidate() {
         this._onValidate.dispatch();
-        if (engrid_ENGrid.debug)
-            console.log("dispatchValidate");
+        this.logger.log("dispatchValidate");
     }
     dispatchError() {
         this._onError.dispatch();
-        if (engrid_ENGrid.debug)
-            console.log("dispatchError");
+        this.logger.log("dispatchError");
     }
     submitForm() {
         const enForm = document.querySelector("form .en__submit button");
@@ -9423,8 +9460,7 @@ class EnForm {
             if (enModal)
                 enModal.classList.add("is-submitting");
             enForm.click();
-            if (engrid_ENGrid.debug)
-                console.log("submitForm");
+            this.logger.log("submitForm");
         }
     }
     get onSubmit() {
@@ -9608,6 +9644,18 @@ class engrid_ENGrid {
         this.enParseDependencies();
         return;
     }
+    // Create a hidden input field
+    static createHiddenInput(name, value = "") {
+        const input = document.createElement("input");
+        input.type = "hidden";
+        input.name = name;
+        input.classList.add("en__field__input");
+        input.classList.add("en__field__input--text");
+        input.classList.add("engrid-added-input");
+        input.value = value;
+        engrid_ENGrid.enForm.appendChild(input);
+        return input;
+    }
     // Trigger EN Dependencies
     static enParseDependencies() {
         var _a, _b, _c, _d, _e;
@@ -9658,6 +9706,9 @@ class engrid_ENGrid {
                     break;
                 case "emailsubscribeform":
                     return "SUBSCRIBEFORM";
+                    break;
+                case "supporterhub":
+                    return "SUPPORTERHUB";
                     break;
                 default:
                     return "DONATION";
@@ -9985,6 +10036,7 @@ class app_App extends engrid_ENGrid {
         this._fees = ProcessingFees.getInstance();
         this._amount = DonationAmount.getInstance("transaction.donationAmt", "transaction.donationAmt.other");
         this._frequency = DonationFrequency.getInstance();
+        this.logger = new EngridLogger("App", "black", "white", "🍏");
         this.shouldScroll = () => {
             // If you find a error, scroll
             if (document.querySelector(".en__errorHeader")) {
@@ -10025,8 +10077,15 @@ class app_App extends engrid_ENGrid {
         };
     }
     run() {
-        // Enable debug if available is the first thing
+        if (!engrid_ENGrid.checkNested(window.EngagingNetworks, "require", "_defined", "enjs")) {
+            this.logger.danger("Engaging Networks JS Framework NOT FOUND");
+            setTimeout(() => {
+                this.run();
+            }, 10);
+            return;
+        }
         if (this.options.Debug || app_App.getUrlParameter("debug") == "true")
+            // Enable debug if available is the first thing
             app_App.setBodyData("debug", "");
         // Page Background
         new PageBackground();
@@ -10068,15 +10127,15 @@ class app_App extends engrid_ENGrid {
         this._form.onError.subscribe(() => this.onError());
         this._form.onValidate.subscribe(() => this.onValidate());
         // Event Listener Examples
-        this._amount.onAmountChange.subscribe((s) => console.log(`Live Amount: ${s}`));
+        this._amount.onAmountChange.subscribe((s) => this.logger.success(`Live Amount: ${s}`));
         this._frequency.onFrequencyChange.subscribe((s) => {
-            console.log(`Live Frequency: ${s}`);
+            this.logger.success(`Live Frequency: ${s}`);
             setTimeout(() => {
                 this._amount.load();
             }, 150);
         });
-        this._form.onSubmit.subscribe((s) => console.log("Submit: ", s));
-        this._form.onError.subscribe((s) => console.log("Error:", s));
+        this._form.onSubmit.subscribe((s) => this.logger.success("Submit: " + s));
+        this._form.onError.subscribe((s) => this.logger.danger("Error: " + s));
         window.enOnSubmit = () => {
             this._form.dispatchSubmit();
             return this._form.submit;
@@ -10140,6 +10199,7 @@ class app_App extends engrid_ENGrid {
         if (this.options.NeverBounceAPI)
             new NeverBounce(this.options.NeverBounceAPI, this.options.NeverBounceDateField, this.options.NeverBounceStatusField, this.options.NeverBounceDateFormat);
         new ShowIfAmount();
+        new OtherAmount();
         this.setDataAttributes();
     }
     onLoad() {
@@ -10148,16 +10208,14 @@ class app_App extends engrid_ENGrid {
         }
         if (this.inIframe()) {
             // Scroll to top of iFrame
-            if (app_App.debug)
-                console.log("iFrame Event - window.onload");
+            this.logger.log("iFrame Event - window.onload");
             sendIframeHeight();
             window.parent.postMessage({
                 scroll: this.shouldScroll(),
             }, "*");
             // On click fire the resize event
             document.addEventListener("click", (e) => {
-                if (app_App.debug)
-                    console.log("iFrame Event - click");
+                this.logger.log("iFrame Event - click");
                 setTimeout(() => {
                     sendIframeHeight();
                 }, 100);
@@ -10169,22 +10227,19 @@ class app_App extends engrid_ENGrid {
             this.options.onResize();
         }
         if (this.inIframe()) {
-            if (app_App.debug)
-                console.log("iFrame Event - window.onload");
+            this.logger.log("iFrame Event - window.onload");
             sendIframeHeight();
         }
     }
     onValidate() {
         if (this.options.onValidate) {
-            if (app_App.debug)
-                console.log("Client onValidate Triggered");
+            this.logger.log("Client onValidate Triggered");
             this.options.onValidate();
         }
     }
     onSubmit() {
         if (this.options.onSubmit) {
-            if (app_App.debug)
-                console.log("Client onSubmit Triggered");
+            this.logger.log("Client onSubmit Triggered");
             this.options.onSubmit();
         }
         if (this.inIframe()) {
@@ -10193,8 +10248,7 @@ class app_App extends engrid_ENGrid {
     }
     onError() {
         if (this.options.onError) {
-            if (app_App.debug)
-                console.log("Client onError Triggered");
+            this.logger.danger("Client onError Triggered");
             this.options.onError();
         }
     }
@@ -10211,13 +10265,20 @@ class app_App extends engrid_ENGrid {
             // Add the data-engrid-embedded attribute when inside an iFrame if it wasn't already added by a script in the Page Template
             app_App.setBodyData("embedded", "");
             // Fire the resize event
-            if (app_App.debug)
-                console.log("iFrame Event - First Resize");
+            this.logger.log("iFrame Event - First Resize");
             sendIframeHeight();
         }
     }
     // Use this function to add any Data Attributes to the Body tag
     setDataAttributes() {
+        // Add the Page Type as a Data Attribute on the video
+        if (engrid_ENGrid.checkNested(window, "pageJson", "pageType")) {
+            app_App.setBodyData("page-type", window.pageJson.pageType);
+            this.logger.log("Page Type: " + window.pageJson.pageType);
+        }
+        else {
+            this.logger.log("Page Type: Not Found");
+        }
         // Add a body banner data attribute if the banner contains no image
         // @TODO Should this account for video?
         // @TODO Should we merge this with the script that checks the background image?
@@ -10684,7 +10745,6 @@ const enInput = (() => {
     // get DOM elements
     const init = () => {
         const formInput = document.querySelectorAll(".en__field--text, .en__field--email:not(.en__field--checkbox), .en__field--telephone, .en__field--number, .en__field--textarea, .en__field--select, .en__field--checkbox");
-        const otherInputs = document.querySelectorAll(".en__field__input--other");
         Array.from(formInput).forEach((e) => {
             // @TODO Currently checkboxes always return as having a value, since they do but they're just not checked. Need to update and account for that, should also do Radio's while we're at it
             let element = e.querySelector("input, textarea, select");
@@ -10692,25 +10752,6 @@ const enInput = (() => {
                 e.classList.add("has-value");
             }
             bindEvents(e);
-        });
-        /* @TODO Review Engaging Networks to see if this is still needed */
-        /************************************
-         * Automatically select other radio input when an amount is entered into it.
-         ***********************************/
-        Array.from(otherInputs).forEach((e) => {
-            ["focus", "input"].forEach((evt) => {
-                e.addEventListener(evt, (ev) => {
-                    const target = ev.target;
-                    if (target && target.parentNode && target.parentNode.parentNode) {
-                        const targetWrapper = target.parentNode;
-                        targetWrapper.classList.remove("en__field__item--hidden");
-                        if (targetWrapper.parentNode) {
-                            const lastRadioInput = targetWrapper.parentNode.querySelector(".en__field__item:nth-last-child(2) input");
-                            lastRadioInput.checked = !0;
-                        }
-                    }
-                }, false);
-            });
         });
     };
     return {
@@ -13449,14 +13490,14 @@ class RememberMe {
 class ShowIfAmount {
     constructor() {
         this._amount = DonationAmount.getInstance();
+        this.logger = new EngridLogger("ShowIfAmount", "yellow", "black", "👀");
         this._elements = document.querySelectorAll('[class*="showifamount"]');
         if (this._elements.length > 0) {
             this._amount.onAmountChange.subscribe(() => this.init());
             this.init();
             return;
         }
-        if (engrid_ENGrid.debug)
-            console.log("Show If Amount: NO ELEMENTS FOUND");
+        this.logger.log("Show If Amount: NO ELEMENTS FOUND");
     }
     init() {
         const amount = this._amount.amount;
@@ -13483,8 +13524,7 @@ class ShowIfAmount {
         if (showifamountClass) {
             let amountCheck = showifamountClass.split("-").slice(-1)[0];
             if (amount < Number(amountCheck)) {
-                if (engrid_ENGrid.debug)
-                    console.log("Show If Amount (lessthan):", element);
+                this.logger.log("(lessthan):", element);
                 element.classList.add("engrid-open");
             }
             else {
@@ -13497,8 +13537,7 @@ class ShowIfAmount {
         if (showifamountClass) {
             let amountCheck = showifamountClass.split("-").slice(-1)[0];
             if (amount <= Number(amountCheck)) {
-                if (engrid_ENGrid.debug)
-                    console.log("Show If Amount (lessthanorequalto):", element);
+                this.logger.log("(lessthanorequalto):", element);
                 element.classList.add("engrid-open");
             }
             else {
@@ -13511,8 +13550,7 @@ class ShowIfAmount {
         if (showifamountClass) {
             let amountCheck = showifamountClass.split("-").slice(-1)[0];
             if (amount == Number(amountCheck)) {
-                if (engrid_ENGrid.debug)
-                    console.log("Show If Amount (equalto):", element);
+                this.logger.log("(equalto):", element);
                 element.classList.add("engrid-open");
             }
             else {
@@ -13525,8 +13563,7 @@ class ShowIfAmount {
         if (showifamountClass) {
             let amountCheck = showifamountClass.split("-").slice(-1)[0];
             if (amount >= Number(amountCheck)) {
-                if (engrid_ENGrid.debug)
-                    console.log("Show If Amount (greaterthanorequalto):", element);
+                this.logger.log("(greaterthanorequalto):", element);
                 element.classList.add("engrid-open");
             }
             else {
@@ -13539,8 +13576,7 @@ class ShowIfAmount {
         if (showifamountClass) {
             let amountCheck = showifamountClass.split("-").slice(-1)[0];
             if (amount > Number(amountCheck)) {
-                if (engrid_ENGrid.debug)
-                    console.log("Show If Amount (greaterthan):", element);
+                this.logger.log("(greaterthan):", element);
                 element.classList.add("engrid-open");
             }
             else {
@@ -13553,10 +13589,8 @@ class ShowIfAmount {
         if (showifamountClass) {
             let amountCheckMin = showifamountClass.split("-").slice(-2, -1)[0];
             let amountCheckMax = showifamountClass.split("-").slice(-1)[0];
-            if (amount > Number(amountCheckMin) &&
-                amount < Number(amountCheckMax)) {
-                if (engrid_ENGrid.debug)
-                    console.log("Show If Amount (between):", element);
+            if (amount > Number(amountCheckMin) && amount < Number(amountCheckMax)) {
+                this.logger.log("(between):", element);
                 element.classList.add("engrid-open");
             }
             else {
@@ -13566,8 +13600,125 @@ class ShowIfAmount {
     }
 }
 
+;// CONCATENATED MODULE: ./node_modules/@4site/engrid-common/dist/other-amount.js
+// This class automatically select other radio input when an amount is entered into it.
+class OtherAmount {
+    constructor() {
+        this.otherAmountField = document.querySelector(".en__field__input--other");
+        if (this.otherAmountField) {
+            "focus input".split(" ").forEach((e) => {
+                var _a;
+                (_a = document.querySelector("body")) === null || _a === void 0 ? void 0 : _a.addEventListener(e, (event) => {
+                    if (event.target === this.otherAmountField) {
+                        this.setRadioInput();
+                    }
+                });
+            });
+        }
+    }
+    setRadioInput() {
+        const target = this.otherAmountField;
+        if (target && target.parentNode && target.parentNode.parentNode) {
+            const targetWrapper = target.parentNode;
+            targetWrapper.classList.remove("en__field__item--hidden");
+            if (targetWrapper.parentNode) {
+                const lastRadioInput = targetWrapper.parentNode.querySelector(".en__field__item:nth-last-child(2) input");
+                lastRadioInput.checked = !0;
+            }
+        }
+    }
+}
+
+;// CONCATENATED MODULE: ./node_modules/@4site/engrid-common/dist/logger.js
+
+/**
+ * A better logger. It only works if debug is enabled.
+ */
+class EngridLogger {
+    constructor(prefix, color, background, emoji) {
+        this.prefix = "";
+        this.color = "black";
+        this.background = "white";
+        this.emoji = "";
+        if (emoji) {
+            this.emoji = emoji;
+        }
+        else {
+            switch (color) {
+                case "red":
+                    this.emoji = "🔴";
+                    break;
+                case "green":
+                    this.emoji = "🟢";
+                    break;
+                case "blue":
+                    this.emoji = "🔵";
+                    break;
+                case "yellow":
+                    this.emoji = "🟡";
+                    this.background = "black";
+                    break;
+                case "purple":
+                    this.emoji = "🟣";
+                    break;
+                case "black":
+                default:
+                    this.emoji = "⚫";
+                    break;
+            }
+        }
+        if (prefix) {
+            this.prefix = `[ENgrid ${prefix}]`;
+        }
+        if (color) {
+            this.color = color;
+        }
+        if (background) {
+            this.background = background;
+        }
+    }
+    get log() {
+        if (!engrid_ENGrid.debug) {
+            return () => { };
+        }
+        return console.log.bind(window.console, "%c" + this.emoji + " " + this.prefix + " %s", `color: ${this.color}; background: ${this.background}; font-size: 1.2em; padding: 4px; border-radius: 2px; font-family: monospace;`);
+    }
+    get success() {
+        if (!engrid_ENGrid.debug) {
+            return () => { };
+        }
+        return console.log.bind(window.console, "%c ✅ " + this.prefix + " %s", `color: green; background: white; font-size: 1.2em; padding: 4px; border-radius: 2px; font-family: monospace;`);
+    }
+    get danger() {
+        if (!engrid_ENGrid.debug) {
+            return () => { };
+        }
+        return console.log.bind(window.console, "%c ⛔️ " + this.prefix + " %s", `color: red; background: white; font-size: 1.2em; padding: 4px; border-radius: 2px; font-family: monospace;`);
+    }
+    get warn() {
+        if (!engrid_ENGrid.debug) {
+            return () => { };
+        }
+        return console.warn.bind(window.console, "%c" + this.emoji + " " + this.prefix + " %s", `color: ${this.color}; background: ${this.background}; font-size: 1.2em; padding: 4px; border-radius: 2px; font-family: monospace;`);
+    }
+    get dir() {
+        if (!engrid_ENGrid.debug) {
+            return () => { };
+        }
+        return console.dir.bind(window.console, "%c" + this.emoji + " " + this.prefix + " %s", `color: ${this.color}; background: ${this.background}; font-size: 1.2em; padding: 4px; border-radius: 2px; font-family: monospace;`);
+    }
+    get error() {
+        if (!engrid_ENGrid.debug) {
+            return () => { };
+        }
+        return console.error.bind(window.console, "%c" + this.emoji + " " + this.prefix + " %s", `color: ${this.color}; background: ${this.background}; font-size: 1.2em; padding: 4px; border-radius: 2px; font-family: monospace;`);
+    }
+}
+
 ;// CONCATENATED MODULE: ./node_modules/@4site/engrid-common/dist/index.js
  // Runs first so it can change the DOM markup before any markup dependent code fires
+
+
 
 
 
