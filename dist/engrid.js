@@ -17,10 +17,10 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Tuesday, February 15, 2022 @ 16:12:33 ET
+ *  Date: Tuesday, February 15, 2022 @ 18:37:17 ET
  *  By: fernando
  *  ENGrid styles: v0.9.0
- *  ENGrid scripts: v0.9.0
+ *  ENGrid scripts: v0.9.1
  *
  *  Created by 4Site Studios
  *  Come work with us or join our team, we would love to hear from you
@@ -9706,6 +9706,32 @@ class engrid_ENGrid {
         }
         return true;
     }
+    static setError(querySelector, errorMessage) {
+        const errorElement = document.querySelector(querySelector);
+        if (errorElement) {
+            errorElement.classList.add("en__field--validationFailed");
+            let errorMessageElement = errorElement.querySelector(".en__field__error");
+            if (!errorMessageElement) {
+                errorMessageElement = document.createElement("div");
+                errorMessageElement.classList.add("en__field__error");
+                errorMessageElement.innerHTML = errorMessage;
+                errorElement.insertBefore(errorMessageElement, errorElement.firstChild);
+            }
+            else {
+                errorMessageElement.innerHTML = errorMessage;
+            }
+        }
+    }
+    static removeError(querySelector) {
+        const errorElement = document.querySelector(querySelector);
+        if (errorElement) {
+            errorElement.classList.remove("en__field--validationFailed");
+            const errorMessageElement = errorElement.querySelector(".en__field__error");
+            if (errorMessageElement) {
+                errorElement.removeChild(errorMessageElement);
+            }
+        }
+    }
 }
 
 ;// CONCATENATED MODULE: ./node_modules/@4site/engrid-common/dist/events/donation-frequency.js
@@ -13694,7 +13720,8 @@ class MinMaxAmount {
             // If we're not on a Donation Page, get out
             return;
         }
-        this._amount.onAmountChange.subscribe(this.disableSubmitButton.bind(this));
+        this._amount.onAmountChange.subscribe((s) => window.setTimeout(this.liveValidate.bind(this), 1000) // Wait 1 second for the amount to be updated
+        );
         this._form.onValidate.subscribe(this.enOnValidate.bind(this));
     }
     // Should we run the script?
@@ -13703,41 +13730,36 @@ class MinMaxAmount {
     }
     // Don't submit the form if the amount is not valid
     enOnValidate() {
+        const otherAmount = document.querySelector("[name='transaction.donationAmt.other']");
         if (this._amount.amount < this.minAmount) {
             this.logger.log("Amount is less than min amount: " + this.minAmount);
-            alert(this.minAmountMessage);
+            if (otherAmount) {
+                otherAmount.focus();
+            }
             return false;
         }
         else if (this._amount.amount > this.maxAmount) {
             this.logger.log("Amount is greater than max amount: " + this.maxAmount);
-            alert(this.maxAmountMessage);
+            if (otherAmount) {
+                otherAmount.focus();
+            }
             return false;
         }
         return true;
     }
     // Disable Submit Button if the amount is not valid
-    disableSubmitButton() {
+    liveValidate() {
         if (this._amount.amount < this.minAmount) {
             this.logger.log("Amount is less than min amount: " + this.minAmount);
-            engrid_ENGrid.disableSubmit(this.minAmountMessage || "");
+            engrid_ENGrid.setError(".en__field--withOther", this.minAmountMessage || "");
         }
         else if (this._amount.amount > this.maxAmount) {
             this.logger.log("Amount is greater than max amount: " + this.maxAmount);
-            engrid_ENGrid.disableSubmit(this.maxAmountMessage || "");
+            engrid_ENGrid.setError(".en__field--withOther", this.maxAmountMessage || "");
         }
         else {
-            engrid_ENGrid.enableSubmit();
+            engrid_ENGrid.removeError(".en__field--withOther");
         }
-    }
-    // Fix Amount Labels
-    fixAmountLabels() {
-        let amounts = document.querySelectorAll(".en__field--donationAmt label");
-        const currencySymbol = engrid_ENGrid.getOption("CurrencySymbol") || "";
-        amounts.forEach((element) => {
-            if (!isNaN(element.innerText)) {
-                element.innerText = currencySymbol + element.innerText;
-            }
-        });
     }
 }
 
