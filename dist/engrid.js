@@ -17,7 +17,7 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Tuesday, February 15, 2022 @ 16:02:15 ET
+ *  Date: Tuesday, February 15, 2022 @ 16:12:33 ET
  *  By: fernando
  *  ENGrid styles: v0.9.0
  *  ENGrid scripts: v0.9.0
@@ -13964,7 +13964,9 @@ const options = {
   CurrencySymbol: "$",
   DecimalSeparator: ".",
   MinAmount: 5,
+  MaxAmount: 30000,
   MinAmountMessage: "Amount must be at least $5",
+  MaxAmountMessage: "Amount must be less than $30,000",
   MediaAttribution: true,
   SkipToMainContentLink: true,
   SrcDefer: true,
