@@ -151,6 +151,8 @@ const options: Options = {
   ClickToExpand: true,
   CurrencySymbol: "$",
   DecimalSeparator: ".",
+  MinAmount: 5,
+  MinAmountMessage: "Amount must be at least $5",
   MediaAttribution: true,
   SkipToMainContentLink: true,
   SrcDefer: true,
