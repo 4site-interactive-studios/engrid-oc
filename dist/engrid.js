@@ -17,10 +17,10 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Tuesday, February 15, 2022 @ 18:37:17 ET
+ *  Date: Monday, February 28, 2022 @ 11:06:57 ET
  *  By: fernando
- *  ENGrid styles: v0.9.0
- *  ENGrid scripts: v0.9.1
+ *  ENGrid styles: v0.9.9
+ *  ENGrid scripts: v0.9.13
  *
  *  Created by 4Site Studios
  *  Come work with us or join our team, we would love to hear from you
@@ -10043,6 +10043,7 @@ class app_App extends engrid_ENGrid {
         this._form.onSubmit.subscribe((s) => this.logger.success("Submit: " + s));
         this._form.onError.subscribe((s) => this.logger.danger("Error: " + s));
         window.enOnSubmit = () => {
+            this._form.submit = true;
             this._form.dispatchSubmit();
             return this._form.submit;
         };
@@ -10050,6 +10051,7 @@ class app_App extends engrid_ENGrid {
             this._form.dispatchError();
         };
         window.enOnValidate = () => {
+            this._form.validate = true;
             this._form.dispatchValidate();
             return this._form.validate;
         };
@@ -10108,6 +10110,7 @@ class app_App extends engrid_ENGrid {
         new OtherAmount();
         new MinMaxAmount();
         this.setDataAttributes();
+        engrid_ENGrid.setBodyData("data-engrid-scripts-js-loading", "finished");
     }
     onLoad() {
         if (this.options.onLoad) {
@@ -10913,6 +10916,10 @@ const inputPlaceholder = () => {
     // CHANGE FIELD INPUT TYPES
     if (enFieldDonationAmt) {
         enFieldDonationAmt.setAttribute("inputmode", "decimal");
+    }
+    // ADD THE MISSING LABEL FOR IMPROVED ACCESSABILITY
+    if (enFieldDonationAmt) {
+        enFieldDonationAmt.setAttribute("aria-label", "Enter your custom donation amount");
     }
     // ADD FIELD PLACEHOLDERS
     const enAddInputPlaceholder = document.querySelector("[data-engrid-add-input-placeholders]");
@@ -12253,8 +12260,8 @@ class TranslateFields {
                 break;
             case "AU":
             case "AUS":
-                this.setStateValues("Province/State", [
-                    { label: "Select Province/State", value: "" },
+                this.setStateValues("Province / State", [
+                    { label: "Select", value: "" },
                     { label: "New South Wales", value: "NSW" },
                     { label: "Victoria", value: "VIC" },
                     { label: "Queensland", value: "QLD" },
@@ -12266,8 +12273,8 @@ class TranslateFields {
                 ]);
                 break;
             case "Australia":
-                this.setStateValues("Province/State", [
-                    { label: "Select Province/State", value: "" },
+                this.setStateValues("Province / State", [
+                    { label: "Select", value: "" },
                     { label: "New South Wales", value: "New South Wales" },
                     { label: "Victoria", value: "Victoria" },
                     { label: "Queensland", value: "Queensland" },
@@ -12396,8 +12403,8 @@ class TranslateFields {
                 break;
             case "CA":
             case "CAN":
-                this.setStateValues("Province", [
-                    { label: "Select Province", value: "" },
+                this.setStateValues("Province / Territory", [
+                    { label: "Select", value: "" },
                     { label: "Alberta", value: "AB" },
                     { label: "British Columbia", value: "BC" },
                     { label: "Manitoba", value: "MB" },
@@ -12414,8 +12421,8 @@ class TranslateFields {
                 ]);
                 break;
             case "Canada":
-                this.setStateValues("Province", [
-                    { label: "Select Province", value: "" },
+                this.setStateValues("Province / Territory", [
+                    { label: "Select", value: "" },
                     { label: "Alberta", value: "Alberta" },
                     { label: "British Columbia", value: "British Columbia" },
                     { label: "Manitoba", value: "Manitoba" },
@@ -12508,7 +12515,7 @@ class TranslateFields {
                 ]);
                 break;
             default:
-                this.setStateValues("Province/State", null);
+                this.setStateValues("Province / State", null);
                 break;
         }
     }
@@ -13736,26 +13743,26 @@ class MinMaxAmount {
             if (otherAmount) {
                 otherAmount.focus();
             }
-            return false;
+            this._form.validate = false;
         }
         else if (this._amount.amount > this.maxAmount) {
             this.logger.log("Amount is greater than max amount: " + this.maxAmount);
             if (otherAmount) {
                 otherAmount.focus();
             }
-            return false;
+            this._form.validate = false;
         }
-        return true;
+        window.setTimeout(this.liveValidate.bind(this), 300);
     }
     // Disable Submit Button if the amount is not valid
     liveValidate() {
         if (this._amount.amount < this.minAmount) {
             this.logger.log("Amount is less than min amount: " + this.minAmount);
-            engrid_ENGrid.setError(".en__field--withOther", this.minAmountMessage || "");
+            engrid_ENGrid.setError(".en__field--withOther", this.minAmountMessage || "Invalid Amount");
         }
         else if (this._amount.amount > this.maxAmount) {
             this.logger.log("Amount is greater than max amount: " + this.maxAmount);
-            engrid_ENGrid.setError(".en__field--withOther", this.maxAmountMessage || "");
+            engrid_ENGrid.setError(".en__field--withOther", this.maxAmountMessage || "Invalid Amount");
         }
         else {
             engrid_ENGrid.removeError(".en__field--withOther");
@@ -13987,8 +13994,8 @@ const options = {
   DecimalSeparator: ".",
   MinAmount: 5,
   MaxAmount: 30000,
-  MinAmountMessage: "Amount must be at least $5",
-  MaxAmountMessage: "Amount must be less than $30,000",
+  MinAmountMessage: "Amount must be at least $5 - Contact us for assistance",
+  MaxAmountMessage: "Amount must be less than $30,000 - Contact us for assistance",
   MediaAttribution: true,
   SkipToMainContentLink: true,
   SrcDefer: true,
