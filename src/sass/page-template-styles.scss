@@ -15,6 +15,8 @@
     background-position: left top;
   }
 
+  @include add-body-drop-shadow(".content-footer");
+
   /*
   * ##########################################################
   * # HIDE UNUSED SECTIONS
@@ -957,22 +959,18 @@
       margin-top: 2.1875rem;
     }
 
-    .content-footerSpacer {
-      margin-bottom: 2.1875rem;
-    }
-
-    .en__component--advrow .body-footer {
-      padding-bottom: 4rem;
+    &:not([data-engrid-embedded]) .en__component--advrow {
+      .body-footer {
+        padding-bottom: 4rem;
+      }
+      .content-footerSpacer {
+        margin-bottom: 2.1875rem;
+      }
     }
 
     .body-headerOutside {
       margin-top: 4rem;
       margin-bottom: 4rem;
-    }
-
-    [class^="body-"] {
-      border-left: 1px solid black;
-      border-right: 1px solid black;
     }
 
     .body-header {
@@ -1526,36 +1524,6 @@
       color: var(--color_white);
       text-decoration: none;
     }
-  }
-
-  .en__component--advrow .body-header:before,
-  .en__component--advrow .body-banner:before,
-  // .en__component--advrow .body-top:before,
-  .en__component--advrow .body-side:before,
-  // .en__component--advrow .body-main:before,
-  // .en__component--advrow .body-bottom:before,
-  .en__component--advrow .body-footer:before {
-    content: "";
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    z-index: -2;
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14),
-      0 2px 1px -1px rgba(0, 0, 0, 0.12);
-  }
-
-  &#en__pagebuilder .en__component--advrow .body-bannerOverlay:before {
-    content: "";
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    z-index: -2;
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14),
-      0 2px 1px -1px rgba(0, 0, 0, 0.12);
   }
 
   &[data-engrid-layout="centercenter1col"] .en__component--advrow .body-bottom {
