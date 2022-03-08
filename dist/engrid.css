@@ -19,7 +19,7 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Wednesday, March 2, 2022 @ 20:16:18 ET
+ *  Date: Tuesday, March 8, 2022 @ 12:08:42 ET
  *  By: bryancasler
  *  ENGrid styles: v0.10.7
  *  ENGrid scripts: v0.10.6
@@ -7352,37 +7352,37 @@ body:not([data-engrid-debug]) #debug-bar{
   padding-right:1.875rem;
   padding-top:0;
 }
-[data-engrid-theme=oc] .body-header>:first-child,[data-engrid-theme=oc] .body-header>:last-child{
+[data-engrid-theme=oc] .body-header>.en__component:first-child,[data-engrid-theme=oc] .body-header>.en__component:not(:first-child):nth-last-child(-n+2):not(.messageOverlay){
   align-items:center;
   justify-content:center;
 }
-[data-engrid-theme=oc] .body-header>:first-child{
+[data-engrid-theme=oc] .body-header>.en__component:first-child{
   display:flex;
   grid-column:pc /  lbc;
   justify-content:flex-start;
   margin-right:auto;
 }
-[data-engrid-theme=oc] .body-header>:first-child img{
+[data-engrid-theme=oc] .body-header>.en__component:first-child img{
   display:block;
   height:52px !important;
   width:auto !important;
 }
-[data-engrid-theme=oc] .body-header>:first-child a{
+[data-engrid-theme=oc] .body-header>.en__component:first-child a{
   cursor:default;
 }
-[data-engrid-theme=oc] .body-header>:last-child{
+[data-engrid-theme=oc] .body-header>.en__component:not(:first-child):nth-last-child(-n+2):not(.messageOverlay){
   display:flex;
   grid-column:rbc /  pc;
   justify-content:flex-end;
   margin-left:auto;
 }
+[data-engrid-theme=oc] .body-header>.en__component:not(:first-child):nth-last-child(-n+2):not(.messageOverlay) img{
+  display:block;
+}
 @media screen and (max-width:600px){
   [data-engrid-theme=oc] .body-header .have-questions-call-line{
-    display:none;
+    display:none !important;
   }
-}
-[data-engrid-theme=oc] .body-header>:first-child img,[data-engrid-theme=oc] .body-header>:last-child img{
-  display:block;
 }
 [data-engrid-theme=oc] .body-header .have-questions-call-line{
   align-items:flex-end;
