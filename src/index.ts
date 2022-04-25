@@ -1,7 +1,14 @@
-import { Options, App } from "@4site/engrid-common"; // Uses ENGrid via NPM
-// import { Options, App } from "../../engrid-scripts/packages/common"; // Uses ENGrid via Visual Studio Workspace
+import {
+  Options,
+  App,
+  DonationAmount,
+  DonationFrequency,
+} from "@4site/engrid-common"; // Uses ENGrid via NPM
+// import { Options, App, DonationAmount, DonationFrequency } from "../../engrid-scripts/packages/common"; // Uses ENGrid via Visual Studio Workspace
 import "./sass/main.scss";
 import { customScript } from "./scripts/main.js";
+
+import DonationLightboxForm from "./scripts/donation-lightbox-form";
 
 declare global {
   interface Window {
@@ -165,6 +172,8 @@ const options: Options = {
   Debug: App.getUrlParameter("debug") == "true" ? true : false,
   onLoad: () => {
     console.log("Starter Theme Loaded"); /*dataCapture();*/
+    (<any>window).DonationLightboxForm = DonationLightboxForm;
+    new DonationLightboxForm(DonationAmount, DonationFrequency);
     customScript();
   },
   onResize: () => console.log("Starter Theme Window Resized"),
