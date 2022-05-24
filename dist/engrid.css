@@ -19,7 +19,7 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Monday, April 25, 2022 @ 17:03:48 ET
+ *  Date: Tuesday, May 24, 2022 @ 13:43:31 ET
  *  By: fernando
  *  ENGrid styles: v0.11.9
  *  ENGrid scripts: v0.11.14
@@ -8524,6 +8524,10 @@ body:not([data-engrid-debug]) #debug-bar{
 [data-engrid-theme=oc][data-engrid-embedded] .body-header,[data-engrid-theme=oc][data-engrid-embedded] .content-footer{
   display:none;
 }
+[data-engrid-theme=oc-multistep]#en__pagebuilder .monthly-upsell-message p{
+  max-height:none;
+  overflow:visible;
+}
 @keyframes float{
   0%{
     opacity:1;
@@ -8736,7 +8740,6 @@ body:not([data-engrid-debug]) #debug-bar{
   font-size:20px;
   font-weight:700;
   height:20px;
-  left:14px;
   left:19px;
   line-height:0;
   position:absolute;
