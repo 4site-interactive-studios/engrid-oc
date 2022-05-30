@@ -366,6 +366,26 @@ export default class DonationLightboxForm {
         }
         return false;
       } else {
+        if (amount < 5) {
+          this.sendMessage(
+            "error",
+            "Amount must be at least $5 - Contact us for assistance"
+          );
+          if (amountBlock) {
+            amountBlock.classList.add("has-error");
+          }
+          return false;
+        }
+        if (amount > 30000) {
+          this.sendMessage(
+            "error",
+            "Amount must be less than $30,000 - Contact us for assistance"
+          );
+          if (amountBlock) {
+            amountBlock.classList.add("has-error");
+          }
+          return false;
+        }
         if (amountBlock) {
           amountBlock.classList.remove("has-error");
         }
