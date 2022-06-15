@@ -17,10 +17,10 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Monday, May 30, 2022 @ 13:34:38 ET
+ *  Date: Wednesday, June 15, 2022 @ 13:06:48 ET
  *  By: fernando
- *  ENGrid styles: v0.12.0
- *  ENGrid scripts: v0.12.5
+ *  ENGrid styles: v0.12.12
+ *  ENGrid scripts: v0.12.13
  *
  *  Created by 4Site Studios
  *  Come work with us or join our team, we would love to hear from you
@@ -11330,6 +11330,42 @@ class engrid_ENGrid {
         }
         return s.join(dec);
     }
+    // Clean an Amount
+    static cleanAmount(amount) {
+        // Split the number
+        const valueArray = amount.replace(/[^0-9,\.]/g, "").split(/[,.]+/);
+        const delimArray = amount.replace(/[^.,]/g, "").split("");
+        // Handle values with no decimal places and non-numeric values
+        if (valueArray.length === 1) {
+            return parseInt(valueArray[0]) || 0;
+        }
+        // Ignore invalid numbers
+        if (valueArray
+            .map((x, index) => {
+            return index > 0 && index + 1 !== valueArray.length && x.length !== 3
+                ? true
+                : false;
+        })
+            .includes(true)) {
+            return 0;
+        }
+        // Multiple commas is a bad thing? So edgy.
+        if (delimArray.length > 1 && !delimArray.includes(".")) {
+            return 0;
+        }
+        // Handle invalid decimal and comma formatting
+        if ([...new Set(delimArray.slice(0, -1))].length > 1) {
+            return 0;
+        }
+        // If there are cents
+        if (valueArray[valueArray.length - 1].length <= 2) {
+            const cents = valueArray.pop() || "00";
+            return parseInt(cents) > 0
+                ? Number(parseInt(valueArray.join("")) + "." + cents).toFixed(2)
+                : parseInt(valueArray.join(""));
+        }
+        return parseInt(valueArray.join(""));
+    }
     static disableSubmit(label = "") {
         const submit = document.querySelector(".en__submit button");
         submit.dataset.originalText = submit.innerText;
@@ -13848,7 +13884,7 @@ class ShowHideRadioCheckboxes {
                     .forEach((el) => {
                     // Consider toggling "hide" class so these fields can be displayed when in a debug state
                     if (el instanceof HTMLElement) {
-                        const fields = el.querySelectorAll("input, select, textarea");
+                        const fields = el.querySelectorAll("input[type='text'], input[type='number'], input[type='email'], select, textarea");
                         if (fields.length > 0) {
                             fields.forEach((field) => {
                                 if (field instanceof HTMLInputElement ||
@@ -13906,7 +13942,7 @@ class ShowHideRadioCheckboxes {
         if (type == "hide" && !engrid_ENGrid.isVisible(item))
             return;
         this.logger.log(`toggleValue: ${type}`);
-        const fields = item.querySelectorAll("input, select, textarea");
+        const fields = item.querySelectorAll("input[type='text'], input[type='number'], input[type='email'], select, textarea");
         if (fields.length > 0) {
             fields.forEach((field) => {
                 var _a;
@@ -15087,24 +15123,48 @@ class RememberMe {
     constructor(options) {
         this._form = EnForm.getInstance();
         this.iframe = null;
-        this.remoteUrl = (options.remoteUrl) ? options.remoteUrl : null;
-        this.cookieName = (options.cookieName) ? options.cookieName : 'engrid-autofill';
-        this.cookieExpirationDays = (options.cookieExpirationDays) ? options.cookieExpirationDays : 365;
-        this.rememberMeOptIn = (options.checked) ? options.checked : false;
-        this.fieldNames = (options.fieldNames) ? options.fieldNames : [];
-        this.fieldDonationAmountRadioName = (options.fieldDonationAmountRadioName) ? options.fieldDonationAmountRadioName : 'transaction.donationAmt';
-        this.fieldDonationAmountOtherName = (options.fieldDonationAmountOtherName) ? options.fieldDonationAmountOtherName : 'transaction.donationAmt.other';
-        this.fieldDonationRecurrPayRadioName = (options.fieldDonationRecurrPayRadioName) ? options.fieldDonationRecurrPayRadioName : 'transaction.recurrpay';
-        this.fieldDonationAmountOtherCheckboxID = (options.fieldDonationAmountOtherCheckboxID) ? options.fieldDonationAmountOtherCheckboxID : '#en__field_transaction_donationAmt4';
-        this.fieldOptInSelectorTarget = (options.fieldOptInSelectorTarget) ? options.fieldOptInSelectorTarget : '.en__field--emailAddress.en__field';
-        this.fieldOptInSelectorTargetLocation = (options.fieldOptInSelectorTargetLocation) ? options.fieldOptInSelectorTargetLocation : 'after';
-        this.fieldClearSelectorTarget = (options.fieldClearSelectorTarget) ? options.fieldClearSelectorTarget : 'label[for="en__field_supporter_firstName"]';
-        this.fieldClearSelectorTargetLocation = (options.fieldClearSelectorTargetLocation) ? options.fieldClearSelectorTargetLocation : 'before';
+        this.remoteUrl = options.remoteUrl ? options.remoteUrl : null;
+        this.cookieName = options.cookieName
+            ? options.cookieName
+            : "engrid-autofill";
+        this.cookieExpirationDays = options.cookieExpirationDays
+            ? options.cookieExpirationDays
+            : 365;
+        this.rememberMeOptIn = options.checked ? options.checked : false;
+        this.fieldNames = options.fieldNames ? options.fieldNames : [];
+        this.fieldDonationAmountRadioName = options.fieldDonationAmountRadioName
+            ? options.fieldDonationAmountRadioName
+            : "transaction.donationAmt";
+        this.fieldDonationAmountOtherName = options.fieldDonationAmountOtherName
+            ? options.fieldDonationAmountOtherName
+            : "transaction.donationAmt.other";
+        this.fieldDonationRecurrPayRadioName =
+            options.fieldDonationRecurrPayRadioName
+                ? options.fieldDonationRecurrPayRadioName
+                : "transaction.recurrpay";
+        this.fieldDonationAmountOtherCheckboxID =
+            options.fieldDonationAmountOtherCheckboxID
+                ? options.fieldDonationAmountOtherCheckboxID
+                : "#en__field_transaction_donationAmt4";
+        this.fieldOptInSelectorTarget = options.fieldOptInSelectorTarget
+            ? options.fieldOptInSelectorTarget
+            : ".en__field--emailAddress.en__field";
+        this.fieldOptInSelectorTargetLocation =
+            options.fieldOptInSelectorTargetLocation
+                ? options.fieldOptInSelectorTargetLocation
+                : "after";
+        this.fieldClearSelectorTarget = options.fieldClearSelectorTarget
+            ? options.fieldClearSelectorTarget
+            : 'label[for="en__field_supporter_firstName"]';
+        this.fieldClearSelectorTargetLocation =
+            options.fieldClearSelectorTargetLocation
+                ? options.fieldClearSelectorTargetLocation
+                : "before";
         this.fieldData = {};
         if (this.useRemote()) {
             this.createIframe(() => {
                 if (this.iframe && this.iframe.contentWindow) {
-                    this.iframe.contentWindow.postMessage({ key: this.cookieName, operation: 'read' }, '*');
+                    this.iframe.contentWindow.postMessage({ key: this.cookieName, operation: "read" }, "*");
                     this._form.onSubmit.subscribe(() => {
                         if (this.rememberMeOptIn) {
                             this.readFields();
@@ -15113,7 +15173,10 @@ class RememberMe {
                     });
                 }
             }, (event) => {
-                if (event.data && event.data.key && event.data.value !== undefined && event.data.key === this.cookieName) {
+                if (event.data &&
+                    event.data.key &&
+                    event.data.value !== undefined &&
+                    event.data.key === this.cookieName) {
                     this.updateFieldData(event.data.value);
                     this.writeFields();
                     let hasFieldData = Object.keys(this.fieldData).length > 0;
@@ -15157,33 +15220,35 @@ class RememberMe {
         }
     }
     insertClearRememberMeLink() {
-        if (!document.getElementById('clear-autofill-data')) {
-            const clearAutofillLabel = 'clear autofill';
-            const clearRememberMeField = document.createElement('a');
-            clearRememberMeField.setAttribute('id', 'clear-autofill-data');
-            clearRememberMeField.classList.add('label-tooltip');
-            clearRememberMeField.setAttribute('style', 'cursor: pointer;');
+        if (!document.getElementById("clear-autofill-data")) {
+            const clearAutofillLabel = "clear autofill";
+            const clearRememberMeField = document.createElement("a");
+            clearRememberMeField.setAttribute("id", "clear-autofill-data");
+            clearRememberMeField.classList.add("label-tooltip");
+            clearRememberMeField.setAttribute("style", "cursor: pointer;");
             clearRememberMeField.innerHTML = `(${clearAutofillLabel})`;
             const targetField = this.getElementByFirstSelector(this.fieldClearSelectorTarget);
             if (targetField) {
-                if (this.fieldClearSelectorTargetLocation === 'after') {
+                if (this.fieldClearSelectorTargetLocation === "after") {
                     targetField.appendChild(clearRememberMeField);
                 }
                 else {
                     targetField.prepend(clearRememberMeField);
                 }
-                clearRememberMeField.addEventListener('click', (e) => {
+                clearRememberMeField.addEventListener("click", (e) => {
                     e.preventDefault();
-                    this.clearFields(['supporter.country' /*, 'supporter.emailAddress'*/]);
+                    this.clearFields([
+                        "supporter.country" /*, 'supporter.emailAddress'*/,
+                    ]);
                     if (this.useRemote()) {
                         this.clearCookieOnRemote();
                     }
                     else {
                         this.clearCookie();
                     }
-                    let clearAutofillLink = document.getElementById('clear-autofill-data');
+                    let clearAutofillLink = document.getElementById("clear-autofill-data");
                     if (clearAutofillLink) {
-                        clearAutofillLink.style.display = 'none';
+                        clearAutofillLink.style.display = "none";
                     }
                     this.rememberMeOptIn = false;
                 });
@@ -15193,7 +15258,7 @@ class RememberMe {
     getElementByFirstSelector(selectorsString) {
         // iterate through the selectors until we find one that exists
         let targetField = null;
-        const selectorTargets = selectorsString.split(',');
+        const selectorTargets = selectorsString.split(",");
         for (let i = 0; i < selectorTargets.length; i++) {
             targetField = document.querySelector(selectorTargets[i]);
             if (targetField) {
@@ -15203,19 +15268,19 @@ class RememberMe {
         return targetField;
     }
     insertRememberMeOptin() {
-        let rememberMeOptInField = document.getElementById('remember-me-opt-in');
+        let rememberMeOptInField = document.getElementById("remember-me-opt-in");
         if (!rememberMeOptInField) {
-            const rememberMeLabel = 'Remember Me';
+            const rememberMeLabel = "Remember Me";
             const rememberMeInfo = `
 				Check “Remember me” to complete forms on this device faster. 
 				While your financial information won’t be stored, you should only check this box from a personal device. 
 				Click “Clear autofill” to remove the information from your device at any time.
 			`;
-            const rememberMeOptInFieldChecked = (this.rememberMeOptIn) ? 'checked' : '';
-            const rememberMeOptInField = document.createElement('div');
-            rememberMeOptInField.classList.add('en__field', 'en__field--checkbox');
-            rememberMeOptInField.setAttribute('id', 'remember-me-opt-in');
-            rememberMeOptInField.setAttribute('style', 'overflow-x: hidden;');
+            const rememberMeOptInFieldChecked = this.rememberMeOptIn ? "checked" : "";
+            const rememberMeOptInField = document.createElement("div");
+            rememberMeOptInField.classList.add("en__field", "en__field--checkbox");
+            rememberMeOptInField.setAttribute("id", "remember-me-opt-in");
+            rememberMeOptInField.setAttribute("style", "overflow-x: hidden;");
             rememberMeOptInField.innerHTML = `
 				<div class="en__field__item rememberme-wrapper">
 					<input id="remember-me-checkbox" type="checkbox" class="en__field__input en__field__input--checkbox" ${rememberMeOptInFieldChecked} />
@@ -15231,10 +15296,12 @@ class RememberMe {
 			`;
             const targetField = this.getElementByFirstSelector(this.fieldOptInSelectorTarget);
             if (targetField && targetField.parentNode) {
-                targetField.parentNode.insertBefore(rememberMeOptInField, (this.fieldOptInSelectorTargetLocation == 'before') ? targetField : targetField.nextSibling);
-                const rememberMeCheckbox = document.getElementById('remember-me-checkbox');
+                targetField.parentNode.insertBefore(rememberMeOptInField, this.fieldOptInSelectorTargetLocation == "before"
+                    ? targetField
+                    : targetField.nextSibling);
+                const rememberMeCheckbox = document.getElementById("remember-me-checkbox");
                 if (rememberMeCheckbox) {
-                    rememberMeCheckbox.addEventListener('change', () => {
+                    rememberMeCheckbox.addEventListener("change", () => {
                         if (rememberMeCheckbox.checked) {
                             this.rememberMeOptIn = true;
                         }
@@ -15243,7 +15310,7 @@ class RememberMe {
                         }
                     });
                 }
-                tippy('#rememberme-learn-more-toggle', { content: rememberMeInfo });
+                tippy("#rememberme-learn-more-toggle", { content: rememberMeInfo });
             }
         }
         else if (this.rememberMeOptIn) {
@@ -15251,18 +15318,22 @@ class RememberMe {
         }
     }
     useRemote() {
-        return (this.remoteUrl && window.postMessage && window.JSON && window.localStorage);
+        return (!!this.remoteUrl &&
+            typeof window.postMessage === "function" &&
+            window.JSON &&
+            window.localStorage);
     }
     createIframe(iframeLoaded, messageReceived) {
         if (this.remoteUrl) {
-            let iframe = document.createElement('iframe');
-            iframe.style.cssText = 'position:absolute;width:1px;height:1px;left:-9999px;';
+            let iframe = document.createElement("iframe");
+            iframe.style.cssText =
+                "position:absolute;width:1px;height:1px;left:-9999px;";
             iframe.src = this.remoteUrl;
-            iframe.setAttribute('sandbox', 'allow-same-origin allow-scripts');
+            iframe.setAttribute("sandbox", "allow-same-origin allow-scripts");
             this.iframe = iframe;
             document.body.appendChild(this.iframe);
-            this.iframe.addEventListener('load', () => iframeLoaded(), false);
-            window.addEventListener('message', (event) => messageReceived(event), false);
+            this.iframe.addEventListener("load", () => iframeLoaded(), false);
+            window.addEventListener("message", (event) => messageReceived(event), false);
         }
     }
     clearCookie() {
@@ -15275,28 +15346,35 @@ class RememberMe {
     }
     saveCookieToRemote() {
         if (this.iframe && this.iframe.contentWindow) {
-            this.iframe.contentWindow.postMessage({ key: this.cookieName, value: JSON.stringify(this.fieldData), operation: 'write', expires: this.cookieExpirationDays }, '*');
+            this.iframe.contentWindow.postMessage({
+                key: this.cookieName,
+                value: JSON.stringify(this.fieldData),
+                operation: "write",
+                expires: this.cookieExpirationDays,
+            }, "*");
         }
     }
     readCookie() {
-        this.updateFieldData(get(this.cookieName) || '');
+        this.updateFieldData(get(this.cookieName) || "");
     }
     saveCookie() {
-        set(this.cookieName, JSON.stringify(this.fieldData), { expires: this.cookieExpirationDays });
+        set(this.cookieName, JSON.stringify(this.fieldData), {
+            expires: this.cookieExpirationDays,
+        });
     }
     readFields() {
         for (let i = 0; i < this.fieldNames.length; i++) {
             let fieldSelector = "[name='" + this.fieldNames[i] + "']";
             let field = document.querySelector(fieldSelector);
             if (field) {
-                if (field.tagName === 'INPUT') {
-                    let type = field.getAttribute('type');
-                    if (type === 'radio' || type === 'checkbox') {
+                if (field.tagName === "INPUT") {
+                    let type = field.getAttribute("type");
+                    if (type === "radio" || type === "checkbox") {
                         field = document.querySelector(fieldSelector + ":checked");
                     }
                     this.fieldData[this.fieldNames[i]] = encodeURIComponent(field.value);
                 }
-                else if (field.tagName === 'SELECT') {
+                else if (field.tagName === "SELECT") {
                     this.fieldData[this.fieldNames[i]] = encodeURIComponent(field.value);
                 }
             }
@@ -15304,7 +15382,7 @@ class RememberMe {
     }
     setFieldValue(field, value, overwrite = false) {
         if (field && value !== undefined) {
-            if (field.value && overwrite || !field.value) {
+            if ((field.value && overwrite) || !field.value) {
                 field.value = value;
             }
         }
@@ -15314,11 +15392,11 @@ class RememberMe {
             if (skipFields.includes(key)) {
                 delete this.fieldData[key];
             }
-            else if (this.fieldData[key] === '') {
+            else if (this.fieldData[key] === "") {
                 delete this.fieldData[key];
             }
             else {
-                this.fieldData[key] = '';
+                this.fieldData[key] = "";
             }
         }
         this.writeFields(true);
@@ -15328,14 +15406,17 @@ class RememberMe {
             let fieldSelector = "[name='" + this.fieldNames[i] + "']";
             let field = document.querySelector(fieldSelector);
             if (field) {
-                if (field.tagName === 'INPUT') {
+                if (field.tagName === "INPUT") {
                     if (this.fieldNames[i] === this.fieldDonationRecurrPayRadioName) {
-                        if (this.fieldData[this.fieldNames[i]] === 'Y') {
+                        if (this.fieldData[this.fieldNames[i]] === "Y") {
                             field.click();
                         }
                     }
                     else if (this.fieldDonationAmountRadioName === this.fieldNames[i]) {
-                        field = document.querySelector(fieldSelector + "[value='" + this.fieldData[this.fieldNames[i]] + "']");
+                        field = document.querySelector(fieldSelector +
+                            "[value='" +
+                            this.fieldData[this.fieldNames[i]] +
+                            "']");
                         if (field) {
                             field.click();
                         }
@@ -15348,7 +15429,7 @@ class RememberMe {
                         this.setFieldValue(field, this.fieldData[this.fieldNames[i]], overwrite);
                     }
                 }
-                else if (field.tagName === 'SELECT') {
+                else if (field.tagName === "SELECT") {
                     this.setFieldValue(field, this.fieldData[this.fieldNames[i]], true);
                 }
             }
@@ -15489,6 +15570,20 @@ class OtherAmount {
                 }
             });
         });
+        const otherAmountField = document.querySelector("[name='transaction.donationAmt.other'");
+        if (otherAmountField) {
+            otherAmountField.addEventListener("change", (e) => {
+                const target = e.target;
+                const amount = target.value;
+                const cleanAmount = engrid_ENGrid.cleanAmount(amount);
+                if (amount !== cleanAmount) {
+                    this.logger.log(`Other Amount Field Changed: ${amount} => ${cleanAmount}`);
+                    if ("ga" in window) {
+                        window.ga("send", "event", "ENgrid Testing", "Other Amount Changed", `${amount} => ${cleanAmount}`);
+                    }
+                }
+            });
+        }
     }
     setRadioInput() {
         const target = document.querySelector(".en__field--donationAmt .en__field__input--other");
@@ -15755,6 +15850,7 @@ class DataReplace {
                 this.replaceItem(item, match);
             }
         });
+        engrid_ENGrid.setBodyData("merge-tags-processed", "");
     }
     replaceItem(where, [item, key, defaultValue]) {
         var _a;
@@ -16022,7 +16118,7 @@ var tidycontact_awaiter = (undefined && undefined.__awaiter) || function (thisAr
 
 class TidyContact {
     constructor() {
-        var _a, _b, _c, _d;
+        var _a, _b;
         this.logger = new EngridLogger("TidyContact", "#FFFFFF", "#4d9068", "📧");
         this.endpoint = "https://api.tidycontact.io";
         this.wasCalled = false; // True if the API endpoint was called
@@ -16034,15 +16130,15 @@ class TidyContact {
         if (this.options === false)
             return;
         this.loadOptions();
-        if (!engrid_ENGrid.getField((_b = (_a = this.options) === null || _a === void 0 ? void 0 : _a.address_fields) === null || _b === void 0 ? void 0 : _b.country)) {
-            this.logger.log("Country field not found");
+        if (!this.hasAddressFields()) {
+            this.logger.log("No address fields found");
             return;
         }
         this.createFields();
         this.addEventListeners();
         if (engrid_ENGrid.checkNested(window.EngagingNetworks, "require", "_defined", "enjs", "checkSubmissionFailed") &&
             !window.EngagingNetworks.require._defined.enjs.checkSubmissionFailed() &&
-            engrid_ENGrid.getFieldValue((_d = (_c = this.options) === null || _c === void 0 ? void 0 : _c.address_fields) === null || _d === void 0 ? void 0 : _d.address1) !=
+            engrid_ENGrid.getFieldValue((_b = (_a = this.options) === null || _a === void 0 ? void 0 : _a.address_fields) === null || _b === void 0 ? void 0 : _b.address1) !=
                 "") {
             this.logger.log("Address Field is not empty");
             this.isDirty = true;
@@ -16201,7 +16297,7 @@ class TidyContact {
             }
             const errorData = {
                 status: this.httpStatus,
-                error: typeof error === "string" ? error : errorType,
+                error: typeof error === "string" ? error : errorType.toUpperCase(),
             };
             recordField.value = JSON.stringify(errorData);
         }
@@ -16209,16 +16305,17 @@ class TidyContact {
             dateField.value = this.todaysDate();
         }
         if (statusField) {
-            statusField.value = "API Error";
+            statusField.value = "ERROR-API";
         }
     }
     setFields(data) {
-        var _a, _b, _c, _d, _e, _f, _g, _h;
+        var _a, _b, _c, _d, _e;
         if (!this.options)
             return {};
         let response = {};
-        const countryValue = engrid_ENGrid.getFieldValue((_a = this.options.address_fields) === null || _a === void 0 ? void 0 : _a.country);
-        const postalCodeValue = engrid_ENGrid.getFieldValue((_b = this.options.address_fields) === null || _b === void 0 ? void 0 : _b.postalCode);
+        const country = this.getCountry();
+        const postalCodeValue = engrid_ENGrid.getFieldValue((_a = this.options.address_fields) === null || _a === void 0 ? void 0 : _a.postalCode);
+        const zipDivider = (_b = this.options.us_zip_divider) !== null && _b !== void 0 ? _b : "+";
         // Check if there's no address2 field
         const address2Field = engrid_ENGrid.getField((_c = this.options.address_fields) === null || _c === void 0 ? void 0 : _c.address2);
         if ("address2" in data && !address2Field) {
@@ -16233,8 +16330,8 @@ class TidyContact {
             }
         }
         if ("postalCode" in data &&
-            ((_e = postalCodeValue.match(/\d+/g)) === null || _e === void 0 ? void 0 : _e.join("")) ===
-                ((_f = data.postalCode.match(/\d+/g)) === null || _f === void 0 ? void 0 : _f.join(""))) {
+            postalCodeValue.replace("+", zipDivider) ===
+                data.postalCode.replace("+", zipDivider)) {
             // Postal code is the same
             delete data.postalCode;
         }
@@ -16248,8 +16345,8 @@ class TidyContact {
             if (field) {
                 let value = data[key];
                 if (key === "postalCode" &&
-                    ["US", "USA", "United States"].includes(countryValue)) {
-                    value = (_h = (_g = value.match(/\d+/g)) === null || _g === void 0 ? void 0 : _g.join("")) !== null && _h !== void 0 ? _h : ""; // Remove all non-numeric characters
+                    ["US", "USA", "United States"].includes(country)) {
+                    value = (_e = value.replace("+", zipDivider)) !== null && _e !== void 0 ? _e : ""; // Replace the "+" with the zip divider
                 }
                 response[key] = { from: field.value, to: value };
                 this.logger.log(`Set ${field.name} to ${value} (${field.value})`);
@@ -16261,8 +16358,42 @@ class TidyContact {
         }
         return response;
     }
-    callAPI() {
+    hasAddressFields() {
         var _a, _b, _c, _d, _e, _f;
+        if (!this.options)
+            return false;
+        const address1 = engrid_ENGrid.getField((_a = this.options.address_fields) === null || _a === void 0 ? void 0 : _a.address1);
+        const address2 = engrid_ENGrid.getField((_b = this.options.address_fields) === null || _b === void 0 ? void 0 : _b.address2);
+        const city = engrid_ENGrid.getField((_c = this.options.address_fields) === null || _c === void 0 ? void 0 : _c.city);
+        const region = engrid_ENGrid.getField((_d = this.options.address_fields) === null || _d === void 0 ? void 0 : _d.region);
+        const postalCode = engrid_ENGrid.getField((_e = this.options.address_fields) === null || _e === void 0 ? void 0 : _e.postalCode);
+        const country = engrid_ENGrid.getField((_f = this.options.address_fields) === null || _f === void 0 ? void 0 : _f.country);
+        return !!(address1 || address2 || city || region || postalCode || country);
+    }
+    canUseAPI() {
+        var _a, _b, _c, _d;
+        if (!this.options)
+            return false;
+        const country = !!this.getCountry();
+        const address1 = !!engrid_ENGrid.getFieldValue((_a = this.options.address_fields) === null || _a === void 0 ? void 0 : _a.address1);
+        const city = !!engrid_ENGrid.getFieldValue((_b = this.options.address_fields) === null || _b === void 0 ? void 0 : _b.city);
+        const region = !!engrid_ENGrid.getFieldValue((_c = this.options.address_fields) === null || _c === void 0 ? void 0 : _c.region);
+        const postalCode = !!engrid_ENGrid.getFieldValue((_d = this.options.address_fields) === null || _d === void 0 ? void 0 : _d.postalCode);
+        if (country && address1) {
+            return (city && region) || postalCode;
+        }
+        return false;
+    }
+    getCountry() {
+        var _a, _b;
+        if (!this.options)
+            return "";
+        const countryFallback = (_a = this.options.country_fallback) !== null && _a !== void 0 ? _a : "";
+        const country = engrid_ENGrid.getFieldValue((_b = this.options.address_fields) === null || _b === void 0 ? void 0 : _b.country);
+        return country || countryFallback.toUpperCase();
+    }
+    callAPI() {
+        var _a, _b, _c, _d, _e;
         if (!this.options)
             return;
         if (!this.isDirty || this.wasCalled)
@@ -16276,17 +16407,29 @@ class TidyContact {
         const statusField = engrid_ENGrid.getField(this.options.status_field);
         const latitudeField = engrid_ENGrid.getField("supporter.geo.latitude");
         const longitudeField = engrid_ENGrid.getField("supporter.geo.longitude");
+        if (!this.canUseAPI()) {
+            this.logger.log("Not Enough Data to Call API");
+            if (dateField) {
+                dateField.value = this.todaysDate();
+            }
+            if (statusField) {
+                statusField.value = "PARTIALADDRESS";
+            }
+            return true;
+        }
         // Call the API
         const address1 = engrid_ENGrid.getFieldValue((_a = this.options.address_fields) === null || _a === void 0 ? void 0 : _a.address1);
         const address2 = engrid_ENGrid.getFieldValue((_b = this.options.address_fields) === null || _b === void 0 ? void 0 : _b.address2);
         const city = engrid_ENGrid.getFieldValue((_c = this.options.address_fields) === null || _c === void 0 ? void 0 : _c.city);
         const region = engrid_ENGrid.getFieldValue((_d = this.options.address_fields) === null || _d === void 0 ? void 0 : _d.region);
         const postalCode = engrid_ENGrid.getFieldValue((_e = this.options.address_fields) === null || _e === void 0 ? void 0 : _e.postalCode);
-        const country = engrid_ENGrid.getFieldValue((_f = this.options.address_fields) === null || _f === void 0 ? void 0 : _f.country);
+        const country = this.getCountry();
         if (!this.countryAllowed(country)) {
             this.logger.log("Country not allowed: " + country);
             if (recordField) {
-                recordField.value = "DISALLOWED";
+                let record = {};
+                record = Object.assign({ date: this.todaysDate(), status: "DISALLOWED" }, record);
+                recordField.value = JSON.stringify(record);
             }
             if (dateField) {
                 dateField.value = this.todaysDate();
@@ -16339,13 +16482,14 @@ class TidyContact {
                     record["longitude"] = data.longitude;
                 }
                 if (recordField) {
+                    record = Object.assign({ date: this.todaysDate(), status: "SUCCESS" }, record);
                     recordField.value = JSON.stringify(record);
                 }
                 if (dateField) {
                     dateField.value = this.todaysDate();
                 }
                 if (statusField) {
-                    statusField.value = "Success";
+                    statusField.value = "SUCCESS";
                 }
             }
             else {
@@ -16357,6 +16501,7 @@ class TidyContact {
                     record["checksum"] = checksum;
                 });
                 if (recordField) {
+                    record = Object.assign({ date: this.todaysDate(), status: "ERROR" }, record);
                     recordField.value = JSON.stringify(record);
                 }
                 if (dateField) {
@@ -16364,7 +16509,7 @@ class TidyContact {
                 }
                 if (statusField) {
                     statusField.value =
-                        "error" in data ? `Error: ` + data.error : "Invalid Address";
+                        "error" in data ? `ERROR: ` + data.error : "INVALIDADDRESS";
                 }
             }
         }))
@@ -16383,7 +16528,7 @@ class TidyContact {
 }
 
 ;// CONCATENATED MODULE: ./node_modules/@4site/engrid-common/dist/version.js
-const AppVersion = "0.12.5";
+const AppVersion = "0.12.13";
 
 ;// CONCATENATED MODULE: ./node_modules/@4site/engrid-common/dist/index.js
  // Runs first so it can change the DOM markup before any markup dependent code fires
