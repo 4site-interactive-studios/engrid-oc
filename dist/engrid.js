@@ -17,10 +17,10 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Wednesday, June 15, 2022 @ 16:43:02 ET
+ *  Date: Thursday, June 16, 2022 @ 08:53:34 ET
  *  By: fernando
  *  ENGrid styles: v0.12.12
- *  ENGrid scripts: v0.12.14
+ *  ENGrid scripts: v0.12.15
  *
  *  Created by 4Site Studios
  *  Come work with us or join our team, we would love to hear from you
@@ -15576,7 +15576,7 @@ class OtherAmount {
                 const target = e.target;
                 const amount = target.value;
                 const cleanAmount = engrid_ENGrid.cleanAmount(amount);
-                if (amount !== cleanAmount) {
+                if (amount !== cleanAmount.toString()) {
                     this.logger.log(`Other Amount Field Changed: ${amount} => ${cleanAmount}`);
                     if ("dataLayer" in window) {
                         window.dataLayer.push({
@@ -16531,7 +16531,7 @@ class TidyContact {
 }
 
 ;// CONCATENATED MODULE: ./node_modules/@4site/engrid-common/dist/version.js
-const AppVersion = "0.12.14";
+const AppVersion = "0.12.15";
 
 ;// CONCATENATED MODULE: ./node_modules/@4site/engrid-common/dist/index.js
  // Runs first so it can change the DOM markup before any markup dependent code fires
