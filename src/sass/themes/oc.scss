@@ -204,6 +204,10 @@ div:not(.manual-form-layout)
   .body-header p {
     margin: 1rem auto;
   }
+
+  .body-title {
+    padding-top: 1rem;
+  }
 }
 
 @mixin on-desktop {
@@ -731,9 +735,7 @@ h1 {
     margin-right: auto;
 
     img {
-      height: 52px !important;
-      width: auto !important;
-      display: block;
+      height: auto !important;
     }
 
     a {
@@ -1697,6 +1699,26 @@ div[id^="nb-field-"] div.nb-feedback {
 
 .body-header #social-share-block a img {
   height: 14px !important;
+}
+
+.en__component--socialshareblock {
+  max-width: 33vw;
+  min-width: auto;
+}
+
+@media screen and (max-width: 400px) {
+  .body-header > * {
+    grid-column: pc !important;
+    width: calc(100vw - 60px);
+  }
+
+  .en__component--socialshareblock {
+    margin-right: auto;
+  }
+
+  .en__socialShares {
+    flex-wrap: nowrap;
+  }
 }
 
 @media screen and (min-width: 600px) {
