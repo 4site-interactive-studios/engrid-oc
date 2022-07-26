@@ -17,10 +17,10 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Tuesday, July 19, 2022 @ 15:59:08 ET
- *  By: bryancasler
+ *  Date: Tuesday, July 26, 2022 @ 16:12:21 ET
+ *  By: fernando
  *  ENGrid styles: v0.13.0
- *  ENGrid scripts: v0.13.6
+ *  ENGrid scripts: v0.13.8
  *
  *  Created by 4Site Studios
  *  Come work with us or join our team, we would love to hear from you
@@ -10997,6 +10997,7 @@ class EnForm {
 
 ;// CONCATENATED MODULE: ./node_modules/@4site/engrid-common/dist/events/donation-amount.js
 
+
 class DonationAmount {
     constructor(radios = "transaction.donationAmt", other = "transaction.donationAmt.other") {
         this._onAmountChange = new dist/* SimpleEventDispatcher */.FK();
@@ -11014,8 +11015,9 @@ class DonationAmount {
                     this.amount = parseFloat(element.value);
                 }
                 else if (element.name == other) {
-                    element.value = this.preformatFloat(element.value);
-                    this.amount = parseFloat(element.value);
+                    const cleanedAmount = engrid_ENGrid.cleanAmount(element.value);
+                    element.value = cleanedAmount.toString();
+                    this.amount = cleanedAmount;
                 }
             }
         });
@@ -11023,7 +11025,7 @@ class DonationAmount {
         const otherField = document.querySelector(`[name='${this._other}']`);
         if (otherField) {
             otherField.addEventListener("keyup", (e) => {
-                this.amount = parseFloat(otherField.value);
+                this.amount = engrid_ENGrid.cleanAmount(otherField.value);
             });
         }
     }
@@ -11055,8 +11057,8 @@ class DonationAmount {
             }
             else {
                 const otherField = document.querySelector('input[name="' + this._other + '"]');
-                currentAmountValue = parseFloat(otherField.value);
-                this.amount = parseFloat(otherField.value);
+                currentAmountValue = engrid_ENGrid.cleanAmount(otherField.value);
+                this.amount = currentAmountValue;
             }
         }
     }
@@ -11093,27 +11095,6 @@ class DonationAmount {
         otherField.value = "";
         const otherWrapper = otherField.parentNode;
         otherWrapper.classList.add("en__field__item--hidden");
-    }
-    preformatFloat(float) {
-        if (!float) {
-            return "";
-        }
-        //Index of first comma
-        const posC = float.indexOf(",");
-        if (posC === -1) {
-            //No commas found, treat as float
-            return float;
-        }
-        //Index of first full stop
-        const posFS = float.indexOf(".");
-        if (posFS === -1) {
-            //Uses commas and not full stops - swap them (e.g. 1,23 --> 1.23)
-            return float.replace(/\,/g, ".");
-        }
-        //Uses both commas and full stops - ensure correct order and remove 1000s separators
-        return posC < posFS
-            ? float.replace(/\,/g, "")
-            : float.replace(/\./g, "").replace(",", ".");
     }
 }
 
@@ -11389,7 +11370,7 @@ class engrid_ENGrid {
         if (valueArray[valueArray.length - 1].length <= 2) {
             const cents = valueArray.pop() || "00";
             return parseInt(cents) > 0
-                ? Number(parseInt(valueArray.join("")) + "." + cents).toFixed(2)
+                ? parseFloat(Number(parseInt(valueArray.join("")) + "." + cents).toFixed(2))
                 : parseInt(valueArray.join(""));
         }
         return parseInt(valueArray.join(""));
@@ -11878,6 +11859,8 @@ class app_App extends engrid_ENGrid {
         // Translate Fields
         if (this.options.TranslateFields)
             new TranslateFields();
+        // Data Layer Events
+        new DataLayer();
         this.setDataAttributes();
         engrid_ENGrid.setBodyData("data-engrid-scripts-js-loading", "finished");
         window.EngridVersion = AppVersion;
@@ -15778,11 +15761,13 @@ class MinMaxAmount {
     }
     // Disable Submit Button if the amount is not valid
     liveValidate() {
-        if (this._amount.amount < this.minAmount) {
+        const amount = engrid_ENGrid.cleanAmount(this._amount.amount.toString());
+        this.logger.log(`Amount: ${amount}`);
+        if (amount < this.minAmount) {
             this.logger.log("Amount is less than min amount: " + this.minAmount);
             engrid_ENGrid.setError(".en__field--withOther", this.minAmountMessage || "Invalid Amount");
         }
-        else if (this._amount.amount > this.maxAmount) {
+        else if (amount > this.maxAmount) {
             this.logger.log("Amount is greater than max amount: " + this.maxAmount);
             engrid_ENGrid.setError(".en__field--withOther", this.maxAmountMessage || "Invalid Amount");
         }
@@ -15857,6 +15842,55 @@ class Ticker {
         ticker.style.setProperty("--ticker-size", tickerWidth);
         this.logger.log("Ticker Size: " + ticker.style.getPropertyValue("--ticker-size"));
         this.logger.log("Ticker Width: " + tickerWidth);
+    }
+}
+
+;// CONCATENATED MODULE: ./node_modules/@4site/engrid-common/dist/data-layer.js
+// This class automatically select other radio input when an amount is entered into it.
+
+class DataLayer {
+    constructor() {
+        this.logger = new EngridLogger("DataLayer", "#f1e5bc", "#009cdc", "📊");
+        this.dataLayer = window.dataLayer || [];
+        this._form = EnForm.getInstance();
+        if (!this.shouldRun()) {
+            // If we're not on a Donation Page, get out
+            return;
+        }
+        this.onLoad();
+        this._form.onSubmit.subscribe(() => this.onSubmit());
+    }
+    shouldRun() {
+        return engrid_ENGrid.getPageType() === "DONATION";
+    }
+    onLoad() {
+        if (engrid_ENGrid.getGiftProcess()) {
+            this.logger.log("EN_SUCCESSFUL_DONATION");
+            this.dataLayer.push({
+                event: "EN_SUCCESSFUL_DONATION",
+            });
+        }
+        else {
+            this.logger.log("EN_PAGE_VIEW");
+            this.dataLayer.push({
+                event: "EN_PAGE_VIEW",
+            });
+        }
+    }
+    onSubmit() {
+        const optIn = document.querySelector(".en__field__item:not(.en__field--question) input[name^='supporter.questions'][type='checkbox']:checked");
+        if (optIn) {
+            this.logger.log("EN_SUBMISSION_WITH_EMAIL_OPTIN");
+            this.dataLayer.push({
+                event: "EN_SUBMISSION_WITH_EMAIL_OPTIN",
+            });
+        }
+        else {
+            this.logger.log("EN_SUBMISSION_WITHOUT_EMAIL_OPTIN");
+            this.dataLayer.push({
+                event: "EN_SUBMISSION_WITHOUT_EMAIL_OPTIN",
+            });
+        }
     }
 }
 
@@ -17337,10 +17371,11 @@ class TidyContact {
 }
 
 ;// CONCATENATED MODULE: ./node_modules/@4site/engrid-common/dist/version.js
-const AppVersion = "0.13.6";
+const AppVersion = "0.13.8";
 
 ;// CONCATENATED MODULE: ./node_modules/@4site/engrid-common/dist/index.js
  // Runs first so it can change the DOM markup before any markup dependent code fires
+
 
 
 
