@@ -17,8 +17,8 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Tuesday, July 26, 2022 @ 16:13:17 ET
- *  By: fernando
+ *  Date: Friday, July 29, 2022 @ 11:39:55 ET
+ *  By: bryancasler
  *  ENGrid styles: v0.13.0
  *  ENGrid scripts: v0.13.11
  *
@@ -17520,6 +17520,26 @@ const customScript = function () {
       content: "The three or four digit security code on your debit or credit card"
     });
   }
+
+  const userIP = () => {
+    const ret = fetch(`https://${window.location.hostname}/cdn-cgi/trace`).then(res => res.text()).then(t => {
+      let data = t.replace(/[\r\n]+/g, '","').replace(/\=+/g, '":"');
+      data = '{"' + data.slice(0, data.lastIndexOf('","')) + '"}';
+      const jsondata = JSON.parse(data);
+      return jsondata.ip;
+    });
+    return ret;
+  };
+
+  userIP().then(ip => {
+    window.dataLayer.push({
+      userIP: ip
+    });
+    console.log(ip);
+    window.dataLayer.push({
+      event: "hasUserIP"
+    });
+  });
 };
 // EXTERNAL MODULE: ./node_modules/smoothscroll-polyfill/dist/smoothscroll.js
 var smoothscroll = __webpack_require__(523);

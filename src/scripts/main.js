@@ -57,4 +57,24 @@ export const customScript = function () {
         "The three or four digit security code on your debit or credit card",
     });
   }
+
+  const userIP = () => {
+    const ret = fetch(`https://${window.location.hostname}/cdn-cgi/trace`)
+      .then((res) => res.text())
+      .then((t) => {
+        let data = t.replace(/[\r\n]+/g, '","').replace(/\=+/g, '":"');
+        data = '{"' + data.slice(0, data.lastIndexOf('","')) + '"}';
+        const jsondata = JSON.parse(data);
+        return jsondata.ip;
+      });
+    return ret;
+  };
+
+  userIP().then((ip) => {
+    window.dataLayer.push({
+      userIP: ip,
+    });
+    console.log(ip);
+    window.dataLayer.push({ event: "hasUserIP" });
+  });
 };
