@@ -17,10 +17,10 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Friday, July 29, 2022 @ 11:39:55 ET
+ *  Date: Friday, July 29, 2022 @ 17:16:25 ET
  *  By: bryancasler
  *  ENGrid styles: v0.13.0
- *  ENGrid scripts: v0.13.11
+ *  ENGrid scripts: v0.13.12
  *
  *  Created by 4Site Studios
  *  Come work with us or join our team, we would love to hear from you
@@ -15894,15 +15894,8 @@ class DataLayer {
         this.logger = new EngridLogger("DataLayer", "#f1e5bc", "#009cdc", "📊");
         this.dataLayer = window.dataLayer || [];
         this._form = EnForm.getInstance();
-        if (!this.shouldRun()) {
-            // If we're not on a Donation Page, get out
-            return;
-        }
         this.onLoad();
         this._form.onSubmit.subscribe(() => this.onSubmit());
-    }
-    shouldRun() {
-        return engrid_ENGrid.getPageType() === "DONATION";
     }
     onLoad() {
         if (engrid_ENGrid.getGiftProcess()) {
@@ -17412,7 +17405,7 @@ class TidyContact {
 }
 
 ;// CONCATENATED MODULE: ./node_modules/@4site/engrid-common/dist/version.js
-const AppVersion = "0.13.11";
+const AppVersion = "0.13.12";
 
 ;// CONCATENATED MODULE: ./node_modules/@4site/engrid-common/dist/index.js
  // Runs first so it can change the DOM markup before any markup dependent code fires
