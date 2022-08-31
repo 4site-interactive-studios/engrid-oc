@@ -17,10 +17,10 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Thursday, August 25, 2022 @ 15:43:15 ET
+ *  Date: Wednesday, August 31, 2022 @ 15:18:38 ET
  *  By: fernando
- *  ENGrid styles: v0.13.16
- *  ENGrid scripts: v0.13.16
+ *  ENGrid styles: v0.13.18
+ *  ENGrid scripts: v0.13.18
  *
  *  Created by 4Site Studios
  *  Come work with us or join our team, we would love to hear from you
@@ -11112,6 +11112,9 @@ class engrid_ENGrid {
     static get debug() {
         return !!this.getOption("Debug");
     }
+    static get demo() {
+        return this.getUrlParameter("mode") === "DEMO";
+    }
     // Return any parameter from the URL
     static getUrlParameter(name) {
         const searchParams = new URLSearchParams(window.location.search);
@@ -12025,6 +12028,17 @@ class app_App extends engrid_ENGrid {
         if (otherAmountDiv) {
             otherAmountDiv.setAttribute("data-currency-symbol", app_App.getCurrencySymbol());
         }
+        // Add a payment type data attribute
+        const paymentTypeSelect = app_App.getField("transaction.paymenttype");
+        if (paymentTypeSelect) {
+            app_App.setBodyData("payment-type", paymentTypeSelect.value);
+            paymentTypeSelect.addEventListener("change", () => {
+                app_App.setBodyData("payment-type", paymentTypeSelect.value);
+            });
+        }
+        // Add demo data attribute
+        if (app_App.demo)
+            app_App.setBodyData("demo", "");
     }
 }
 
@@ -12229,21 +12243,31 @@ class ApplePay {
 }
 
 ;// CONCATENATED MODULE: ./node_modules/@4site/engrid-common/dist/aria-attributes.js
+// This Component is supposed to be used as a helper for Arria Attributes
 class AriaAttributes {
     constructor() {
-        this.mandatoryFields = document.querySelectorAll(".en__mandatory .en__field__input");
-        if (!this.shouldRun()) {
-            return;
-        }
         this.addRequired();
+        this.addLabel();
     }
     addRequired() {
-        this.mandatoryFields.forEach((field) => {
+        const mandatoryFields = document.querySelectorAll(".en__mandatory .en__field__input");
+        mandatoryFields.forEach((field) => {
             field.setAttribute("aria-required", "true");
         });
     }
-    shouldRun() {
-        return this.mandatoryFields.length > 0;
+    addLabel() {
+        const otherAmount = document.querySelector(".en__field__input--otheramount");
+        if (otherAmount) {
+            otherAmount.setAttribute("aria-label", "Enter your custom donation amount");
+        }
+        // Split selects usually don't have a label, so let's make the first option the label
+        const splitSelects = document.querySelectorAll(".en__field__input--splitselect");
+        splitSelects.forEach((select) => {
+            const firstOption = select.querySelector("option");
+            if (firstOption) {
+                select.setAttribute("aria-label", firstOption.textContent || "");
+            }
+        });
     }
 }
 
@@ -13313,6 +13337,11 @@ class iFrame {
                 this.sendIframeFormStatus("chained");
                 this.hideFormComponents();
                 this.addChainedBanner();
+            }
+            // Remove the skip link markup when inside an iFrame
+            const skipLink = document.querySelector(".skip-link");
+            if (skipLink) {
+                skipLink.remove();
             }
         }
         else {
@@ -17544,7 +17573,7 @@ class LiveCurrency {
 }
 
 ;// CONCATENATED MODULE: ./node_modules/@4site/engrid-common/dist/version.js
-const AppVersion = "0.13.16";
+const AppVersion = "0.13.18";
 
 ;// CONCATENATED MODULE: ./node_modules/@4site/engrid-common/dist/index.js
  // Runs first so it can change the DOM markup before any markup dependent code fires
