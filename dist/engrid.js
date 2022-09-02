@@ -17,10 +17,10 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Wednesday, August 31, 2022 @ 17:09:31 ET
+ *  Date: Friday, September 2, 2022 @ 11:27:41 ET
  *  By: fernando
  *  ENGrid styles: v0.13.19
- *  ENGrid scripts: v0.13.19
+ *  ENGrid scripts: v0.13.20
  *
  *  Created by 4Site Studios
  *  Come work with us or join our team, we would love to hear from you
@@ -11318,10 +11318,10 @@ class engrid_ENGrid {
         scriptTag.src = url;
         scriptTag.onload = onload;
         if (head) {
-            document.getElementsByTagName("head")[0].appendChild(scriptTag);
+            document.head.appendChild(scriptTag);
             return;
         }
-        document.getElementsByTagName("body")[0].appendChild(scriptTag);
+        document.body.appendChild(scriptTag);
         return;
     }
     // Format a number
@@ -11878,7 +11878,7 @@ class app_App extends engrid_ENGrid {
         new OtherAmount();
         new MinMaxAmount();
         new Ticker();
-        new AriaAttributes();
+        new A11y();
         new AddNameToMessage();
         new ExpandRegionName();
         // Page Background
@@ -12242,12 +12242,27 @@ class ApplePay {
     }
 }
 
-;// CONCATENATED MODULE: ./node_modules/@4site/engrid-common/dist/aria-attributes.js
-// This Component is supposed to be used as a helper for Arria Attributes
-class AriaAttributes {
+;// CONCATENATED MODULE: ./node_modules/@4site/engrid-common/dist/a11y.js
+// a11y means accessibility
+// This Component is supposed to be used as a helper for Arria Attributes & Other Accessibility Features
+class A11y {
     constructor() {
         this.addRequired();
         this.addLabel();
+        this.addGroupRole();
+    }
+    addGroupRole() {
+        // Add role="group" to all EN Radio fields
+        const radioFields = document.querySelectorAll(".en__field--radio");
+        radioFields.forEach((field) => {
+            field.setAttribute("role", "group");
+            // Add random ID to the label
+            const label = field.querySelector("label");
+            if (label) {
+                label.setAttribute("id", `en__field__label--${Math.random().toString(36).slice(2, 7)}`);
+                field.setAttribute("aria-labelledby", label.id);
+            }
+        });
     }
     addRequired() {
         const mandatoryFields = document.querySelectorAll(".en__mandatory .en__field__input");
@@ -13290,14 +13305,10 @@ const isInViewport = (e) => {
 };
 // Checks to see if the page is so short, the footer is above the fold. If the footer is above the folde we'll use this class to ensure at a minimum the page fills the full viewport height.
 if (contentFooter && isInViewport(contentFooter)) {
-    document
-        .getElementsByTagName("BODY")[0]
-        .setAttribute("data-engrid-footer-above-fold", "");
+    document.body.setAttribute("data-engrid-footer-above-fold", "");
 }
 else {
-    document
-        .getElementsByTagName("BODY")[0]
-        .setAttribute("data-engrid-footer-below-fold", "");
+    document.body.setAttribute("data-engrid-footer-below-fold", "");
 }
 
 ;// CONCATENATED MODULE: ./node_modules/@4site/engrid-common/dist/iframe.js
@@ -15072,9 +15083,7 @@ class NeverBounce {
             '<div id="nb-feedback" class="en__field__error nb-hidden">Enter a valid email.</div>';
         this.insertAfter(nbCustomMessageHTML, this.emailField);
         const NBClass = this;
-        document
-            .getElementsByTagName("body")[0]
-            .addEventListener("nb:registered", function (event) {
+        document.body.addEventListener("nb:registered", function (event) {
             const field = document.querySelector('[data-nb-id="' + event.detail.id + '"]');
             field.addEventListener("nb:loading", function (e) {
                 engrid_ENGrid.disableSubmit("Validating Your Email");
@@ -17577,7 +17586,7 @@ class LiveCurrency {
 }
 
 ;// CONCATENATED MODULE: ./node_modules/@4site/engrid-common/dist/version.js
-const AppVersion = "0.13.19";
+const AppVersion = "0.13.20";
 
 ;// CONCATENATED MODULE: ./node_modules/@4site/engrid-common/dist/index.js
  // Runs first so it can change the DOM markup before any markup dependent code fires
