@@ -17,8 +17,8 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Monday, September 12, 2022 @ 09:39:06 ET
- *  By: fernando
+ *  Date: Sunday, October 2, 2022 @ 22:37:45 ET
+ *  By: bryancasler
  *  ENGrid styles: v0.13.19
  *  ENGrid scripts: v0.13.23
  *
@@ -17672,7 +17672,7 @@ const customScript = function () {
     childEl.id = "title-tooltip";
     childEl.className = "label-tooltip";
     childEl.tabIndex = "-1";
-    childEl.innerText = "Why is this required?";
+    childEl.innerHTML = "<span class='tooltip-long'>Why is this required</span><span class='tooltip-short'>?</span>";
     childEl.addEventListener("click", e => e.preventDefault());
     el.appendChild(childEl);
     titleLabel.appendChild(el);

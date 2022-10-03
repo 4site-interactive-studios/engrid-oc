@@ -29,7 +29,8 @@ export const customScript = function () {
     childEl.id = "title-tooltip";
     childEl.className = "label-tooltip";
     childEl.tabIndex = "-1";
-    childEl.innerText = "Why is this required?";
+    childEl.innerHTML =
+      "<span class='tooltip-long'>Why is this required</span><span class='tooltip-short'>?</span>";
     childEl.addEventListener("click", (e) => e.preventDefault());
     el.appendChild(childEl);
     titleLabel.appendChild(el);

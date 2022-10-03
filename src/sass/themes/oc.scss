@@ -2020,6 +2020,32 @@ div[id^="nb-wrapper"].nb-loading #nb-feedback:after {
   }
 }
 
+@media screen and (max-width: 999px) {
+  #title-tooltip {
+    text-decoration: none;
+
+    .tooltip-long {
+      display: none;
+    }
+
+    .tooltip-short {
+      width: 15px;
+      height: 15px;
+      background: var(--input_placeholder-color);
+      color: white;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      border-radius: 100%;
+      font-size: 75%;
+      margin-top: -1px;
+      margin-bottom: -1px;
+      bottom: 1px;
+    }
+  }
+}
+
 &[data-engrid-layout="centercenter2col"] {
   --engrid__body_padding: 0px 50px;
 
