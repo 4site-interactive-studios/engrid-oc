@@ -17,10 +17,10 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Monday, October 10, 2022 @ 12:47:34 ET
- *  By: fernando
+ *  Date: Friday, November 18, 2022 @ 13:15:34 ET
+ *  By: bryancasler
  *  ENGrid styles: v0.13.19
- *  ENGrid scripts: v0.13.24
+ *  ENGrid scripts: v0.13.30
  *
  *  Created by 4Site Studios
  *  Come work with us or join our team, we would love to hear from you
@@ -10788,6 +10788,7 @@ const UpsellOptionsDefaults = {
     minAmount: 0,
     canClose: true,
     submitOnClose: false,
+    disablePaymentMethods: [],
 };
 
 ;// CONCATENATED MODULE: ./node_modules/@4site/engrid-common/dist/interfaces/translate-options.js
@@ -11838,6 +11839,8 @@ class app_App extends engrid_ENGrid {
         new DataReplace();
         // ENgrid Hide Script
         new DataHide();
+        // Autosubmit script
+        new Autosubmit();
         // On the end of the script, after all subscribers defined, let's load the current value
         this._amount.load();
         this._frequency.load();
@@ -13911,11 +13914,13 @@ class UpsellLightbox {
     shouldOpen() {
         const freq = this._frequency.frequency;
         const upsellAmount = this.getUpsellAmount();
+        const paymenttype = engrid_ENGrid.getFieldValue("transaction.paymenttype") || "";
         // If frequency is not onetime or
         // the modal is already opened or
         // there's no suggestion for this donation amount,
         // we should not open
         if (freq == "onetime" &&
+            !this.options.disablePaymentMethods.includes(paymenttype.toLowerCase()) &&
             !this.overlay.classList.contains("is-submitting") &&
             upsellAmount > 0) {
             this.logger.log("Upsell Frequency " + this._frequency.frequency);
@@ -15345,7 +15350,9 @@ class RememberMe {
                 }
             }, (event) => {
                 let data;
-                if (event.data && typeof event.data === "string") {
+                if (event.data &&
+                    typeof event.data === "string" &&
+                    this.isJson(event.data)) {
                     data = JSON.parse(event.data);
                 }
                 if (data &&
@@ -15508,7 +15515,12 @@ class RememberMe {
             this.iframe = iframe;
             document.body.appendChild(this.iframe);
             this.iframe.addEventListener("load", () => iframeLoaded(), false);
-            window.addEventListener("message", (event) => messageReceived(event), false);
+            window.addEventListener("message", (event) => {
+                var _a;
+                if (((_a = this.iframe) === null || _a === void 0 ? void 0 : _a.contentWindow) === event.source) {
+                    messageReceived(event);
+                }
+            }, false);
         }
     }
     clearCookie() {
@@ -15609,6 +15621,15 @@ class RememberMe {
                 }
             }
         }
+    }
+    isJson(str) {
+        try {
+            JSON.parse(str);
+        }
+        catch (e) {
+            return false;
+        }
+        return true;
     }
 }
 
@@ -16004,6 +16025,16 @@ class DataLayer {
         this.onLoad();
         this._form.onSubmit.subscribe(() => this.onSubmit());
     }
+    transformJSON(value) {
+        if (typeof value === "string") {
+            return value.toUpperCase().split(" ").join("-").replace(":-", "-");
+        }
+        else if (typeof value === "boolean") {
+            value = value ? "TRUE" : "FALSE";
+            return value;
+        }
+        return "";
+    }
     onLoad() {
         if (engrid_ENGrid.getGiftProcess()) {
             this.logger.log("EN_SUCCESSFUL_DONATION");
@@ -16016,6 +16047,27 @@ class DataLayer {
             this.dataLayer.push({
                 event: "EN_PAGE_VIEW",
             });
+        }
+        if (window.pageJson) {
+            const pageJson = window.pageJson;
+            for (const property in pageJson) {
+                if (Number.isInteger(pageJson[property])) {
+                    this.dataLayer.push({
+                        event: `EN_PAGEJSON_${property.toUpperCase()}-${pageJson[property]}`,
+                    });
+                    this.dataLayer.push({
+                        [`'EN_PAGEJSON_${property.toUpperCase()}'`]: pageJson[property],
+                    });
+                }
+                else {
+                    this.dataLayer.push({
+                        event: `EN_PAGEJSON_${property.toUpperCase()}-${this.transformJSON(pageJson[property])}`,
+                    });
+                    this.dataLayer.push({
+                        [`'EN_PAGEJSON_${property.toUpperCase()}'`]: this.transformJSON(pageJson[property]),
+                    });
+                }
+            }
         }
     }
     onSubmit() {
@@ -17520,6 +17572,7 @@ class LiveCurrency {
         this.elementsFound = false;
         this._amount = DonationAmount.getInstance();
         this._frequency = DonationFrequency.getInstance();
+        this._fees = ProcessingFees.getInstance();
         this.searchElements();
         if (!this.shouldRun())
             return;
@@ -17556,6 +17609,11 @@ class LiveCurrency {
         return this.elementsFound;
     }
     addEventListeners() {
+        this._fees.onFeeChange.subscribe(() => {
+            setTimeout(() => {
+                this.updateCurrency();
+            }, 10);
+        });
         this._amount.onAmountChange.subscribe(() => {
             setTimeout(() => {
                 this.updateCurrency();
@@ -17583,20 +17641,44 @@ class LiveCurrency {
         }
     }
     updateCurrency() {
-        document.querySelectorAll(".engrid-currency-symbol").forEach((item) => {
-            item.innerHTML = engrid_ENGrid.getCurrencySymbol();
-        });
-        document.querySelectorAll(".engrid-currency-code").forEach((item) => {
-            item.innerHTML = engrid_ENGrid.getCurrencyCode();
-        });
+        const currencySymbolElements = document.querySelectorAll(".engrid-currency-symbol");
+        const currencyCodeElements = document.querySelectorAll(".engrid-currency-code");
+        if (currencySymbolElements.length > 0) {
+            currencySymbolElements.forEach((item) => {
+                item.innerHTML = engrid_ENGrid.getCurrencySymbol();
+            });
+        }
+        if (currencyCodeElements.length > 0) {
+            currencyCodeElements.forEach((item) => {
+                item.innerHTML = engrid_ENGrid.getCurrencyCode();
+            });
+        }
+        this.logger.log(`Currency updated for ${currencySymbolElements.length + currencyCodeElements.length} elements`);
+    }
+}
+
+;// CONCATENATED MODULE: ./node_modules/@4site/engrid-common/dist/autosubmit.js
+// Automatically submits the page if a URL argument is present
+
+class Autosubmit {
+    constructor() {
+        this.logger = new EngridLogger("Autosubmit", "#f0f0f0", "#ff0000", "🚀");
+        this._form = EnForm.getInstance();
+        if (engrid_ENGrid.checkNested(window.EngagingNetworks, "require", "_defined", "enjs", "checkSubmissionFailed") &&
+            !window.EngagingNetworks.require._defined.enjs.checkSubmissionFailed() &&
+            engrid_ENGrid.getUrlParameter("autosubmit") === "Y") {
+            this.logger.log("Autosubmitting Form");
+            this._form.submitForm();
+        }
     }
 }
 
 ;// CONCATENATED MODULE: ./node_modules/@4site/engrid-common/dist/version.js
-const AppVersion = "0.13.24";
+const AppVersion = "0.13.30";
 
 ;// CONCATENATED MODULE: ./node_modules/@4site/engrid-common/dist/index.js
  // Runs first so it can change the DOM markup before any markup dependent code fires
+
 
 
 
@@ -17722,7 +17804,32 @@ const customScript = function () {
     window.dataLayer.push({
       event: "hasUserIP"
     });
-  });
+  }); // Digital Wallets Moving Parts
+
+  const digitalWalletWrapper = document.querySelector(".merge-with-give-by-select #en__digitalWallet");
+  const digitalWalletFirstChild = document.querySelector("#en__digitalWallet");
+  const giveBySelect = document.querySelector(".give-by-select");
+
+  if (digitalWalletWrapper && giveBySelect) {
+    giveBySelect.appendChild(digitalWalletWrapper);
+    digitalWalletFirstChild.insertAdjacentHTML("beforeend", "<div class='digital-divider'><span class='divider-left'></span><p class='divider-center'>or enter manually</p><span class='divider-right'></span></div>");
+  }
+
+  let digitalWalletsExist;
+  setTimeout(function () {
+    digitalWalletsExist = document.querySelectorAll(".en__digitalWallet__container > *");
+
+    if (digitalWalletsExist.length > 0) {
+      giveBySelect.setAttribute("show-wallets", "");
+    }
+  }, 500);
+  setTimeout(function () {
+    digitalWalletsExist = document.querySelectorAll(".en__digitalWallet__container > *");
+
+    if (digitalWalletsExist.length > 0) {
+      giveBySelect.setAttribute("show-wallets", "");
+    }
+  }, 2500);
 };
 // EXTERNAL MODULE: ./node_modules/smoothscroll-polyfill/dist/smoothscroll.js
 var smoothscroll = __webpack_require__(523);
