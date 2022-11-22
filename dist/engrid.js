@@ -17,8 +17,8 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Tuesday, December 13, 2022 @ 08:52:25 ET
- *  By: fernando
+ *  Date: Tuesday, November 22, 2022 @ 15:32:51 ET
+ *  By: bryancasler
  *  ENGrid styles: v0.13.19
  *  ENGrid scripts: v0.13.30
  *
@@ -17812,7 +17812,7 @@ const customScript = function () {
 
   if (digitalWalletWrapper && giveBySelect) {
     giveBySelect.appendChild(digitalWalletWrapper);
-    digitalWalletFirstChild.insertAdjacentHTML("beforeend", "<div class='digital-divider'><span class='divider-left'></span><p class='divider-center'>or enter manually</p><span class='divider-right'></span></div>");
+    digitalWalletFirstChild.insertAdjacentHTML("beforeend", "<div class='digital-divider recurring-frequency-y-hide'><span class='divider-left'></span><p class='divider-center'>or enter manually</p><span class='divider-right'></span></div>");
   }
 
   let digitalWalletsExist;
@@ -18738,9 +18738,9 @@ const options = {
   CurrencySymbol: "$",
   DecimalSeparator: ".",
   MinAmount: 5,
-  MaxAmount: 25000,
+  MaxAmount: 30000,
   MinAmountMessage: "Amount must be at least $5 - Contact us for assistance",
-  MaxAmountMessage: "Contact us to give above $25,000 at 202-280-6283 or vision@oceanconservancy.org",
+  MaxAmountMessage: "Amount must be less than $30,000 - Contact us for assistance",
   MediaAttribution: true,
   SkipToMainContentLink: true,
   SrcDefer: true,
