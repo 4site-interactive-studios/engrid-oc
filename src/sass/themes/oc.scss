@@ -217,6 +217,15 @@ div:not(.manual-form-layout)
   padding-top: 15px !important;
 }
 
+#en__digitalWallet__paypalTouch + .applePayWrapper {
+  width: 100%;
+
+  .apple-pay-button {
+    width: 100%;
+    height: 47px;
+  }
+}
+
 .en__digitalWallet__button {
   margin-top: 0 !important;
 }

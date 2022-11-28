@@ -19,7 +19,7 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Tuesday, November 22, 2022 @ 15:32:51 ET
+ *  Date: Monday, November 28, 2022 @ 17:14:36 ET
  *  By: bryancasler
  *  ENGrid styles: v0.13.19
  *  ENGrid scripts: v0.13.30
@@ -7454,6 +7454,13 @@ body:not([data-engrid-debug]) #debug-bar{
   margin-bottom:0 !important;
   order:-1;
   padding-top:15px !important;
+}
+[data-engrid-theme=oc] #en__digitalWallet__paypalTouch+.applePayWrapper{
+  width:100%;
+}
+[data-engrid-theme=oc] #en__digitalWallet__paypalTouch+.applePayWrapper .apple-pay-button{
+  height:47px;
+  width:100%;
 }
 [data-engrid-theme=oc] .en__digitalWallet__button{
   margin-top:0 !important;
