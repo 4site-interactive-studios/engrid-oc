@@ -17,7 +17,7 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Tuesday, November 22, 2022 @ 15:32:51 ET
+ *  Date: Monday, November 28, 2022 @ 17:14:36 ET
  *  By: bryancasler
  *  ENGrid styles: v0.13.19
  *  ENGrid scripts: v0.13.30
@@ -17812,24 +17812,36 @@ const customScript = function () {
 
   if (digitalWalletWrapper && giveBySelect) {
     giveBySelect.appendChild(digitalWalletWrapper);
-    digitalWalletFirstChild.insertAdjacentHTML("beforeend", "<div class='digital-divider recurring-frequency-y-hide'><span class='divider-left'></span><p class='divider-center'>or enter manually</p><span class='divider-right'></span></div>");
+    digitalWalletFirstChild.insertAdjacentHTML("beforeend", "<div class='digital-divider'><span class='divider-left'></span><p class='divider-center'>or enter manually</p><span class='divider-right'></span></div>");
+    const applePayWrapper = document.querySelector(".applePayWrapper");
+    const digitalDivider = document.querySelector(".digital-divider");
+
+    if (applePayWrapper && digitalDivider) {
+      digitalDivider.insertAdjacentElement("beforebegin", applePayWrapper);
+    }
+
+    let digitalWalletsExist;
+    digitalWalletsExist = document.querySelectorAll(".en__digitalWallet__container > *");
+
+    if (digitalWalletsExist.length > 0) {
+      giveBySelect.setAttribute("show-wallets", "");
+    }
+
+    setTimeout(function () {
+      let digitalWalletsExist = document.querySelectorAll(".en__digitalWallet__container > *");
+
+      if (digitalWalletsExist.length > 0) {
+        giveBySelect.setAttribute("show-wallets", "");
+      }
+    }, 500);
+    setTimeout(function () {
+      digitalWalletsExist = document.querySelectorAll(".en__digitalWallet__container > *");
+
+      if (digitalWalletsExist.length > 0) {
+        giveBySelect.setAttribute("show-wallets", "");
+      }
+    }, 2500);
   }
-
-  let digitalWalletsExist;
-  setTimeout(function () {
-    digitalWalletsExist = document.querySelectorAll(".en__digitalWallet__container > *");
-
-    if (digitalWalletsExist.length > 0) {
-      giveBySelect.setAttribute("show-wallets", "");
-    }
-  }, 500);
-  setTimeout(function () {
-    digitalWalletsExist = document.querySelectorAll(".en__digitalWallet__container > *");
-
-    if (digitalWalletsExist.length > 0) {
-      giveBySelect.setAttribute("show-wallets", "");
-    }
-  }, 2500);
 };
 // EXTERNAL MODULE: ./node_modules/smoothscroll-polyfill/dist/smoothscroll.js
 var smoothscroll = __webpack_require__(523);
