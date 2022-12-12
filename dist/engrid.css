@@ -19,7 +19,7 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Monday, December 12, 2022 @ 14:16:30 ET
+ *  Date: Monday, December 12, 2022 @ 15:24:50 ET
  *  By: fernando
  *  ENGrid styles: v0.13.19
  *  ENGrid scripts: v0.13.24
@@ -8807,7 +8807,7 @@ body:not([data-engrid-debug]) #debug-bar{
   --recurring-frequency__button_padding:14px 0.2ch;
   --submit__button_padding-top:1.75ch;
   --submit__button_padding-bottom:1.75ch;
-  --checkbox_font-size:12px;
+  --checkbox_font-size:14px;
   --checkbox_font-weight:normal;
   --checkbox_border-radius:5px;
   --checkbox_background-color_checked:var(--color_primary);
