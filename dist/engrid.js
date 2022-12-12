@@ -17,7 +17,7 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Monday, October 10, 2022 @ 12:47:34 ET
+ *  Date: Monday, December 12, 2022 @ 14:16:30 ET
  *  By: fernando
  *  ENGrid styles: v0.13.19
  *  ENGrid scripts: v0.13.24
@@ -18631,9 +18631,9 @@ const options = {
   CurrencySymbol: "$",
   DecimalSeparator: ".",
   MinAmount: 5,
-  MaxAmount: 30000,
+  MaxAmount: 25000,
   MinAmountMessage: "Amount must be at least $5 - Contact us for assistance",
-  MaxAmountMessage: "Amount must be less than $30,000 - Contact us for assistance",
+  MaxAmountMessage: "Amount must be less than $25,000 - Contact us for assistance",
   MediaAttribution: true,
   SkipToMainContentLink: true,
   SrcDefer: true,
