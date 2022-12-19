@@ -17,7 +17,7 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Wednesday, December 14, 2022 @ 10:43:31 ET
+ *  Date: Monday, December 19, 2022 @ 10:36:10 ET
  *  By: fernando
  *  ENGrid styles: v0.13.19
  *  ENGrid scripts: v0.13.24
@@ -18642,7 +18642,7 @@ const options = {
   MinAmount: 5,
   MaxAmount: 25000,
   MinAmountMessage: "Amount must be at least $5 - Contact us for assistance",
-  MaxAmountMessage: "Amount must be less than $25,000 - Contact us for assistance",
+  MaxAmountMessage: "Contact us to give above $25,000 at 202-280-6283 or vision@oceanconservancy.org",
   MediaAttribution: true,
   SkipToMainContentLink: true,
   SrcDefer: true,

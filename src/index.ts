@@ -167,7 +167,7 @@ const options: Options = {
   MaxAmount: 25000,
   MinAmountMessage: "Amount must be at least $5 - Contact us for assistance",
   MaxAmountMessage:
-    "Amount must be less than $25,000 - Contact us for assistance",
+    "Contact us to give above $25,000 at 202-280-6283 or vision@oceanconservancy.org",
   MediaAttribution: true,
   SkipToMainContentLink: true,
   SrcDefer: true,
