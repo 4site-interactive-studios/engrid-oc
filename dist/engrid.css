@@ -19,8 +19,8 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Thursday, December 15, 2022 @ 19:09:09 ET
- *  By: bryancasler
+ *  Date: Monday, December 19, 2022 @ 10:36:10 ET
+ *  By: fernando
  *  ENGrid styles: v0.13.19
  *  ENGrid scripts: v0.13.30
  *
@@ -8849,7 +8849,7 @@ body:not([data-engrid-debug]) #debug-bar{
   --recurring-frequency__button_padding:14px 0.2ch;
   --submit__button_padding-top:1.75ch;
   --submit__button_padding-bottom:1.75ch;
-  --checkbox_font-size:12px;
+  --checkbox_font-size:14px;
   --checkbox_font-weight:normal;
   --checkbox_border-radius:5px;
   --checkbox_background-color_checked:var(--color_primary);
@@ -8859,6 +8859,13 @@ body:not([data-engrid-debug]) #debug-bar{
   --error__color_faded:#fff8f7;
   --error__background-color:#fff8f7;
   --engrid__body-main_padding:0;
+}
+[data-engrid-theme=oc-multistep] input[type=checkbox]+label{
+  align-items:start;
+  margin-bottom:10px;
+}
+[data-engrid-theme=oc-multistep] input[type=checkbox]+label:before{
+  margin-top:5px;
 }
 [data-engrid-theme=oc-multistep] .mt-10{
   margin-top:10px;

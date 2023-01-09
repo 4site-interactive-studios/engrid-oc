@@ -139,6 +139,7 @@ export default class DonationLightboxForm {
       this.clickPaymentOptions(paymentOpts);
     }
 
+    this.addTabIndexToLabels();
     this.putArrowUpSVG();
     this.bounceArrow(this.frequency.getInstance().frequency);
 
@@ -758,5 +759,14 @@ export default class DonationLightboxForm {
     if (obj === undefined) return false;
     if (rest.length == 0 && obj.hasOwnProperty(level)) return true;
     return this.checkNested(obj[level], ...rest);
+  }
+  // Add Tabindex to Labels
+  addTabIndexToLabels() {
+    const labels = document.querySelectorAll(
+      ".en__field__label.en__field__label--item"
+    );
+    labels.forEach((label) => {
+      label.tabIndex = 0;
+    });
   }
 }

@@ -17,8 +17,8 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Thursday, December 15, 2022 @ 19:09:09 ET
- *  By: bryancasler
+ *  Date: Monday, December 19, 2022 @ 10:36:10 ET
+ *  By: fernando
  *  ENGrid styles: v0.13.19
  *  ENGrid scripts: v0.13.30
  *
@@ -17959,6 +17959,7 @@ class DonationLightboxForm {
       this.clickPaymentOptions(paymentOpts);
     }
 
+    this.addTabIndexToLabels();
     this.putArrowUpSVG();
     this.bounceArrow(this.frequency.getInstance().frequency);
     DonationFrequency.getInstance().onFrequencyChange.subscribe(s => this.bounceArrow(s));
@@ -18614,6 +18615,14 @@ class DonationLightboxForm {
 
     if (rest.length == 0 && obj.hasOwnProperty(level)) return true;
     return this.checkNested(obj[level], ...rest);
+  } // Add Tabindex to Labels
+
+
+  addTabIndexToLabels() {
+    const labels = document.querySelectorAll(".en__field__label.en__field__label--item");
+    labels.forEach(label => {
+      label.tabIndex = 0;
+    });
   }
 
 }
