@@ -78,4 +78,52 @@ export const customScript = function () {
     console.log(ip);
     window.dataLayer.push({ event: "hasUserIP" });
   });
+
+  // Digital Wallets Moving Parts
+
+  const digitalWalletWrapper = document.querySelector(
+    ".merge-with-give-by-select #en__digitalWallet"
+  );
+  const digitalWalletFirstChild = document.querySelector("#en__digitalWallet");
+  const giveBySelect = document.querySelector(".give-by-select");
+  if (digitalWalletWrapper && giveBySelect) {
+    giveBySelect.appendChild(digitalWalletWrapper);
+    digitalWalletFirstChild.insertAdjacentHTML(
+      "beforeend",
+      "<div class='digital-divider'><span class='divider-left'></span><p class='divider-center'>or enter manually</p><span class='divider-right'></span></div>"
+    );
+
+    const applePayWrapper = document.querySelector(".applePayWrapper");
+    const digitalDivider = document.querySelector(".digital-divider");
+    if (applePayWrapper && digitalDivider) {
+      digitalDivider.insertAdjacentElement("beforebegin", applePayWrapper);
+    }
+
+    let digitalWalletsExist;
+
+    digitalWalletsExist = document.querySelectorAll(
+      ".en__digitalWallet__container > *"
+    );
+    if (digitalWalletsExist.length > 0) {
+      giveBySelect.setAttribute("show-wallets", "");
+    }
+
+    setTimeout(function () {
+      let digitalWalletsExist = document.querySelectorAll(
+        ".en__digitalWallet__container > *"
+      );
+      if (digitalWalletsExist.length > 0) {
+        giveBySelect.setAttribute("show-wallets", "");
+      }
+    }, 500);
+
+    setTimeout(function () {
+      digitalWalletsExist = document.querySelectorAll(
+        ".en__digitalWallet__container > *"
+      );
+      if (digitalWalletsExist.length > 0) {
+        giveBySelect.setAttribute("show-wallets", "");
+      }
+    }, 2500);
+  }
 };

@@ -22,7 +22,7 @@
  *  Date: Monday, December 19, 2022 @ 10:36:10 ET
  *  By: fernando
  *  ENGrid styles: v0.13.19
- *  ENGrid scripts: v0.13.24
+ *  ENGrid scripts: v0.13.30
  *
  *  Created by 4Site Studios
  *  Come work with us or join our team, we would love to hear from you
@@ -7443,6 +7443,48 @@ body:not([data-engrid-debug]) #debug-bar{
 }
 [data-engrid-theme=oc] .content-footer.pseudo-subgrid>*{
   display:block;
+}
+[data-engrid-theme=oc] #en__pagebuilder .merge-with-give-by-select{
+  background-color:#ff00001a !important;
+}
+[data-engrid-theme=oc] .give-by-select:not([show-wallets]) #en__digitalWallet .digital-divider{
+  display:none;
+}
+[data-engrid-theme=oc] #en__digitalWallet{
+  margin-bottom:0 !important;
+  order:-1;
+  padding-top:15px !important;
+}
+[data-engrid-theme=oc] #en__digitalWallet__paypalTouch+.applePayWrapper{
+  width:100%;
+}
+[data-engrid-theme=oc] #en__digitalWallet__paypalTouch+.applePayWrapper .apple-pay-button{
+  height:47px;
+  width:100%;
+}
+[data-engrid-theme=oc] .en__digitalWallet__button{
+  margin-top:0 !important;
+}
+[data-engrid-theme=oc] .en__digitalWallet__container{
+  margin-bottom:0 !important;
+}
+[data-engrid-theme=oc] .digital-divider{
+  align-items:center;
+  color:#9b9b94;
+  display:flex;
+  margin-bottom:calc(var(--fields_spacing-block) - 4px);
+  padding-left:var(--fields_spacing-inline);
+  padding-right:var(--fields_spacing-inline);
+  width:100%;
+}
+[data-engrid-theme=oc] .divider-left,[data-engrid-theme=oc] .divider-right{
+  background:#dfdfd7;
+  content:"";
+  flex:1 1;
+  height:1px;
+}
+[data-engrid-theme=oc] .divider-center{
+  margin:0 .5rem;
 }
 @media screen and (max-width:600px){
   [data-engrid-theme=oc][data-engrid-layout=centercenter1col] .body-header p,[data-engrid-theme=oc][data-engrid-layout=centerleft1col] .body-header p,[data-engrid-theme=oc][data-engrid-layout=centerright1col] .body-header p{
