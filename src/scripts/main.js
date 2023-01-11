@@ -81,14 +81,11 @@ export const customScript = function () {
 
   // Digital Wallets Moving Parts
 
-  const digitalWalletWrapper = document.querySelector(
-    ".merge-with-give-by-select #en__digitalWallet"
-  );
-  const digitalWalletFirstChild = document.querySelector("#en__digitalWallet");
+  const digitalWalletWrapper = document.querySelector("#en__digitalWallet");
   const giveBySelect = document.querySelector(".give-by-select");
   if (digitalWalletWrapper && giveBySelect) {
     giveBySelect.appendChild(digitalWalletWrapper);
-    digitalWalletFirstChild.insertAdjacentHTML(
+    digitalWalletWrapper.insertAdjacentHTML(
       "beforeend",
       "<div class='digital-divider'><span class='divider-left'></span><p class='divider-center'>or enter manually</p><span class='divider-right'></span></div>"
     );
@@ -125,5 +122,26 @@ export const customScript = function () {
         giveBySelect.setAttribute("show-wallets", "");
       }
     }, 2500);
+    // Check if a digital wallet container was loaded
+    const config = { attributes: true, childList: true, subtree: true };
+    let isLoaded = false;
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (
+          mutation.type === "childList" &&
+          mutation.addedNodes.length > 0 &&
+          !isLoaded
+        ) {
+          const giveBySelectItems = document.querySelectorAll(
+            ".give-by-select .card, .give-by-select .paypal, .give-by-select .check"
+          );
+          giveBySelectItems.forEach((item) => {
+            item.classList.add("recurring-frequency-n-hide");
+          });
+          isLoaded = true;
+        }
+      });
+    });
+    observer.observe(digitalWalletWrapper, config);
   }
 };

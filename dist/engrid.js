@@ -17,7 +17,7 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Monday, January 9, 2023 @ 15:45:40 ET
+ *  Date: Wednesday, January 11, 2023 @ 14:25:10 ET
  *  By: fernando
  *  ENGrid styles: v0.13.19
  *  ENGrid scripts: v0.13.31
@@ -17812,13 +17812,12 @@ const customScript = function () {
     });
   }); // Digital Wallets Moving Parts
 
-  const digitalWalletWrapper = document.querySelector(".merge-with-give-by-select #en__digitalWallet");
-  const digitalWalletFirstChild = document.querySelector("#en__digitalWallet");
+  const digitalWalletWrapper = document.querySelector("#en__digitalWallet");
   const giveBySelect = document.querySelector(".give-by-select");
 
   if (digitalWalletWrapper && giveBySelect) {
     giveBySelect.appendChild(digitalWalletWrapper);
-    digitalWalletFirstChild.insertAdjacentHTML("beforeend", "<div class='digital-divider'><span class='divider-left'></span><p class='divider-center'>or enter manually</p><span class='divider-right'></span></div>");
+    digitalWalletWrapper.insertAdjacentHTML("beforeend", "<div class='digital-divider'><span class='divider-left'></span><p class='divider-center'>or enter manually</p><span class='divider-right'></span></div>");
     const applePayWrapper = document.querySelector(".applePayWrapper");
     const digitalDivider = document.querySelector(".digital-divider");
 
@@ -17846,7 +17845,26 @@ const customScript = function () {
       if (digitalWalletsExist.length > 0) {
         giveBySelect.setAttribute("show-wallets", "");
       }
-    }, 2500);
+    }, 2500); // Check if a digital wallet container was loaded
+
+    const config = {
+      attributes: true,
+      childList: true,
+      subtree: true
+    };
+    let isLoaded = false;
+    const observer = new MutationObserver(mutations => {
+      mutations.forEach(mutation => {
+        if (mutation.type === "childList" && mutation.addedNodes.length > 0 && !isLoaded) {
+          const giveBySelectItems = document.querySelectorAll(".give-by-select .card, .give-by-select .paypal, .give-by-select .check");
+          giveBySelectItems.forEach(item => {
+            item.classList.add("recurring-frequency-n-hide");
+          });
+          isLoaded = true;
+        }
+      });
+    });
+    observer.observe(digitalWalletWrapper, config);
   }
 };
 // EXTERNAL MODULE: ./node_modules/smoothscroll-polyfill/dist/smoothscroll.js
