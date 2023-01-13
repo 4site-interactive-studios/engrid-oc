@@ -213,7 +213,7 @@ div:not(.manual-form-layout)
 
 #en__digitalWallet {
   margin-bottom: 0 !important;
-  order: -1;
+  // order: -1;
   padding-top: 15px !important;
 }
 
@@ -2187,9 +2187,18 @@ div[id^="nb-wrapper"].nb-loading #nb-feedback:after {
 .give-by-select-wrapper {
   display: flex;
   flex-direction: column;
+  .en__digitalWallet__button {
+    margin-left: 0;
+    margin-right: 0;
+  }
+  .applePayWrapper {
+    order: -1;
+    flex-basis: 100%;
+  }
   .apple-pay-button {
-    margin-left: var(--fields_spacing-inline);
-    margin-right: var(--fields_spacing-inline);
     height: 50px;
+    width: 100%;
+    margin-left: 3px;
+    margin-right: 3px;
   }
 }
