@@ -87,7 +87,7 @@ export const customScript = function () {
     giveBySelect.appendChild(digitalWalletWrapper);
     digitalWalletWrapper.insertAdjacentHTML(
       "beforeend",
-      "<div class='digital-divider'><span class='divider-left'></span><p class='divider-center'>or enter manually</p><span class='divider-right'></span></div>"
+      "<div class='digital-divider recurring-frequency-y-hide'><span class='divider-left'></span><p class='divider-center'>or enter manually</p><span class='divider-right'></span></div>"
     );
 
     const applePayWrapper = document.querySelector(".applePayWrapper");

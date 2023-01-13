@@ -778,8 +778,9 @@ h1 {
   justify-content: space-between;
 
   > .en__component:first-child,
-  > .en__component:not(:first-child):nth-last-child(-n
-      + 2):not(.messageOverlay) {
+  > .en__component:not(:first-child):nth-last-child(-n + 2):not(
+      .messageOverlay
+    ) {
     align-items: center;
     justify-content: center;
   }
@@ -799,8 +800,9 @@ h1 {
     }
   }
 
-  > .en__component:not(:first-child):nth-last-child(-n
-      + 2):not(.messageOverlay) {
+  > .en__component:not(:first-child):nth-last-child(-n + 2):not(
+      .messageOverlay
+    ) {
     grid-column: rbc / pc;
     display: flex;
     justify-content: flex-end;
@@ -2179,5 +2181,15 @@ div[id^="nb-wrapper"].nb-loading #nb-feedback:after {
   .body-header,
   .content-footer {
     display: none;
+  }
+}
+
+.give-by-select-wrapper {
+  display: flex;
+  flex-direction: column;
+  .apple-pay-button {
+    margin-left: var(--fields_spacing-inline);
+    margin-right: var(--fields_spacing-inline);
+    height: 50px;
   }
 }
