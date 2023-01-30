@@ -18,6 +18,7 @@ export default class DonationLightboxForm {
     this.sections = document.querySelectorAll(
       "form.en__component > .en__component"
     );
+    this.currentSectionId = 0;
     // Check if we're on the Thank You page
     if (pageJson.pageNumber === pageJson.pageCount) {
       this.sendMessage("status", "loaded");
@@ -128,9 +129,13 @@ export default class DonationLightboxForm {
         .forEach((e) => {
           e.addEventListener("focus", (event) => {
             // Run after 50ms - We need this or else some browsers will disregard the scroll due to the focus event
-            const sectionId = this.getSectionId(e);
+            const nextSectionId = Number(this.getSectionId(e));
+            const currentSectionId = Number(this.currentSectionId);
+
             setTimeout(() => {
-              if (sectionId > 0 && this.validateForm(sectionId - 1)) {
+              const focusIsOnNextSection = nextSectionId === (currentSectionId + 1);
+
+              if (focusIsOnNextSection && this.validateForm(currentSectionId)) {
                 this.scrollToElement(e);
               }
             }, 50);
@@ -322,6 +327,8 @@ export default class DonationLightboxForm {
     const section = document.querySelector(`[data-section-id="${sectionId}"]`);
     if (this.sections[sectionId]) {
       console.log(section);
+      this.currentSectionId = sectionId;
+      console.log('Changed current section ID to', sectionId);
       this.sections[sectionId].scrollIntoView({
         behavior: "smooth",
         // block: "start",
@@ -334,6 +341,8 @@ export default class DonationLightboxForm {
     if (element) {
       const sectionId = this.getSectionId(element);
       if (sectionId) {
+        this.currentSectionId = sectionId;
+        console.log('Changed current section ID to', sectionId);
         this.scrollToSection(sectionId);
       }
     }

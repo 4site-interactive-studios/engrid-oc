@@ -17,8 +17,8 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Tuesday, January 24, 2023 @ 14:10:14 ET
- *  By: fernando
+ *  Date: Thursday, January 26, 2023 @ 23:25:54 ET
+ *  By: jrh
  *  ENGrid styles: v0.13.32
  *  ENGrid scripts: v0.13.32
  *
@@ -17897,7 +17897,8 @@ class DonationLightboxForm {
     this.isDonation = ["donation", "premiumgift"].includes(window.pageJson.pageType);
     console.log("DonationLightboxForm: constructor"); // Each EN Row is a Section
 
-    this.sections = document.querySelectorAll("form.en__component > .en__component"); // Check if we're on the Thank You page
+    this.sections = document.querySelectorAll("form.en__component > .en__component");
+    this.currentSectionId = 0; // Check if we're on the Thank You page
 
     if (pageJson.pageNumber === pageJson.pageCount) {
       this.sendMessage("status", "loaded");
@@ -17977,9 +17978,12 @@ class DonationLightboxForm {
       document.querySelectorAll("form.en__component input.en__field__input").forEach(e => {
         e.addEventListener("focus", event => {
           // Run after 50ms - We need this or else some browsers will disregard the scroll due to the focus event
-          const sectionId = this.getSectionId(e);
+          const nextSectionId = Number(this.getSectionId(e));
+          const currentSectionId = Number(this.currentSectionId);
           setTimeout(() => {
-            if (sectionId > 0 && this.validateForm(sectionId - 1)) {
+            const focusIsOnNextSection = nextSectionId === currentSectionId + 1;
+
+            if (focusIsOnNextSection && this.validateForm(currentSectionId)) {
               this.scrollToElement(e);
             }
           }, 50);
@@ -18161,6 +18165,8 @@ class DonationLightboxForm {
 
     if (this.sections[sectionId]) {
       console.log(section);
+      this.currentSectionId = sectionId;
+      console.log('Changed current section ID to', sectionId);
       this.sections[sectionId].scrollIntoView({
         behavior: "smooth" // block: "start",
         // inline: "center",
@@ -18175,6 +18181,8 @@ class DonationLightboxForm {
       const sectionId = this.getSectionId(element);
 
       if (sectionId) {
+        this.currentSectionId = sectionId;
+        console.log('Changed current section ID to', sectionId);
         this.scrollToSection(sectionId);
       }
     }
