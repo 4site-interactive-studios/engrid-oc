@@ -1,9 +1,11 @@
-@include mq($until: tablet) {
+@media (max-width: 768px) {
   // Remove down arrow when giving frequency wraps
   .monthly-gift-upsell-tooltip .highlight:after {
     display: none;
   }
-  --engrid__body_padding: 0px 30px;
+  & {
+    --engrid__body_padding: 0px 30px;
+  }
 }
 
 &:not(#en__pagebuilder) {
@@ -355,24 +357,6 @@ div:not(.manual-form-layout)
 
 .en__field--recurrfreq .en__field__input--radio + .en__field__label::before {
   border-radius: 50%;
-}
-
-.en__field--recurrfreq .en__field__input--radio + .en__field__label::before {
-  // content: "";
-  // position: absolute;
-  // height: calc(1.4rem - 2px);
-  // width: calc(1.4rem - 2px);
-  // left: -2rem;
-  // display: inline-block;
-  // vertical-align: middle;
-  // border: 1px solid #c3c3c3;
-  // -webkit-box-shadow: inset 0 0 0 5px #fff;
-  // box-shadow: inset 0 0 0 5px #fff;
-  // cursor: pointer;
-  // -webkit-transition-duration: 0.25s;
-  // transition-duration: 0.25s;
-  // -webkit-transition-property: border-color, background-color;
-  // transition-property: border-color, background-color;
 }
 
 // Make the outline branded
@@ -778,9 +762,8 @@ h1 {
   justify-content: space-between;
 
   > .en__component:first-child,
-  > .en__component:not(:first-child):nth-last-child(-n + 2):not(
-      .messageOverlay
-    ) {
+  > .en__component:not(:first-child):nth-last-child(-n
+      + 2):not(.messageOverlay) {
     align-items: center;
     justify-content: center;
   }
@@ -800,9 +783,8 @@ h1 {
     }
   }
 
-  > .en__component:not(:first-child):nth-last-child(-n + 2):not(
-      .messageOverlay
-    ) {
+  > .en__component:not(:first-child):nth-last-child(-n
+      + 2):not(.messageOverlay) {
     grid-column: rbc / pc;
     display: flex;
     justify-content: flex-end;
@@ -878,7 +860,7 @@ h1 {
     box-decoration-break: clone;
     margin: 0;
     text-align: center;
-    @include mq($until: laptop) {
+    @media (max-width: 1024px) {
       font-size: 26px;
     }
   }
@@ -999,15 +981,6 @@ h1 {
 
 /* Sum of all MIN values of the Body Columns */
 @media screen and (min-width: 600px) {
-  .en__component--advrow .body-top,
-  .en__component--advrow .body-side,
-  .en__component--advrow .body-main,
-  .en__component--advrow .body-bottom,
-  .en__component--advrow .body-footer {
-    // padding-left: 6.5rem;
-    // padding-right: 6.5rem;
-  }
-
   .en__component--advrow .body-header,
   .en__component--advrow .body-banner,
   .en__component--advrow .body-top,
@@ -1858,12 +1831,6 @@ div[id^="nb-field-"] div.nb-feedback {
 }
 .en__component
   .en__field--donationAmt.en__field.en__field--radio
-  .en__field__item:not(.en__field__item--other) {
-  // flex-basis: 24%;
-  // min-width: 120px;
-}
-.en__component
-  .en__field--donationAmt.en__field.en__field--radio
   .en__field__item.en__field__item--other
   input {
   border-radius: var(--button_border-radius);
@@ -1922,19 +1889,6 @@ div[id^="nb-wrapper"] div.nb-hidden {
 }
 
 /* Style upon being wrapped and having a validation message displayed*/
-div[id^="nb-wrapper"] .nb-loading input,
-div[id^="nb-wrapper"].nb-error input,
-div[id^="nb-wrapper"].nb-success input {
-  // margin-bottom: 0 !important;
-  // border-bottom-right-radius: 0 !important;
-  // border-bottom-left-radius: 0 !important;
-}
-div[id^="nb-wrapper"] .nb-loading.nb-feedback,
-div[id^="nb-wrapper"].nb-error div.nb-feedback,
-div[id^="nb-wrapper"].nb-success div.nb-feedback {
-  // border-top-right-radius: 0 !important;
-  // border-top-left-radius: 0 !important;
-}
 
 div[id^="nb-wrapper"] .nb-loading #en__field_supporter_emailAddress,
 div[id^="nb-wrapper"].nb-error #en__field_supporter_emailAddress,
@@ -1950,13 +1904,11 @@ div[id^="nb-wrapper"] div.nb-loading.nb-feedback {
 /* Style upon error */
 div[id^="nb-wrapper"].nb-error input {
   border-color: #e74b3c !important;
-  color: #999999 !important;
   background-color: initial !important;
   color: #0a0a0a !important;
 }
 div[id^="nb-wrapper"].nb-error div.nb-feedback {
   border-color: #e74b3c !important;
-  color: #e74b3c !important;
   background-color: #e74b3c !important;
   color: #ffffff !important;
 }
@@ -2032,27 +1984,27 @@ div[id^="nb-wrapper"].nb-loading #nb-feedback:after {
       margin-bottom: 0;
     }
 
-    .body-title {
-      // grid-row: body-header-end / body-title-end;
-    }
+    // .body-title {
+    //   grid-row: body-header-end / body-title-end;
+    // }
 
-    .body-banner,
-    .body-bannerOverlay {
-      // grid-row: body-title-end / body-banner-end;
-      // grid-column: bc;
-    }
+    // .body-banner,
+    // .body-bannerOverlay {
+    //   grid-row: body-title-end / body-banner-end;
+    //   grid-column: bc;
+    // }
 
-    .body-top {
-      // grid-row: body-banner-end / body-bottom-end;
-    }
+    // .body-top {
+    //   grid-row: body-banner-end / body-bottom-end;
+    // }
 
-    .body-main {
-      // grid-row: body-title-start / body-bottom-start;
-    }
+    // .body-main {
+    //   grid-row: body-title-start / body-bottom-start;
+    // }
 
-    .body-bottom {
-      // grid-row: body-main-end / body-bottom-end;
-    }
+    // .body-bottom {
+    //   grid-row: body-main-end / body-bottom-end;
+    // }
   }
 
   @media screen and (max-width: 999px) {
@@ -2132,13 +2084,13 @@ div[id^="nb-wrapper"].nb-loading #nb-feedback:after {
       margin-top: 35px;
     }
 
-    .body-title {
-      // border-top-left-radius: 5px;
-    }
+    // .body-title {
+    //   border-top-left-radius: 5px;
+    // }
 
-    .body-main {
-      // border-top-right-radius: 5px;
-    }
+    // .body-main {
+    //   border-top-right-radius: 5px;
+    // }
 
     .body-footer {
       margin-bottom: 35px;
