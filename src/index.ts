@@ -3,6 +3,7 @@ import {
   App,
   DonationAmount,
   DonationFrequency,
+  EnForm
 } from "@4site/engrid-common"; // Uses ENGrid via NPM
 // import {
 //   Options,
@@ -179,7 +180,7 @@ const options: Options = {
     console.log("Starter Theme Loaded"); /*dataCapture();*/
     (<any>window).DonationLightboxForm = DonationLightboxForm;
     new DonationLightboxForm(DonationAmount, DonationFrequency);
-    customScript();
+    customScript(EnForm);
   },
   onResize: () => console.log("Starter Theme Window Resized"),
   onSubmit: () => {

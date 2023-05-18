@@ -17,8 +17,8 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Monday, April 10, 2023 @ 16:57:41 ET
- *  By: fernando
+ *  Date: Thursday, May 18, 2023 @ 09:11:18 ET
+ *  By: michael
  *  ENGrid styles: v0.13.53
  *  ENGrid scripts: v0.13.53
  *
@@ -18886,7 +18886,7 @@ const AppVersion = "0.13.53";
 ;// CONCATENATED MODULE: ./src/scripts/main.js
 const main_tippy = (__webpack_require__(3861)/* ["default"] */ .ZP);
 
-const customScript = function () {
+const customScript = function (EnForm) {
   console.log("ENGrid client scripts are executing"); // Add your client scripts here
 
   let enFieldPhoneNumber = document.querySelectorAll("input#en__field_supporter_phoneNumber")[0];
@@ -19013,7 +19013,29 @@ const customScript = function () {
       });
     });
     observer.observe(digitalWalletWrapper, config);
-  }
+  } //GTM event handling for opted in on previous page in session
+
+
+  const enForm = EnForm.getInstance();
+  enForm.onSubmit.subscribe(() => {
+    const optedInInSession = sessionStorage.getItem("opted_in_this_session"); //If user didn't opt in in this session yet, check if they opted in on this page
+
+    if (optedInInSession !== "true") {
+      const optedIn = !!document.querySelector(".en__field__item:not(.en__field--question) input[name^='supporter.questions'][type='checkbox']:checked");
+      sessionStorage.setItem("opted_in_this_session", optedIn.toString());
+    } // if we're submitting the last page or 2nd to last page,
+
+
+    if (window.pageJson.pageNumber === window.pageJson.pageCount || window.pageJson.pageNumber === pageJson.pageCount - 1) {
+      // and the user has opted in on a previous page, push the event to the dataLayer
+      if (optedInInSession === "true") {
+        window.dataLayer.push({
+          event: "EN_SUBMISSION_WITH_EMAIL_OPTIN_ON_A_PREVIOUS_PAGE"
+        });
+        sessionStorage.removeItem("opted_in_this_session");
+      }
+    }
+  });
 };
 // EXTERNAL MODULE: ./node_modules/smoothscroll-polyfill/dist/smoothscroll.js
 var smoothscroll = __webpack_require__(523);
@@ -19975,7 +19997,7 @@ const options = {
 
     window.DonationLightboxForm = DonationLightboxForm;
     new DonationLightboxForm(DonationAmount, DonationFrequency);
-    customScript();
+    customScript(EnForm);
   },
   onResize: () => console.log("Starter Theme Window Resized"),
   onSubmit: () => {
