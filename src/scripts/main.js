@@ -1,6 +1,6 @@
 const tippy = require("tippy.js").default;
 
-export const customScript = function () {
+export const customScript = function (EnForm) {
   console.log("ENGrid client scripts are executing");
   // Add your client scripts here
   let enFieldPhoneNumber = document.querySelectorAll(
@@ -144,4 +144,32 @@ export const customScript = function () {
     });
     observer.observe(digitalWalletWrapper, config);
   }
+
+  //GTM event handling for opted in on previous page in session
+  const enForm = EnForm.getInstance();
+  enForm.onSubmit.subscribe(() => {
+    const optedInInSession = sessionStorage.getItem("opted_in_this_session");
+
+    //If user didn't opt in in this session yet, check if they opted in on this page
+    if (optedInInSession !== "true") {
+      const optedIn = !!document.querySelector(
+        ".en__field__item:not(.en__field--question) input[name^='supporter.questions'][type='checkbox']:checked"
+      );
+      sessionStorage.setItem("opted_in_this_session", optedIn.toString());
+    }
+
+    // if we're submitting the last page or 2nd to last page,
+    if (
+      window.pageJson.pageNumber === window.pageJson.pageCount ||
+      window.pageJson.pageNumber === pageJson.pageCount - 1
+    ) {
+      // and the user has opted in on a previous page, push the event to the dataLayer
+      if (optedInInSession === "true") {
+        window.dataLayer.push({
+          event: "EN_SUBMISSION_WITH_EMAIL_OPTIN_ON_A_PREVIOUS_PAGE",
+        });
+        sessionStorage.removeItem("opted_in_this_session");
+      }
+    }
+  });
 };
