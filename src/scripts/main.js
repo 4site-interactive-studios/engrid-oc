@@ -3,6 +3,8 @@ const tippy = require("tippy.js").default;
 export const customScript = function (EnForm) {
   console.log("ENGrid client scripts are executing");
   // Add your client scripts here
+  const theme = document.body.dataset.engridTheme;
+
   let enFieldPhoneNumber = document.querySelectorAll(
     "input#en__field_supporter_phoneNumber"
   )[0];
@@ -80,69 +82,70 @@ export const customScript = function (EnForm) {
   });
 
   // Digital Wallets Moving Parts
-
-  const digitalWalletWrapper = document.querySelector("#en__digitalWallet");
-  const giveBySelect = document.querySelector(".give-by-select");
-  if (digitalWalletWrapper && giveBySelect) {
-    giveBySelect.appendChild(digitalWalletWrapper);
-    digitalWalletWrapper.insertAdjacentHTML(
-      "beforeend",
-      "<div class='digital-divider recurring-frequency-y-hide'><span class='divider-left'></span><p class='divider-center'>or enter manually</p><span class='divider-right'></span></div>"
-    );
-
-    const applePayWrapper = document.querySelector(".applePayWrapper");
-    const digitalDivider = document.querySelector(".digital-divider");
-    if (applePayWrapper && digitalDivider) {
-      digitalDivider.insertAdjacentElement("beforebegin", applePayWrapper);
-    }
-
-    let digitalWalletsExist;
-
-    digitalWalletsExist = document.querySelectorAll(
-      ".en__digitalWallet__container > *"
-    );
-    if (digitalWalletsExist.length > 0) {
-      giveBySelect.setAttribute("show-wallets", "");
-    }
-
-    setTimeout(function () {
-      let digitalWalletsExist = document.querySelectorAll(
-        ".en__digitalWallet__container > *"
+  if (theme === "oc") {
+    const digitalWalletWrapper = document.querySelector("#en__digitalWallet");
+    const giveBySelect = document.querySelector(".give-by-select");
+    if (digitalWalletWrapper && giveBySelect) {
+      giveBySelect.appendChild(digitalWalletWrapper);
+      digitalWalletWrapper.insertAdjacentHTML(
+        "beforeend",
+        "<div class='digital-divider recurring-frequency-y-hide'><span class='divider-left'></span><p class='divider-center'>or enter manually</p><span class='divider-right'></span></div>"
       );
-      if (digitalWalletsExist.length > 0) {
-        giveBySelect.setAttribute("show-wallets", "");
-      }
-    }, 500);
 
-    setTimeout(function () {
+      const applePayWrapper = document.querySelector(".applePayWrapper");
+      const digitalDivider = document.querySelector(".digital-divider");
+      if (applePayWrapper && digitalDivider) {
+        digitalDivider.insertAdjacentElement("beforebegin", applePayWrapper);
+      }
+
+      let digitalWalletsExist;
+
       digitalWalletsExist = document.querySelectorAll(
         ".en__digitalWallet__container > *"
       );
       if (digitalWalletsExist.length > 0) {
         giveBySelect.setAttribute("show-wallets", "");
       }
-    }, 2500);
-    // Check if a digital wallet container was loaded
-    const config = { attributes: true, childList: true, subtree: true };
-    let isLoaded = false;
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        if (
-          mutation.type === "childList" &&
-          mutation.addedNodes.length > 0 &&
-          !isLoaded
-        ) {
-          const giveBySelectItems = document.querySelectorAll(
-            ".give-by-select .card, .give-by-select .paypal, .give-by-select .check"
-          );
-          giveBySelectItems.forEach((item) => {
-            item.classList.add("recurring-frequency-n-hide");
-          });
-          isLoaded = true;
+
+      setTimeout(function () {
+        let digitalWalletsExist = document.querySelectorAll(
+          ".en__digitalWallet__container > *"
+        );
+        if (digitalWalletsExist.length > 0) {
+          giveBySelect.setAttribute("show-wallets", "");
         }
+      }, 500);
+
+      setTimeout(function () {
+        digitalWalletsExist = document.querySelectorAll(
+          ".en__digitalWallet__container > *"
+        );
+        if (digitalWalletsExist.length > 0) {
+          giveBySelect.setAttribute("show-wallets", "");
+        }
+      }, 2500);
+      // Check if a digital wallet container was loaded
+      const config = { attributes: true, childList: true, subtree: true };
+      let isLoaded = false;
+      const observer = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+          if (
+            mutation.type === "childList" &&
+            mutation.addedNodes.length > 0 &&
+            !isLoaded
+          ) {
+            const giveBySelectItems = document.querySelectorAll(
+              ".give-by-select .card, .give-by-select .paypal, .give-by-select .check"
+            );
+            giveBySelectItems.forEach((item) => {
+              item.classList.add("recurring-frequency-n-hide");
+            });
+            isLoaded = true;
+          }
+        });
       });
-    });
-    observer.observe(digitalWalletWrapper, config);
+      observer.observe(digitalWalletWrapper, config);
+    }
   }
 
   //GTM event handling for opted in on previous page in session
