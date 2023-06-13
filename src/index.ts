@@ -24,6 +24,8 @@ declare global {
   }
 }
 
+const theme = document.body.dataset.engridTheme;
+
 function getUserData() {
   let phone = App.getFieldValue("supporter.phoneNumber");
   let sms_message_opt_in = document.getElementById(
@@ -207,4 +209,9 @@ const options: Options = {
     });
   },
 };
+
+if (theme === "oc2") {
+  options.AddCurrencySymbol = false;
+}
+
 new App(options);
