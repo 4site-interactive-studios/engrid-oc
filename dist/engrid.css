@@ -19,10 +19,10 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Monday, May 22, 2023 @ 15:44:25 ET
+ *  Date: Tuesday, June 20, 2023 @ 16:23:37 ET
  *  By: fernando
- *  ENGrid styles: v0.13.70
- *  ENGrid scripts: v0.13.70
+ *  ENGrid styles: v0.14.0
+ *  ENGrid scripts: v0.14.1
  *
  *  Created by 4Site Studios
  *  Come work with us or join our team, we would love to hear from you
@@ -2036,7 +2036,7 @@ a:focus,a:hover{
   margin-bottom:var(--fields_spacing-block);
   padding-bottom:0;
 }
-.en__component--formblock .en__field .en__field__helpText,.en__component--formblock .en__field .en__field__label:not(.en__field__label--item),.en__component--svblock .en__field .en__field__helpText,.en__component--svblock .en__field .en__field__label:not(.en__field__label--item),.en__registrants__registrantDetails .en__field .en__field__helpText,.en__registrants__registrantDetails .en__field .en__field__label:not(.en__field__label--item){
+.en__component--formblock .en__field .en__field__helpText,.en__component--formblock .en__field .en__field__label:not(.en__field__label--item):not([for*=svquestion]),.en__component--svblock .en__field .en__field__helpText,.en__component--svblock .en__field .en__field__label:not(.en__field__label--item):not([for*=svquestion]),.en__registrants__registrantDetails .en__field .en__field__helpText,.en__registrants__registrantDetails .en__field .en__field__label:not(.en__field__label--item):not([for*=svquestion]){
   align-items:center;
   display:flex;
   justify-content:space-between;
@@ -2546,6 +2546,9 @@ select.en__field__input--select:focus,select.en__field__input--select:hover,sele
   position:absolute;
   top:5px;
 }
+.en__field__notice{
+  order:3;
+}
 input[type=number]::-webkit-inner-spin-button,input[type=number]::-webkit-outer-spin-button{
   -webkit-appearance:none;
 }
@@ -2717,7 +2720,7 @@ body .page-backgroundImage video.crop-on-right{
 body{
   background-color:var(--engrid__page_background-color);
   min-height:100vh;
-  min-width:100vw;
+  min-width:min(100vw, 100%);
 }
 
 [data-engrid-theme]{

@@ -17,10 +17,10 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Monday, May 22, 2023 @ 15:44:25 ET
+ *  Date: Tuesday, June 20, 2023 @ 16:23:37 ET
  *  By: fernando
- *  ENGrid styles: v0.13.70
- *  ENGrid scripts: v0.13.70
+ *  ENGrid styles: v0.14.0
+ *  ENGrid scripts: v0.14.1
  *
  *  Created by 4Site Studios
  *  Come work with us or join our team, we would love to hear from you
@@ -11700,6 +11700,25 @@ class engrid_ENGrid {
             observer.observe(errorElement, { childList: true });
         }
     }
+    // Get the Payment Type
+    static getPaymentType() {
+        return engrid_ENGrid.getFieldValue("transaction.paymenttype");
+    }
+    // Set the Payment Type
+    static setPaymentType(paymentType) {
+        const enFieldPaymentType = engrid_ENGrid.getField("transaction.paymenttype");
+        if (enFieldPaymentType) {
+            const paymentTypeOption = Array.from(enFieldPaymentType.options).find((option) => option.value.toLowerCase() === paymentType.toLowerCase());
+            if (paymentTypeOption) {
+                paymentTypeOption.selected = true;
+                const event = new Event("change");
+                enFieldPaymentType.dispatchEvent(event);
+            }
+            else {
+                enFieldPaymentType.value = paymentType;
+            }
+        }
+    }
 }
 
 ;// CONCATENATED MODULE: ./node_modules/@4site/engrid-common/dist/events/donation-frequency.js
@@ -11962,7 +11981,6 @@ class app_App extends engrid_ENGrid {
         inputPlaceholder();
         preventAutocomplete();
         watchInmemField();
-        watchGiveBySelectField();
         simpleUnsubscribe();
         contactDetailLabels();
         easyEdit();
@@ -12008,6 +12026,7 @@ class app_App extends engrid_ENGrid {
             this._form.submit = true;
             this._form.submitPromise = false;
             this._form.dispatchSubmit();
+            engrid_ENGrid.watchForError(engrid_ENGrid.enableSubmit);
             if (!this._form.submit)
                 return false;
             if (this._form.submitPromise)
@@ -12016,7 +12035,6 @@ class app_App extends engrid_ENGrid {
             // If all validation passes, we'll watch for Digital Wallets Errors, which
             // will not reload the page (thanks EN), so we will enable the submit button if
             // an error is programmatically thrown by the Digital Wallets
-            engrid_ENGrid.watchForError(engrid_ENGrid.enableSubmit);
             return true;
         };
         window.enOnError = () => {
@@ -12072,8 +12090,8 @@ class app_App extends engrid_ENGrid {
         // Auto Year Class
         if (this.options.AutoYear)
             new AutoYear();
-        // Credit Card Numbers Only
-        new CreditCardNumbers();
+        // Credit Card Utility
+        new CreditCard();
         // Autocomplete Class
         new Autocomplete();
         // Ecard Class
@@ -12137,7 +12155,10 @@ class app_App extends engrid_ENGrid {
         // Plaid
         if (this.options.Plaid)
             new Plaid();
+        // Give By Select
+        new GiveBySelect();
         this.setDataAttributes();
+        new UrlParamsToBodyAttrs();
         //Debug panel
         if (this.options.Debug ||
             window.sessionStorage.hasOwnProperty(DebugPanel.debugSessionStorageKey)) {
@@ -12584,21 +12605,180 @@ class CapitalizeFields {
     }
 }
 
-;// CONCATENATED MODULE: ./node_modules/@4site/engrid-common/dist/credit-card-numbers.js
-// This class removes any non-numeric characters from the credit card field
+;// CONCATENATED MODULE: ./node_modules/@4site/engrid-common/dist/credit-card.js
+// This class provides the credit card handler
+// and common credit card manipulation, like removing any non-numeric
+//  characters from the credit card field
 
-class CreditCardNumbers {
+class CreditCard {
     constructor() {
+        this.logger = new EngridLogger("CreditCard", "#ccc84a", "#333", "💳");
         this._form = EnForm.getInstance();
-        this.ccField = document.getElementById("en__field_transaction_ccnumber");
-        if (this.ccField) {
-            this._form.onSubmit.subscribe(() => this.onlyNumbersCC());
+        this.ccField = engrid_ENGrid.getField("transaction.ccnumber");
+        this.field_expiration_month = null;
+        this.field_expiration_year = null;
+        this.paymentTypeField = engrid_ENGrid.getField("transaction.paymenttype");
+        this.handleExpUpdate = (e) => {
+            if (!this.field_expiration_month || !this.field_expiration_year)
+                return;
+            const current_date = new Date();
+            const current_month = current_date.getMonth() + 1;
+            const current_year = current_date.getFullYear() - 2000;
+            // handle if year is changed to current year (disable all months less than current month)
+            // handle if month is changed to less than current month (disable current year)
+            if (e == "month") {
+                let selected_month = parseInt(this.field_expiration_month.value);
+                let disable = selected_month < current_month;
+                this.logger.log(`month disable ${disable}`);
+                this.logger.log(`selected_month ${selected_month}`);
+                for (let i = 0; i < this.field_expiration_year.options.length; i++) {
+                    // disable or enable current year
+                    if (parseInt(this.field_expiration_year.options[i].value) <= current_year) {
+                        if (disable) {
+                            this.field_expiration_year.options[i].setAttribute("disabled", "disabled");
+                        }
+                        else {
+                            this.field_expiration_year.options[i].disabled = false;
+                        }
+                    }
+                }
+            }
+            else if (e == "year") {
+                let selected_year = parseInt(this.field_expiration_year.value);
+                let disable = selected_year == current_year;
+                this.logger.log(`year disable ${disable}`);
+                this.logger.log(`selected_year ${selected_year}`);
+                for (let i = 0; i < this.field_expiration_month.options.length; i++) {
+                    // disable or enable all months less than current month
+                    if (parseInt(this.field_expiration_month.options[i].value) < current_month) {
+                        if (disable) {
+                            this.field_expiration_month.options[i].setAttribute("disabled", "disabled");
+                        }
+                        else {
+                            this.field_expiration_month.options[i].disabled = false;
+                        }
+                    }
+                }
+            }
+        };
+        if (!this.ccField)
+            return;
+        const expireFiels = document.getElementsByName("transaction.ccexpire");
+        if (expireFiels) {
+            this.field_expiration_month = expireFiels[0];
+            this.field_expiration_year = expireFiels[1];
+        }
+        this._form.onSubmit.subscribe(() => this.onlyNumbersCC());
+        this.addEventListeners();
+        this.handleCCUpdate();
+    }
+    addEventListeners() {
+        // Add event listeners to the credit card field
+        ["keyup", "paste", "blur"].forEach((event) => {
+            this.ccField.addEventListener(event, () => this.handleCCUpdate());
+        });
+        // Add event listeners to the expiration fields
+        if (this.field_expiration_month && this.field_expiration_year) {
+            ["change"].forEach((event) => {
+                var _a, _b;
+                (_a = this.field_expiration_month) === null || _a === void 0 ? void 0 : _a.addEventListener(event, () => {
+                    this.handleExpUpdate("month");
+                });
+                (_b = this.field_expiration_year) === null || _b === void 0 ? void 0 : _b.addEventListener(event, () => {
+                    this.handleExpUpdate("year");
+                });
+            });
+        }
+        // Add event listeners to the Give By Select Radio Buttons, if they exist
+        const transactionGiveBySelect = document.getElementsByName("transaction.giveBySelect");
+        if (transactionGiveBySelect) {
+            transactionGiveBySelect.forEach((giveBySelect) => {
+                giveBySelect.addEventListener("change", () => {
+                    if (giveBySelect.value.toLowerCase() === "card") {
+                        this.logger.log("Handle credit card auto-update");
+                        window.setTimeout(() => {
+                            this.handleCCUpdate();
+                        }, 100);
+                    }
+                });
+            });
         }
     }
     onlyNumbersCC() {
         const onlyNumbers = this.ccField.value.replace(/\D/g, "");
         this.ccField.value = onlyNumbers;
         return true;
+    }
+    handleCCUpdate() {
+        const card_type = this.getCardType(this.ccField.value);
+        const card_values = {
+            amex: ["amex", "american express", "americanexpress", "amx", "ax"],
+            visa: ["visa", "vi"],
+            mastercard: ["mastercard", "master card", "mc"],
+            discover: ["discover", "di"],
+        };
+        const selected_card_value = card_type
+            ? Array.from(this.paymentTypeField.options).filter((d) => card_values[card_type].includes(d.value.toLowerCase()))[0].value
+            : "";
+        if (this.paymentTypeField.value != selected_card_value) {
+            this.logger.log(`card type ${card_type}`);
+            this.paymentTypeField.value = selected_card_value;
+            const paymentTypeChangeEvent = new Event("change", { bubbles: true });
+            this.paymentTypeField.dispatchEvent(paymentTypeChangeEvent);
+        }
+    }
+    getCardType(cc_partial) {
+        let key_character = cc_partial.charAt(0);
+        const prefix = "live-card-type-";
+        const field_credit_card_classes = this.ccField.className
+            .split(" ")
+            .filter((c) => !c.startsWith(prefix));
+        switch (key_character) {
+            case "0":
+                this.ccField.className = field_credit_card_classes.join(" ").trim();
+                this.ccField.classList.add("live-card-type-invalid");
+                return false;
+            case "1":
+                this.ccField.className = field_credit_card_classes.join(" ").trim();
+                this.ccField.classList.add("live-card-type-invalid");
+                return false;
+            case "2":
+                this.ccField.className = field_credit_card_classes.join(" ").trim();
+                this.ccField.classList.add("live-card-type-invalid");
+                return false;
+            case "3":
+                this.ccField.className = field_credit_card_classes.join(" ").trim();
+                this.ccField.classList.add("live-card-type-amex");
+                return "amex";
+            case "4":
+                this.ccField.className = field_credit_card_classes.join(" ").trim();
+                this.ccField.classList.add("live-card-type-visa");
+                return "visa";
+            case "5":
+                this.ccField.className = field_credit_card_classes.join(" ").trim();
+                this.ccField.classList.add("live-card-type-mastercard");
+                return "mastercard";
+            case "6":
+                this.ccField.className = field_credit_card_classes.join(" ").trim();
+                this.ccField.classList.add("live-card-type-discover");
+                return "discover";
+            case "7":
+                this.ccField.className = field_credit_card_classes.join(" ").trim();
+                this.ccField.classList.add("live-card-type-invalid");
+                return false;
+            case "8":
+                this.ccField.className = field_credit_card_classes.join(" ").trim();
+                this.ccField.classList.add("live-card-type-invalid");
+                return false;
+            case "9":
+                this.ccField.className = field_credit_card_classes.join(" ").trim();
+                this.ccField.classList.add("live-card-type-invalid");
+                return false;
+            default:
+                this.ccField.className = field_credit_card_classes.join(" ").trim();
+                this.ccField.classList.add("live-card-type-na");
+                return false;
+        }
     }
 }
 
@@ -12878,122 +13058,6 @@ const removeClassesByPrefix = (el, prefix) => {
         }
     }
 };
-const debugBar = () => {
-    if (window.location.href.indexOf("debug") != -1 ||
-        location.hostname === "localhost" ||
-        location.hostname === "127.0.0.1") {
-        body.classList.add("debug");
-        if (enGrid) {
-            enGrid.insertAdjacentHTML("beforebegin", '<span id="debug-bar">' +
-                '<span id="info-wrapper">' +
-                "<span>DEBUG BAR</span>" +
-                "</span>" +
-                '<span id="buttons-wrapper">' +
-                '<span id="debug-close">X</span>' +
-                "</span>" +
-                "</span>");
-        }
-        if (window.location.search.indexOf("mode=DEMO") > -1) {
-            const infoWrapper = document.getElementById("info-wrapper");
-            const buttonsWrapper = document.getElementById("buttons-wrapper");
-            if (infoWrapper) {
-                // console.log(window.performance);
-                const now = new Date().getTime();
-                const initialPageLoad = (now - performance.timing.navigationStart) / 1000;
-                const domInteractive = initialPageLoad + (now - performance.timing.domInteractive) / 1000;
-                infoWrapper.insertAdjacentHTML("beforeend", "<span>Initial Load: " +
-                    initialPageLoad +
-                    "s</span>" +
-                    "<span>DOM Interactive: " +
-                    domInteractive +
-                    "s</span>");
-                if (buttonsWrapper) {
-                    buttonsWrapper.insertAdjacentHTML("afterbegin", '<button id="layout-toggle" type="button">Layout Toggle</button>' +
-                        '<button id="page-edit" type="button">Edit in PageBuilder (BETA)</button>');
-                }
-            }
-        }
-        if (window.location.href.indexOf("debug") != -1 ||
-            location.hostname === "localhost" ||
-            location.hostname === "127.0.0.1") {
-            const buttonsWrapper = document.getElementById("buttons-wrapper");
-            if (buttonsWrapper) {
-                buttonsWrapper.insertAdjacentHTML("afterbegin", '<button id="layout-toggle" type="button">Layout Toggle</button>' +
-                    '<button id="fancy-errors-toggle" type="button">Toggle Fancy Errors</button>');
-            }
-        }
-        if (document.getElementById("fancy-errors-toggle")) {
-            const debugTemplateButton = document.getElementById("fancy-errors-toggle");
-            if (debugTemplateButton) {
-                debugTemplateButton.addEventListener("click", function () {
-                    fancyErrorsToggle();
-                }, false);
-            }
-        }
-        if (document.getElementById("layout-toggle")) {
-            const debugTemplateButton = document.getElementById("layout-toggle");
-            if (debugTemplateButton) {
-                debugTemplateButton.addEventListener("click", function () {
-                    layoutToggle();
-                }, false);
-            }
-        }
-        if (document.getElementById("page-edit")) {
-            const debugTemplateButton = document.getElementById("page-edit");
-            if (debugTemplateButton) {
-                debugTemplateButton.addEventListener("click", function () {
-                    pageEdit();
-                }, false);
-            }
-        }
-        if (document.getElementById("debug-close")) {
-            const debugTemplateButton = document.getElementById("debug-close");
-            if (debugTemplateButton) {
-                debugTemplateButton.addEventListener("click", function () {
-                    debugClose();
-                }, false);
-            }
-        }
-        const fancyErrorsToggle = () => {
-            if (enGrid) {
-                enGrid.classList.toggle("fancy-errors");
-            }
-        };
-        const pageEdit = () => {
-            window.location.href = window.location.href + "?edit";
-        };
-        const layoutToggle = () => {
-            if (enGrid) {
-                if (enGrid.classList.contains("layout-centercenter1col")) {
-                    removeClassesByPrefix(enGrid, "layout-");
-                    enGrid.classList.add("layout-centerright1col");
-                }
-                else if (enGrid.classList.contains("layout-centerright1col")) {
-                    removeClassesByPrefix(enGrid, "layout-");
-                    enGrid.classList.add("layout-centerleft1col");
-                }
-                else if (enGrid.classList.contains("layout-centerleft1col")) {
-                    removeClassesByPrefix(enGrid, "layout-");
-                    enGrid.classList.add("layout-embedded");
-                }
-                else if (enGrid.classList.contains("layout-embedded")) {
-                    removeClassesByPrefix(enGrid, "layout-");
-                    enGrid.classList.add("layout-centercenter1col");
-                }
-                else {
-                    console.log("While trying to switch layouts, something unexpected happen.");
-                }
-            }
-        };
-        const debugClose = () => {
-            body.classList.remove("debug");
-            const debugBar = document.getElementById("debug-bar");
-            if (debugBar) {
-                debugBar.style.display = "none";
-            }
-        };
-    }
-};
 const inputPlaceholder = () => {
     // Personal Information
     let enFieldFirstName = document.querySelector("input#en__field_supporter_firstName");
@@ -13241,250 +13305,6 @@ const watchInmemField = () => {
         enFieldTransactionInmem.addEventListener("change", handleEnFieldTransactionInmemChange);
     }
 };
-// @TODO Refactor (low priority)
-const watchGiveBySelectField = () => {
-    const setPaymentType = (paymentType) => {
-        const enFieldPaymentType = document.querySelector("#en__field_transaction_paymenttype");
-        if (enFieldPaymentType) {
-            // Set Payment Type Option Value Case Insensitive
-            const paymentTypeOption = Array.from(enFieldPaymentType.options).find((option) => option.value.toLowerCase() === paymentType.toLowerCase());
-            if (paymentTypeOption) {
-                paymentTypeOption.selected = true;
-                const event = new Event("change");
-                enFieldPaymentType.dispatchEvent(event);
-            }
-        }
-    };
-    const enFieldGiveBySelect = document.querySelector(".en__field--give-by-select");
-    const transactionGiveBySelect = document.getElementsByName("transaction.giveBySelect");
-    let enFieldGiveBySelectCurrentValue = document.querySelector('input[name="transaction.giveBySelect"]:checked');
-    const prefix = "has-give-by-";
-    /* prettier-ignore */
-    const handleEnFieldGiveBySelect = () => {
-        enFieldGiveBySelectCurrentValue = document.querySelector('input[name="transaction.giveBySelect"]:checked');
-        console.log("enFieldGiveBySelectCurrentValue:", enFieldGiveBySelectCurrentValue);
-        // Give By Card
-        if (enFieldGiveBySelectCurrentValue && enFieldGiveBySelectCurrentValue.value.toLowerCase() == "card") {
-            if (enGrid) {
-                removeClassesByPrefix(enGrid, prefix);
-                enGrid.classList.add("has-give-by-card");
-            }
-            // enFieldPaymentType.value = "card";
-            handleCCUpdate();
-            // Give By ACH
-        }
-        else if (enFieldGiveBySelectCurrentValue && enFieldGiveBySelectCurrentValue.value.toLowerCase() == "ach") {
-            if (enGrid) {
-                removeClassesByPrefix(enGrid, prefix);
-                enGrid.classList.add("has-give-by-ach");
-            }
-            setPaymentType("ach");
-            // Give By Check
-        }
-        else if (enFieldGiveBySelectCurrentValue && enFieldGiveBySelectCurrentValue.value.toLowerCase() == "check") {
-            if (enGrid) {
-                removeClassesByPrefix(enGrid, prefix);
-                enGrid.classList.add("has-give-by-check");
-            }
-            setPaymentType("check");
-            // Give By PayPal
-        }
-        else if (enFieldGiveBySelectCurrentValue && enFieldGiveBySelectCurrentValue.value.toLowerCase() == "paypal") {
-            if (enGrid) {
-                removeClassesByPrefix(enGrid, prefix);
-                enGrid.classList.add("has-give-by-paypal");
-            }
-            setPaymentType("paypal");
-            // Give By Paypal One Touch or Venmo
-        }
-        else if (enFieldGiveBySelectCurrentValue && enFieldGiveBySelectCurrentValue.value.toLowerCase() == "paypaltouch") {
-            if (enGrid) {
-                removeClassesByPrefix(enGrid, prefix);
-                enGrid.classList.add("has-give-by-paypaltouch");
-            }
-            setPaymentType("paypaltouch");
-            // Give By Apple Pay via Vantiv
-        }
-        else if (enFieldGiveBySelectCurrentValue && enFieldGiveBySelectCurrentValue.value.toLowerCase() == "applepay") {
-            if (enGrid) {
-                removeClassesByPrefix(enGrid, prefix);
-                enGrid.classList.add("has-give-by-applepay");
-            }
-            setPaymentType("applepay");
-            // Give By Apple Pay or Google Pay via Stripe
-        }
-        else if (enFieldGiveBySelectCurrentValue && enFieldGiveBySelectCurrentValue.value.toLowerCase() == "stripedigitalwallet") {
-            if (enGrid) {
-                removeClassesByPrefix(enGrid, prefix);
-                enGrid.classList.add("has-give-by-stripedigitalwallet");
-            }
-            setPaymentType("stripedigitalwallet");
-        }
-        ;
-    };
-    /* prettier-ignore */
-    // Check Giving Frequency on page load
-    if (enFieldGiveBySelect) {
-        handleEnFieldGiveBySelect();
-    }
-    // Watch each Giving Frequency radio input for a change
-    if (transactionGiveBySelect) {
-        Array.from(transactionGiveBySelect).forEach((e) => {
-            let element = e;
-            element.addEventListener("change", handleEnFieldGiveBySelect);
-        });
-    }
-};
-/*
- * Input fields as reference variables
- */
-const field_credit_card = document.getElementById("en__field_transaction_ccnumber");
-const field_payment_type = document.getElementById("en__field_transaction_paymenttype");
-let field_expiration_parts = document.querySelectorAll(".en__field--ccexpire .en__field__input--splitselect");
-const field_country = document.getElementById("en__field_supporter_country");
-let field_expiration_month = field_expiration_parts[0];
-let field_expiration_year = field_expiration_parts[1];
-/*
- * Helpers
- */
-// current_month and current_year used by handleExpUpdate()
-let d = new Date();
-var current_month = d.getMonth() + 1; // month options in expiration dropdown are indexed from 1
-var current_year = d.getFullYear() - 2000;
-// getCardType used by handleCCUpdate()
-const getCardType = (cc_partial) => {
-    let key_character = cc_partial.charAt(0);
-    const prefix = "live-card-type-";
-    const field_credit_card_classes = field_credit_card.className
-        .split(" ")
-        .filter((c) => !c.startsWith(prefix));
-    switch (key_character) {
-        case "0":
-            field_credit_card.className = field_credit_card_classes.join(" ").trim();
-            field_credit_card.classList.add("live-card-type-invalid");
-            return false;
-        case "1":
-            field_credit_card.className = field_credit_card_classes.join(" ").trim();
-            field_credit_card.classList.add("live-card-type-invalid");
-            return false;
-        case "2":
-            field_credit_card.className = field_credit_card_classes.join(" ").trim();
-            field_credit_card.classList.add("live-card-type-invalid");
-            return false;
-        case "3":
-            field_credit_card.className = field_credit_card_classes.join(" ").trim();
-            field_credit_card.classList.add("live-card-type-amex");
-            return "amex";
-        case "4":
-            field_credit_card.className = field_credit_card_classes.join(" ").trim();
-            field_credit_card.classList.add("live-card-type-visa");
-            return "visa";
-        case "5":
-            field_credit_card.className = field_credit_card_classes.join(" ").trim();
-            field_credit_card.classList.add("live-card-type-mastercard");
-            return "mastercard";
-        case "6":
-            field_credit_card.className = field_credit_card_classes.join(" ").trim();
-            field_credit_card.classList.add("live-card-type-discover");
-            return "discover";
-        case "7":
-            field_credit_card.className = field_credit_card_classes.join(" ").trim();
-            field_credit_card.classList.add("live-card-type-invalid");
-            return false;
-        case "8":
-            field_credit_card.className = field_credit_card_classes.join(" ").trim();
-            field_credit_card.classList.add("live-card-type-invalid");
-            return false;
-        case "9":
-            field_credit_card.className = field_credit_card_classes.join(" ").trim();
-            field_credit_card.classList.add("live-card-type-invalid");
-            return false;
-        default:
-            field_credit_card.className = field_credit_card_classes.join(" ").trim();
-            field_credit_card.classList.add("live-card-type-na");
-            return false;
-    }
-};
-/*
- * Handlers
- */
-const handleCCUpdate = () => {
-    const card_type = getCardType(field_credit_card.value);
-    const card_values = {
-        amex: ["amex", "american express", "americanexpress", "amx", "ax"],
-        visa: ["visa", "vi"],
-        mastercard: ["mastercard", "master card", "mc"],
-        discover: ["discover", "di"],
-    };
-    const selected_card_value = card_type
-        ? Array.from(field_payment_type.options).filter((d) => card_values[card_type].includes(d.value.toLowerCase()))[0].value
-        : "";
-    if (field_payment_type.value != selected_card_value) {
-        field_payment_type.value = selected_card_value;
-        const paymentTypeChangeEvent = new Event("change", { bubbles: true });
-        field_payment_type.dispatchEvent(paymentTypeChangeEvent);
-    }
-};
-const handleExpUpdate = (e) => {
-    // handle if year is changed to current year (disable all months less than current month)
-    // handle if month is changed to less than current month (disable current year)
-    if (e == "month") {
-        let selected_month = parseInt(field_expiration_month.value);
-        let disable = selected_month < current_month;
-        console.log("month disable", disable, typeof disable, selected_month, current_month);
-        for (let i = 0; i < field_expiration_year.options.length; i++) {
-            // disable or enable current year
-            if (parseInt(field_expiration_year.options[i].value) <= current_year) {
-                if (disable) {
-                    //@TODO Couldn't get working in TypeScript
-                    field_expiration_year.options[i].setAttribute("disabled", "disabled");
-                }
-                else {
-                    field_expiration_year.options[i].disabled = false;
-                }
-            }
-        }
-    }
-    else if (e == "year") {
-        let selected_year = parseInt(field_expiration_year.value);
-        let disable = selected_year == current_year;
-        console.log("year disable", disable, typeof disable, selected_year, current_year);
-        for (let i = 0; i < field_expiration_month.options.length; i++) {
-            // disable or enable all months less than current month
-            if (parseInt(field_expiration_month.options[i].value) < current_month) {
-                if (disable) {
-                    //@TODO Couldn't get working in TypeScript
-                    field_expiration_month.options[i].setAttribute("disabled", "disabled");
-                }
-                else {
-                    field_expiration_month.options[i].disabled = false;
-                }
-            }
-        }
-    }
-};
-/*
- * Event Listeners
- */
-if (field_credit_card) {
-    field_credit_card.addEventListener("keyup", function () {
-        handleCCUpdate();
-    });
-    field_credit_card.addEventListener("paste", function () {
-        handleCCUpdate();
-    });
-    field_credit_card.addEventListener("blur", function () {
-        handleCCUpdate();
-    });
-}
-if (field_expiration_month && field_expiration_year) {
-    field_expiration_month.addEventListener("change", function () {
-        handleExpUpdate("month");
-    });
-    field_expiration_year.addEventListener("change", function () {
-        handleExpUpdate("year");
-    });
-}
 // EN Polyfill to support "label" clicking on Advocacy Recipient "labels"
 const contactDetailLabels = () => {
     const contact = document.querySelectorAll(".en__contactDetails__rows");
@@ -13611,9 +13431,6 @@ class iFrame {
             engrid_ENGrid.setBodyData("embedded", "");
             // Fire the resize event
             this.logger.log("iFrame Event - Begin Resizing");
-            this.sendIframeHeight();
-            // Listen for the resize event
-            window.addEventListener("resize", this.sendIframeHeight.bind(this));
             window.addEventListener("load", (event) => {
                 // Scroll to top of iFrame
                 this.logger.log("iFrame Event - window.onload");
@@ -13629,6 +13446,9 @@ class iFrame {
                     }, 100);
                 });
             });
+            window.setTimeout(() => {
+                this.sendIframeHeight();
+            }, 300);
             // Listen for the form submit event
             this._form.onSubmit.subscribe((e) => {
                 this.logger.log("iFrame Event - onSubmit");
@@ -18726,7 +18546,7 @@ class DebugPanel {
           <div class="debug-panel__container">
             <div class="debug-panel__closed-title">Debug</div>
             <div class="debug-panel__title">
-              <h2>Debug Panel</h2>
+              <h2>Debug</h2>
               <div class="debug-panel__close">X</div>
             </div>
             <div class="debug-panel__options">
@@ -18736,7 +18556,7 @@ class DebugPanel {
                 </label>
               </div>
               <div class="debug-panel__option">
-                <label for="engrid-form-quickfill">Form Quick-fill</label>
+                <label for="engrid-form-quickfill">Quick-fill</label>
                 <select name="engrid-form-quickfill" id="engrid-form-quickfill">
                   <option disabled selected>Choose an option</option>
                   <option value="quick-fill-pi-unique-us-address-senate-rep-cc-stripe-visa">Quick-fill - Unique w/ Senate Address - Stripe Visa</option>
@@ -18752,11 +18572,11 @@ class DebugPanel {
                 </select>
               </div>
               <div class="debug-panel__option">
-                <label for="engrid-layout-switch">Switch layout</label>
+                <label for="engrid-layout-switch">Layout</label>
                 <select name="engrid-layout" id="engrid-layout-switch">
                 </select>
               </div>
-              <div class="debug-panel__option">
+              <div class="debug-panel__option debug-panel__option--local">
                 <div class="debug-panel__checkbox">
                   <input type="checkbox" name="engrid-embedded-layout" id="engrid-embedded-layout">
                   <label for="engrid-embedded-layout">Embedded layout</label>            
@@ -18778,7 +18598,7 @@ class DebugPanel {
                 <label for="engrid-theme">Theme</label>
                 <input type="text" id="engrid-theme">
               </div>
-              <div class="debug-panel__option">
+              <div class="debug-panel__option debug-panel__option--local">
                 <label for="engrid-theme">Sub-theme</label>
                 <input type="text" id="engrid-subtheme">
               </div>
@@ -19494,12 +19314,15 @@ class LiveFrequency {
  * inside a universal opt-in element (any form block with the CSS class universal-opt-in). When the user clicks on a radio/checkbox
  * button, we will search for every other radio/checkbox button inside the same
  * universal opt-in element and mirror the user's selection.
+ * If instead of universal-opt-in you use universal-opt-in_null, the class will
+ * not mirror the user's selection when a radio "No" option is selected. Instead,
+ * it will unset all other radio buttons.
  */
 
 class UniversalOptIn {
     constructor() {
         this.logger = new EngridLogger("UniversalOptIn", "#f0f0f0", "#d2691e", "🪞");
-        this._elements = document.querySelectorAll(".universal-opt-in");
+        this._elements = document.querySelectorAll(".universal-opt-in, .universal-opt-in_null");
         if (!this.shouldRun())
             return;
         this.addEventListeners();
@@ -19549,21 +19372,26 @@ class UniversalOptIn {
                         if (yesNoValue === "Y") {
                             this.logger.log("Yes/No " + yesNoElement.getAttribute("type") + " is checked");
                             yesNoElements.forEach((yesNoElement2) => {
-                                if (yesNoElement === yesNoElement2)
+                                const fieldName = yesNoElement2.getAttribute("name");
+                                const clickedFieldName = yesNoElement.getAttribute("name");
+                                if (!fieldName || fieldName === clickedFieldName)
                                     return;
-                                if (yesNoElement2.getAttribute("value") === "Y")
-                                    yesNoElement2.setAttribute("checked", "checked");
-                                if (yesNoElement2.getAttribute("value") === "N")
-                                    yesNoElement2.removeAttribute("checked");
+                                engrid_ENGrid.setFieldValue(fieldName, "Y");
                             });
                         }
                         else {
                             this.logger.log("Yes/No " + yesNoElement.getAttribute("type") + " is unchecked");
                             yesNoElements.forEach((yesNoElement2) => {
-                                if (yesNoElement === yesNoElement2)
+                                const fieldName = yesNoElement2.getAttribute("name");
+                                const clickedFieldName = yesNoElement.getAttribute("name");
+                                if (!fieldName || fieldName === clickedFieldName)
                                     return;
-                                if (yesNoElement2.getAttribute("value") === "Y")
-                                    yesNoElement2.removeAttribute("checked");
+                                if (element.classList.contains("universal-opt-in")) {
+                                    engrid_ENGrid.setFieldValue(fieldName, "N");
+                                }
+                                else {
+                                    yesNoElement2.checked = false;
+                                }
                             });
                         }
                     });
@@ -19624,11 +19452,79 @@ class Plaid {
     }
 }
 
+;// CONCATENATED MODULE: ./node_modules/@4site/engrid-common/dist/give-by-select.js
+
+class GiveBySelect {
+    constructor() {
+        this.logger = new EngridLogger("GiveBySelect", "#FFF", "#333", "🐇");
+        this.enFieldGiveBySelect = document.querySelector(".en__field--give-by-select");
+        this.transactionGiveBySelect = document.getElementsByName("transaction.giveBySelect");
+        if (!this.enFieldGiveBySelect || !this.transactionGiveBySelect)
+            return;
+        this.transactionGiveBySelect.forEach((giveBySelect) => {
+            giveBySelect.addEventListener("change", () => {
+                this.logger.log("Changed to " + giveBySelect.value);
+                if (giveBySelect.value.toLowerCase() === "card") {
+                    engrid_ENGrid.setPaymentType("");
+                }
+                else {
+                    engrid_ENGrid.setPaymentType(giveBySelect.value);
+                }
+            });
+        });
+        // Set the initial value of giveBySelect to the transaction.paymenttype field
+        const paymentType = engrid_ENGrid.getPaymentType();
+        if (paymentType) {
+            this.logger.log("Setting giveBySelect to " + paymentType);
+            const isCard = [
+                "visa",
+                "mastercard",
+                "amex",
+                "discover",
+                "diners",
+                "jcb",
+                "vi",
+                "mc",
+                "ax",
+                "dc",
+                "di",
+                "jc",
+            ].includes(paymentType.toLowerCase());
+            this.transactionGiveBySelect.forEach((giveBySelect) => {
+                if (isCard && giveBySelect.value.toLowerCase() === "card") {
+                    giveBySelect.checked = true;
+                }
+                else if (giveBySelect.value.toLowerCase() === paymentType.toLowerCase()) {
+                    giveBySelect.checked = true;
+                }
+            });
+        }
+    }
+}
+
+;// CONCATENATED MODULE: ./node_modules/@4site/engrid-common/dist/url-params-to-body-attrs.js
+//This component adds any url parameters that begin with "data-engrid-" to the body as attributes.
+
+class UrlParamsToBodyAttrs {
+    constructor() {
+        this.logger = new EngridLogger("UrlParamsToBodyAttrs", "white", "magenta", "📌");
+        this.urlParams = new URLSearchParams(document.location.search);
+        this.urlParams.forEach((value, key) => {
+            if (key.startsWith("data-engrid-")) {
+                engrid_ENGrid.setBodyData(key.split("data-engrid-")[1], value);
+                this.logger.log(`Set "${key}" on body to "${value}" from URL params`);
+            }
+        });
+    }
+}
+
 ;// CONCATENATED MODULE: ./node_modules/@4site/engrid-common/dist/version.js
-const AppVersion = "0.13.70";
+const AppVersion = "0.14.1";
 
 ;// CONCATENATED MODULE: ./node_modules/@4site/engrid-common/dist/index.js
  // Runs first so it can change the DOM markup before any markup dependent code fires
+
+
 
 
 
