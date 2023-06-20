@@ -17,7 +17,7 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Thursday, June 15, 2023 @ 13:11:23 ET
+ *  Date: Tuesday, June 20, 2023 @ 13:17:31 ET
  *  By: michael
  *  ENGrid styles: v0.13.53
  *  ENGrid scripts: v0.13.53
@@ -14231,7 +14231,8 @@ class app_App extends engrid_ENGrid {
     if (this.options.Plaid) new Plaid(); // Give By Select
 
     new GiveBySelect();
-    this.setDataAttributes(); //Debug panel
+    this.setDataAttributes();
+    new UrlParamsToBodyAttrs(); //Debug panel
 
     if (this.options.Debug || window.sessionStorage.hasOwnProperty(DebugPanel.debugSessionStorageKey)) {
       new DebugPanel(this.options.PageLayouts);
@@ -22372,10 +22373,27 @@ class GiveBySelect {
   }
 
 }
+;// CONCATENATED MODULE: ../engrid-scripts/packages/common/dist/url-params-to-body-attrs.js
+//This component adds any url parameters that begin with "data-engrid-" to the body as attributes.
+
+class UrlParamsToBodyAttrs {
+  constructor() {
+    this.logger = new EngridLogger("UrlParamsToBodyAttrs", "white", "magenta", "📌");
+    this.urlParams = new URLSearchParams(document.location.search);
+    this.urlParams.forEach((value, key) => {
+      if (key.startsWith("data-engrid-")) {
+        engrid_ENGrid.setBodyData(key.split("data-engrid-")[1], value);
+        this.logger.log(`Set "${key}" on body to "${value}" from URL params`);
+      }
+    });
+  }
+
+}
 ;// CONCATENATED MODULE: ../engrid-scripts/packages/common/dist/version.js
-const AppVersion = "0.14.0";
+const AppVersion = "0.14.1";
 ;// CONCATENATED MODULE: ../engrid-scripts/packages/common/dist/index.js
  // Runs first so it can change the DOM markup before any markup dependent code fires
+
 
 
 

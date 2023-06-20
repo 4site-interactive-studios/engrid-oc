@@ -27,6 +27,8 @@
   --engrid__body-top_padding: 0 9rem 65px;
   --engrid__body-main_padding: 25px 9rem;
 
+  // FOOTER LAYOUT
+  --engrid__content-footer_padding: 2rem 0 1rem;
 
   // TYPOGRAPHY
   --default_font-family: "Roboto", sans-serif;
@@ -115,6 +117,13 @@
   --checkbox_height: 34px;
   --radio_font-size: 1rem;
 
+  // Media attribution
+  --media-attribution__font-size: 20px;
+  --media-attribution__font-weight: 500;
+  --media-attribution__background-color: none;
+  --media-attribution__margin: 0 0 0 1rem;
+  --media-attribution__padding: 0;
+
   @keyframes pulse {
     0% {
       transform: scale(1);
@@ -146,6 +155,11 @@
           right: 0;
           width: calc(100% - $one_col_body-column_max-width);
           background-position: center !important;
+        }
+
+        figattribution {
+          text-align: left;
+          left: 0;
         }
       }
     }
@@ -431,5 +445,82 @@
 
   .en__field--splitselect.en__field--ccexpire .en__field__item {
     flex-basis: 100%;
+  }
+
+  .gift-summary {
+    text-align: center;
+    border-top: 1px solid var(--color-primary);
+    border-bottom: 1px solid var(--color-primary);
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
+  .accreditations img {
+    max-width: 334px;
+    margin: 1rem auto 2rem;
+  }
+
+  .accreditations + p {
+    max-width: 410px;
+    margin: 0 auto 2rem;
+  }
+
+  .content-footer {
+    position: relative;
+    margin-top: 90px;
+  }
+
+  .content-footer:before {
+    background-image: url("https://aaf1a18515da0e792f78-c27fdabe952dfc357fe25ebf5c8897ee.ssl.cf5.rackcdn.com/1991/wave-black.png?v=1686667309000");
+    background-repeat: repeat-x;
+    background-size: 100%;
+    content: "";
+    height: 124px;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: -68px;
+    width: 100%;
+  }
+
+  .footer-text-content {
+    text-align: center;
+
+    p:last-of-type {
+      font-size: 14px;
+    }
+
+    .heart {
+      margin: 0 6px;
+    }
+  }
+
+  .footer-links {
+    font-size: 20px;
+    color: white;
+  }
+
+  .footer-links a:not(:first-of-type) {
+    padding-left: 1rem;
+  }
+
+  label[for="en__field_transaction_ccvv"] a.label-tooltip {
+    width: 20px;
+    height: 20px;
+    background-color: var(--color-primary);
+    color: var(--color-primary);
+    border-radius: 50%;
+    display: block;
+    font-size: 0;
+    position: relative;
+    text-decoration: none;
+
+    &:after {
+      content: '?';
+      color: white;
+      position: absolute;
+      font-size: 14px;
+      left: 7px;
+    }
   }
 }
