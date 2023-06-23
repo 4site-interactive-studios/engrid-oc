@@ -19,7 +19,7 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Tuesday, June 20, 2023 @ 13:17:31 ET
+ *  Date: Friday, June 23, 2023 @ 21:31:29 ET
  *  By: michael
  *  ENGrid styles: v0.13.53
  *  ENGrid scripts: v0.13.53
@@ -9681,7 +9681,7 @@ body[data-engrid-debug]:before{
   --engrid__body_box-shadow:none;
   --engrid__body-top_padding:0 9rem 65px;
   --engrid__body-main_padding:25px 9rem;
-  --engrid__content-footer_padding:2rem 0 1rem;
+  --engrid__content-footer_padding:90px 1.5rem 1rem;
   --default_font-family:"Roboto", sans-serif;
   --default_color:var(--color-primary);
   --p_font-size:18px;
@@ -9711,6 +9711,7 @@ body[data-engrid-debug]:before{
   --give-by-select__button_count:1;
   --donation-amount__button_font-size:3rem;
   --donation-amount__button_padding:5px;
+  --donation-amount__button_count:3;
   --submit__button_background-color:#007cf9;
   --submit__button_color:#fff;
   --submit__button_border-color:#007cf9;
@@ -9757,11 +9758,17 @@ body[data-engrid-debug]:before{
     transform:scale(1);
   }
 }
+[data-engrid-theme=oc2] .header-logo img.logo-horizontal{
+  display:none;
+}
 [data-engrid-theme=oc2] .content-footer{
   color:var(--color-light-blue);
   grid-column:bc;
 }
-@media screen and (min-width:1024px){
+[data-engrid-theme=oc2] .body-title h2{
+  display:none;
+}
+@media screen and (min-width:840px){
   [data-engrid-theme=oc2]:not(#en__pagebuilder)[data-engrid-layout=leftleft1col] .page-backgroundImage{
     grid-column:rpc /  pc;
   }
@@ -9785,6 +9792,11 @@ body[data-engrid-debug]:before{
     width:calc(100% - 840px);
   }
 }
+@media screen and (min-width:840px) and (max-width:1030px){
+  [data-engrid-theme=oc2] .page-backgroundImage figattribution{
+    display:none;
+  }
+}
 [data-engrid-theme=oc2][data-engrid-layout=leftleft1col]{
   --engrid__body-header_padding:16px 24px;
 }
@@ -9795,6 +9807,7 @@ body[data-engrid-debug]:before{
 [data-engrid-theme=oc2] .body-top:after{
   background-color:var(--top_background-color);
   background-image:url(https://aaf1a18515da0e792f78-c27fdabe952dfc357fe25ebf5c8897ee.ssl.cf5.rackcdn.com/1991/wave-white.png?v=1686667298000);
+  background-position:bottom;
   background-repeat:no-repeat;
   background-size:100%;
   bottom:0;
@@ -10006,19 +10019,20 @@ body[data-engrid-debug]:before{
   max-width:410px;
 }
 [data-engrid-theme=oc2] .content-footer{
-  margin-top:90px;
+  margin-top:35px;
   position:relative;
 }
 [data-engrid-theme=oc2] .content-footer:before{
-  background-image:url(https://aaf1a18515da0e792f78-c27fdabe952dfc357fe25ebf5c8897ee.ssl.cf5.rackcdn.com/1991/wave-black.png?v=1686667309000);
-  background-repeat:repeat-x;
+  background-color:#000;
+  background-image:url(https://aaf1a18515da0e792f78-c27fdabe952dfc357fe25ebf5c8897ee.ssl.cf5.rackcdn.com/1991/wave-white-bottom.png?v=1687480189000);
+  background-repeat:no-repeat;
   background-size:100%;
   content:"";
-  height:124px;
+  height:125px;
   left:0;
   position:absolute;
   right:0;
-  top:-68px;
+  top:0;
   width:100%;
 }
 [data-engrid-theme=oc2] .footer-text-content{
@@ -10054,6 +10068,149 @@ body[data-engrid-debug]:before{
   font-size:14px;
   left:7px;
   position:absolute;
+}
+@media screen and (max-width:840px){
+  [data-engrid-theme=oc2]{
+    --engrid__body_padding:0 4rem;
+    --engrid__body-top_padding:0 4rem 65px;
+    --engrid__body-main_padding:25px 4rem;
+  }
+  [data-engrid-theme=oc2] .content-footer{
+    margin-top:0;
+  }
+}
+@media screen and (max-width:599px){
+  [data-engrid-theme=oc2]{
+    --engrid__body_padding:0 1.5rem;
+    --engrid__body-top_padding:0 1.5rem;
+    --engrid__body-main_padding:25px 1.5rem;
+    --engrid__body-top_background-color:var(--color-secondary);
+    --top_background-color:#fff;
+    --h1_font-size:2rem;
+    --h2_font-size:1.3rem;
+    --button_border-radius:6px;
+    --recurring-frequency__button_border-radius:6px;
+    --recurring-frequency__button_padding:15px .5em;
+    --button_font-size:1.25rem;
+    --donation-amount__button_font-size:1.5rem;
+    --donation-amount__button_count:2;
+    --donation-amount__button_padding:15px 5px;
+    --input_border-radius:4px;
+    --input_font-size:18px;
+    --input_padding:17px 12px;
+    --label_font-size:1rem;
+    --checkbox_border-radius:9px;
+    --submit__button_padding-top:15px;
+    --submit__button_padding-bottom:15px;
+    --fields_spacing-inline:0;
+    --engrid__content-footer_padding:70px 1.5rem 1rem;
+  }
+  [data-engrid-theme=oc2] .body-top:after{
+    display:none;
+  }
+  [data-engrid-theme=oc2] .body-title{
+    text-align:center;
+  }
+  [data-engrid-theme=oc2] .body-title h1{
+    margin-top:2rem;
+  }
+  [data-engrid-theme=oc2] .body-title h2{
+    display:block;
+    margin-top:1rem;
+  }
+  [data-engrid-theme=oc2] #engrid>.en__component--advrow,[data-engrid-theme=oc2] form>.en__component--advrow{
+    grid-template-rows:[page-start page-alert-start] min-content [page-alert-end content-header-start] min-content [content-header-end body-headerOutside-start] min-content [body-headerOutside-end body-banner-start] min-content [body-banner-end body-bannerOverlay-start] min-content [body-bannerOverlay-end body-header-start] min-content [body-header-end body-title-start] min-content [body-title-end body-top-start] min-content [body-top-end body-side-start] min-content [body-side-end body-main-start] min-content [body-main-end body-bottom-start] min-content [body-bottom-end body-footer-start] min-content [body-footer-end body-footerOutside-start] min-content [body-footerOutside-end content-footerSpacer-start] minmax(0, 1fr) [content-footerSpacer-end content-preFooter-start] min-content [content-preFooter-end content-footer-start] min-content [content-footer-end page-backgroundImage-start] min-content [page-backgroundImage-end page-backgroundImageOverlay-start] min-content [page-backgroundImageOverlay-end page-end page-customCode-start] min-content [page-customCode-end];
+  }
+  [data-engrid-theme=oc2][data-replace-banner-with-background=if-banner-empty][data-engrid-body-banner=empty][data-engrid-page-background=image] [class*=page-backgroundImage]:after{
+    background-image:url(https://aaf1a18515da0e792f78-c27fdabe952dfc357fe25ebf5c8897ee.ssl.cf5.rackcdn.com/1991/wave-white-mobile.png?v=1687473795000);
+    background-position:bottom;
+    background-repeat:no-repeat;
+    background-size:100% 40px;
+    bottom:0;
+    content:"";
+    display:block;
+    height:40px;
+    left:0;
+    position:absolute;
+    right:0;
+    width:100%;
+  }
+  [data-engrid-theme=oc2][data-replace-banner-with-background=if-banner-empty][data-engrid-body-banner=empty][data-engrid-page-background=image] [class*=page-backgroundImage] figure{
+    align-items:center;
+    background-image:none;
+    display:flex;
+    height:250px !important;
+    position:relative !important;
+  }
+  [data-engrid-theme=oc2][data-replace-banner-with-background=if-banner-empty][data-engrid-body-banner=empty][data-engrid-page-background=image] [class*=page-backgroundImage] figattribution{
+    bottom:auto;
+    display:none;
+    top:0;
+  }
+  [data-engrid-theme=oc2] .header-logo img:not(.logo-horizontal){
+    display:none;
+  }
+  [data-engrid-theme=oc2] .header-logo img.logo-horizontal{
+    display:block;
+    height:auto;
+    margin-top:1.4rem;
+    width:250px;
+  }
+  [data-engrid-theme=oc2] .recurring-upsell-text p{
+    font-size:1rem;
+    text-align:center;
+    width:100%;
+  }
+  [data-engrid-theme=oc2] .radio-to-buttons_donationAmt .en__field--donationAmt.en__field--radio>.en__field__element .en__field__item{
+    padding:4px;
+  }
+  [data-engrid-theme=oc2] .radio-to-buttons_donationAmt input[name="transaction.donationAmt"]+label:before{
+    margin-right:-2px;
+    margin-top:0;
+  }
+  [data-engrid-theme=oc2][data-engrid-transaction-recurring-frequency] .radio-to-buttons_donationAmt .en__field--donationAmt div:not(.en__field__item--other) .en__field__label--item:after{
+    font-size:12px;
+    opacity:1;
+  }
+  [data-engrid-theme=oc2][data-engrid-transaction-recurring-frequency] .radio-to-buttons_donationAmt .en__field--donationAmt div:not(.en__field__item--other) input:checked .en__field__label--item:after{
+    color:#fff;
+  }
+  [data-engrid-theme=oc2] .en__field--withOther.en__field--radio.en__field--donationAmt .en__field__item--other input{
+    font-size:24px;
+    padding:15px 52px 15px 40px;
+  }
+  [data-engrid-theme=oc2] .en__field--give-by-select .en__field__item label{
+    height:62px;
+  }
+  [data-engrid-theme=oc2] .en__field--give-by-select img.apple-pay-logo{
+    width:61px;
+  }
+  [data-engrid-theme=oc2] .en__field--give-by-select img.paypal,[data-engrid-theme=oc2] .en__field--give-by-select img.paypal-venmo{
+    width:75px;
+  }
+  [data-engrid-theme=oc2] .en__field--give-by-select img.credit-card-logos{
+    max-width:100%;
+    width:216px;
+  }
+  [data-engrid-theme=oc2] .gift-summary{
+    margin:1rem auto;
+    padding:0 10px;
+  }
+  [data-engrid-theme=oc2] .footer-links{
+    display:flex;
+    flex-direction:column;
+  }
+  [data-engrid-theme=oc2] .footer-links a:not(:first-of-type){
+    padding-left:0;
+  }
+  [data-engrid-theme=oc2] .content-footer:before{
+    background-image:url(https://aaf1a18515da0e792f78-c27fdabe952dfc357fe25ebf5c8897ee.ssl.cf5.rackcdn.com/1991/wave-bottom-mobile.png?v=1687482969000);
+  }
+}
+@media screen and (max-width:359px){
+  [data-engrid-theme=oc2] .en__captcha{
+    margin:0 -17px;
+  }
 }
 body{
   opacity:1;
