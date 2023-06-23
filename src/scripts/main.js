@@ -175,4 +175,28 @@ export const customScript = function (EnForm) {
       }
     }
   });
+
+  if (theme === "oc2") {
+    const bgImageTooltip = document.querySelector(
+      ".page-backgroundImage figattribution"
+    );
+    const bgImageTooltipText = bgImageTooltip.innerHTML;
+
+    if (bgImageTooltipText) {
+      bgImageTooltip.insertAdjacentHTML(
+        "afterend",
+        `<div id="mobile-bg-tooltip"></div>`
+      );
+      tippy("#mobile-bg-tooltip", {
+        theme: "black",
+        content: bgImageTooltipText,
+        allowHTML: true,
+        arrow: true,
+        arrowType: "default",
+        placement: "left",
+        trigger: "click mouseenter focus",
+        interactive: true,
+      });
+    }
+  }
 };

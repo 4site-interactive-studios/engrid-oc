@@ -17,7 +17,7 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Friday, June 23, 2023 @ 21:31:29 ET
+ *  Date: Friday, June 23, 2023 @ 17:55:57 ET
  *  By: michael
  *  ENGrid styles: v0.13.53
  *  ENGrid scripts: v0.13.53
@@ -22641,6 +22641,25 @@ const customScript = function (EnForm) {
       }
     }
   });
+
+  if (theme === "oc2") {
+    const bgImageTooltip = document.querySelector(".page-backgroundImage figattribution");
+    const bgImageTooltipText = bgImageTooltip.innerHTML;
+
+    if (bgImageTooltipText) {
+      bgImageTooltip.insertAdjacentHTML("afterend", `<div id="mobile-bg-tooltip"></div>`);
+      main_tippy("#mobile-bg-tooltip", {
+        theme: "black",
+        content: bgImageTooltipText,
+        allowHTML: true,
+        arrow: true,
+        arrowType: "default",
+        placement: "left",
+        trigger: "click mouseenter focus",
+        interactive: true
+      });
+    }
+  }
 };
 // EXTERNAL MODULE: ./node_modules/smoothscroll-polyfill/dist/smoothscroll.js
 var smoothscroll = __webpack_require__(523);
