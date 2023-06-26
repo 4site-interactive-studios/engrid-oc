@@ -212,6 +212,10 @@ const options: Options = {
 
 if (theme === "oc2") {
   options.AddCurrencySymbol = false;
+  options.MobileCTA = {
+    label: "Add Your Name",
+    pages: ["ADVOCACY", "EMAILTOTARGET", "TWEETPAGE"],
+  };
 }
 
 new App(options);

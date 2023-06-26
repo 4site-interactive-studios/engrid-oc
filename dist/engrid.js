@@ -17,7 +17,7 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Friday, June 23, 2023 @ 17:55:57 ET
+ *  Date: Monday, June 26, 2023 @ 12:14:55 ET
  *  By: michael
  *  ENGrid styles: v0.13.53
  *  ENGrid scripts: v0.13.53
@@ -22644,9 +22644,9 @@ const customScript = function (EnForm) {
 
   if (theme === "oc2") {
     const bgImageTooltip = document.querySelector(".page-backgroundImage figattribution");
-    const bgImageTooltipText = bgImageTooltip.innerHTML;
 
-    if (bgImageTooltipText) {
+    if (bgImageTooltip) {
+      const bgImageTooltipText = bgImageTooltip.innerHTML;
       bgImageTooltip.insertAdjacentHTML("afterend", `<div id="mobile-bg-tooltip"></div>`);
       main_tippy("#mobile-bg-tooltip", {
         theme: "black",
@@ -22659,6 +22659,14 @@ const customScript = function (EnForm) {
         interactive: true
       });
     }
+
+    document.querySelectorAll(".click-to-expand-cta").forEach(el => {
+      el.addEventListener("click", () => {
+        el.parentElement.classList.add("expanded");
+        const buttonContainer = document.querySelector(".engrid-mobile-cta-container");
+        if (buttonContainer) buttonContainer.style.display = "block";
+      });
+    });
   }
 };
 // EXTERNAL MODULE: ./node_modules/smoothscroll-polyfill/dist/smoothscroll.js
@@ -23644,6 +23652,10 @@ const options = {
 
 if (theme === "oc2") {
   options.AddCurrencySymbol = false;
+  options.MobileCTA = {
+    label: "Add Your Name",
+    pages: ["ADVOCACY", "EMAILTOTARGET", "TWEETPAGE"]
+  };
 }
 
 new app_App(options);

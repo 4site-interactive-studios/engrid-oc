@@ -180,9 +180,10 @@ export const customScript = function (EnForm) {
     const bgImageTooltip = document.querySelector(
       ".page-backgroundImage figattribution"
     );
-    const bgImageTooltipText = bgImageTooltip.innerHTML;
 
-    if (bgImageTooltipText) {
+    if (bgImageTooltip) {
+      const bgImageTooltipText = bgImageTooltip.innerHTML;
+
       bgImageTooltip.insertAdjacentHTML(
         "afterend",
         `<div id="mobile-bg-tooltip"></div>`
@@ -198,5 +199,16 @@ export const customScript = function (EnForm) {
         interactive: true,
       });
     }
+
+    document.querySelectorAll(".click-to-expand-cta").forEach((el) => {
+      el.addEventListener("click", () => {
+        el.parentElement.classList.add("expanded");
+
+        const buttonContainer = document.querySelector(
+          ".engrid-mobile-cta-container"
+        );
+        if (buttonContainer) buttonContainer.style.display = "block";
+      });
+    });
   }
 };

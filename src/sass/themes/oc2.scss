@@ -22,10 +22,13 @@
   --engrid__content-footer_background-color: var(--bottom_background-color);
 
   // BODY LAYOUT
+  --engrid__body-header_padding: 16px 24px;
   --engrid__body_padding: 0 9rem;
   --engrid__body_box-shadow: none;
   --engrid__body-top_padding: 0 9rem 65px;
   --engrid__body-main_padding: 25px 9rem;
+  --engrid__body-footer_padding: 0 0 35px;
+
 
   // FOOTER LAYOUT
   --engrid__content-footer_padding: 90px 1.5rem 1rem;
@@ -125,6 +128,11 @@
   --media-attribution__margin: 0 0 0 1rem;
   --media-attribution__padding: 0;
 
+  // CLick to expand
+  --click-to-expand__cta-image_url: url(https://aaf1a18515da0e792f78-c27fdabe952dfc357fe25ebf5c8897ee.ssl.cf5.rackcdn.com/1991/read-more.png?v=1687780063000);
+  --click-to-expand__cta-image_width: auto;
+  --click-to-expand__cta-image_height: 28px;
+
   @keyframes pulse {
     0% {
       transform: scale(1);
@@ -181,6 +189,24 @@
     }
   }
 
+  &[data-engrid-layout="centercenter2col"] {
+    --engrid__body-header_background-color: var(--top_background-color);
+    --engrid__body-top_background-color:  #ffffff;
+    --engrid__body-title_background-color: #ffffff;
+
+    // BODY LAYOUT
+    --engrid__body-header_padding: 16px 2rem;
+    --engrid__body_padding: 0 2rem;
+    --engrid__body-top_padding: 0 2rem;
+    --engrid__body-main_padding: 25px 2rem;
+    --engrid__body-footer_padding: 0;
+    --engrid__body-title_padding: 16px 2rem;
+
+    .body-top:after {
+      content: none;
+    }
+  }
+
   @media screen and (min-width: 840px) {
     &:not(#en__pagebuilder)[data-engrid-layout="leftleft1col"] {
       .page-backgroundImage {
@@ -222,13 +248,8 @@
     }
   }
 
-  &[data-engrid-layout="leftleft1col"] {
-    --engrid__body-header_padding: 16px 24px;
-  }
-
   .body-title h1 {
     margin-top: 0;
-    margin-bottom: 0;
   }
 
   .body-top:after {
@@ -527,7 +548,6 @@
 
   .content-footer {
     position: relative;
-    margin-top: 35px;
   }
 
   .content-footer:before {
@@ -818,4 +838,83 @@
       margin: 0 -17px;
     }
   }
+
+  //Remove click-to-expand when element also has .click-to-expand-mobile class
+  &:not(#en__pagebuilder) .click-to-expand-mobile:not(.expanded) {
+    max-height: none;
+
+    .click-to-expand-text-wrapper {
+      mask-image: none;
+      max-height: none;
+    }
+
+    .click-to-expand-cta {
+      display: none;
+    }
+  }
+
+  @media screen and (max-width: 600px) {
+    &:not(#en__pagebuilder) .click-to-expand:not(.expanded) {
+      overflow: initial;
+
+      .click-to-expand-cta {
+        display: block;
+        background-color: white;
+        margin: 0 -24px;
+        position: static;
+        background-position: center;
+      }
+
+      .click-to-expand-text-wrapper {
+        mask-image: none;
+        max-height: 0;
+      }
+    }
+
+    .click-to-expand.expanded {
+      margin-top: 1em;
+    }
+  }
+
+
+  .engrid-mobile-cta-container {
+    background-color: #ffffff;
+    bottom: 0;
+    left: 0;
+    padding: 0.5rem;
+    width: 100%;
+    box-shadow: 0px -25px 50px 8px rgb(255,255,255);
+
+    .primary {
+      --submit__button_font-size: 20px;
+      --submit__button_background-color: #007CF9;
+      --submit__button_color: #000000;
+
+      &:after {
+        background-image: url("data:image/svg+xml,%3Csvg width='15' height='10' viewBox='0 0 15 10' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12.8491 0.800049L7.5 5.99412L2.15085 0.800049L0.5 2.40299L7.5 9.20005L14.5 2.40299L12.8491 0.800049Z' fill='black'/%3E%3C/svg%3E%0A");
+        content: "";
+        display: inline-block;
+        height: 9px;
+        margin-left: 9px;
+        width: 15px;
+        margin-bottom: 2px;
+      }
+    }
+  }
+
+  .en__errorHeader,
+  .en__errorList {
+    position: relative;
+    z-index: 100;
+  }
+
+
+  .en__field__input.en__field__input--radio[value="applepay"] {
+    + label {
+      border-width: 1px!important;
+    }
+    &:checked + label {
+        background-color: var(--give-by-select__button_background-color_checked)!important;
+      }
+    }
 }
