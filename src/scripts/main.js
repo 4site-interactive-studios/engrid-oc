@@ -1,6 +1,6 @@
 const tippy = require("tippy.js").default;
 
-export const customScript = function (EnForm) {
+export const customScript = function (App, EnForm) {
   console.log("ENGrid client scripts are executing");
   // Add your client scripts here
   let enFieldPhoneNumber = document.querySelectorAll(
@@ -15,6 +15,23 @@ export const customScript = function (EnForm) {
   )[0];
   if (enFieldCVV) {
     enFieldCVV.placeholder = "3 Digits";
+  }
+
+  //On form block with .us-only and a country field, add a notice, set value to US and disable field
+  if (
+    document.querySelector(
+      ".en__component--formblock.us-only .en__field--country"
+    )
+  ) {
+    if (!document.querySelector(".en__field--country .en__field__notice")) {
+      App.addHtml(
+        '<div class="en__field__notice">Note: This action is limited to US addresses.</div>',
+        ".us-only .en__field--country .en__field__element",
+        "after"
+      );
+    }
+    App.getField("supporter.country").setAttribute("disabled", "disabled");
+    App.setFieldValue("supporter.country", "US");
   }
 
   function addTooltip(labelElement, fieldName, labelText, tooltipText) {

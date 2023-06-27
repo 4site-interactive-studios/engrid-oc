@@ -17,7 +17,7 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Tuesday, June 27, 2023 @ 08:12:09 ET
+ *  Date: Tuesday, June 27, 2023 @ 11:29:47 ET
  *  By: michael
  *  ENGrid styles: v0.13.53
  *  ENGrid scripts: v0.13.53
@@ -18886,7 +18886,7 @@ const AppVersion = "0.13.53";
 ;// CONCATENATED MODULE: ./src/scripts/main.js
 const main_tippy = (__webpack_require__(3861)/* ["default"] */ .ZP);
 
-const customScript = function (EnForm) {
+const customScript = function (App, EnForm) {
   console.log("ENGrid client scripts are executing"); // Add your client scripts here
 
   let enFieldPhoneNumber = document.querySelectorAll("input#en__field_supporter_phoneNumber")[0];
@@ -18899,6 +18899,16 @@ const customScript = function (EnForm) {
 
   if (enFieldCVV) {
     enFieldCVV.placeholder = "3 Digits";
+  } //On form block with .us-only and a country field, add a notice, set field to US and disable field;
+
+
+  if (document.querySelector(".en__component--formblock.us-only .en__field--country")) {
+    if (!document.querySelector(".en__field--country .en__field__notice")) {
+      App.addHtml('<div class="en__field__notice">Note: This action is limited to US addresses.</div>', ".us-only .en__field--country .en__field__element", "after");
+    }
+
+    App.getField("supporter.country").setAttribute("disabled", "disabled");
+    App.setFieldValue("supporter.country", "US");
   }
 
   function addTooltip(labelElement, fieldName, labelText, tooltipText) {
@@ -19848,6 +19858,7 @@ class DonationLightboxForm {
 
 
 
+console.log("??????");
 
 function getUserData() {
   let phone = app_App.getFieldValue("supporter.phoneNumber");
@@ -19985,7 +19996,7 @@ const options = {
 
     window.DonationLightboxForm = DonationLightboxForm;
     new DonationLightboxForm(DonationAmount, DonationFrequency);
-    customScript(EnForm);
+    customScript(app_App, EnForm);
   },
   onResize: () => console.log("Starter Theme Window Resized"),
   onSubmit: () => {

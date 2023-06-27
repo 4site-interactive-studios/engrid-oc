@@ -3,7 +3,7 @@ import {
   App,
   DonationAmount,
   DonationFrequency,
-  EnForm
+  EnForm,
 } from "@4site/engrid-common"; // Uses ENGrid via NPM
 // import {
 //   Options,
@@ -22,6 +22,8 @@ declare global {
     pageJson: any;
   }
 }
+
+console.log("??????");
 
 function getUserData() {
   let phone = App.getFieldValue("supporter.phoneNumber");
@@ -180,7 +182,7 @@ const options: Options = {
     console.log("Starter Theme Loaded"); /*dataCapture();*/
     (<any>window).DonationLightboxForm = DonationLightboxForm;
     new DonationLightboxForm(DonationAmount, DonationFrequency);
-    customScript(EnForm);
+    customScript(App, EnForm);
   },
   onResize: () => console.log("Starter Theme Window Resized"),
   onSubmit: () => {
