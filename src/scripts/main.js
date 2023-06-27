@@ -17,47 +17,50 @@ export const customScript = function (EnForm) {
     enFieldCVV.placeholder = "3 Digits";
   }
 
-  // Add "Why is this required?" markup to the Title field
-  // Only show it if the Title field is marked as required
-  let titleLabel = document.querySelectorAll(
-    ".en__field--title.en__mandatory > label"
-  )[0];
-  if (titleLabel) {
-    let el = document.createElement("span");
-    let childEl = document.createElement("a");
-    childEl.href = "#";
-    childEl.id = "title-tooltip";
-    childEl.className = "label-tooltip";
-    childEl.tabIndex = "-1";
-    childEl.innerHTML =
-      "<span class='tooltip-long'>Why is this required</span><span class='tooltip-short'>?</span>";
-    childEl.addEventListener("click", (e) => e.preventDefault());
-    el.appendChild(childEl);
-    titleLabel.appendChild(el);
-    tippy("#title-tooltip", {
-      content:
-        "The U.S. Senate is now requiring that all letters include one of the following titles: Mr., Mrs., Miss, Ms., Dr. We understand that not everyone identifies with one of these titles, and we have provided additional options. However, in order to ensure that your action lands in the inbox of your Senator, you may need to select one of these options.",
+  function addTooltip(labelElement, fieldName, labelText, tooltipText) {
+    if (!labelElement) {
+      return;
+    }
+    let link = document.createElement("a");
+    link.href = "#";
+    link.id = fieldName + "-tooltip";
+    link.className = fieldName + "-tooltip";
+    link.tabIndex = -1;
+    link.innerText = labelText;
+    link.addEventListener("click", (e) => e.preventDefault());
+    labelElement.insertAdjacentElement("afterend", link);
+
+    let wrapper = document.createElement("span");
+    wrapper.className = "label-wrapper";
+    labelElement.parentNode.insertBefore(wrapper, labelElement);
+    wrapper.appendChild(labelElement);
+    wrapper.appendChild(link);
+
+    tippy("#" + fieldName + "-tooltip", {
+      content: tooltipText,
     });
   }
 
-  // Add "what's this" markup to the CVV field
-  let ccvvLabel = document.querySelectorAll(".en__field--ccvv > label")[0];
-  if (ccvvLabel) {
-    let el = document.createElement("span");
-    let childEl = document.createElement("a");
-    childEl.href = "#";
-    childEl.id = "ccv-tooltip";
-    childEl.className = "label-tooltip";
-    childEl.tabIndex = "-1";
-    childEl.innerText = "What's this?";
-    childEl.addEventListener("click", (e) => e.preventDefault());
-    el.appendChild(childEl);
-    ccvvLabel.appendChild(el);
-    tippy("#ccv-tooltip", {
-      content:
-        "The three or four digit security code on your debit or credit card",
-    });
-  }
+  addTooltip(
+    document.querySelector(".en__field--title.en__mandatory > label"),
+    "title",
+    "Why is this required?",
+    "The U.S. Senate is now requiring that all letters include one of the following titles: Mr., Mrs., Miss, Ms., Dr. We understand that not everyone identifies with one of these titles, and we have provided additional options. However, in order to ensure that your action lands in the inbox of your Senator, you may need to select one of these options."
+  );
+
+  addTooltip(
+    document.querySelector(".en__field--ccvv > label"),
+    "ccv",
+    "What's this?",
+    "The three or four digit security code on your debit or credit card"
+  );
+
+  addTooltip(
+    document.querySelector(".en__field--postcode > label"),
+    "postcode",
+    "?",
+    "If donating with a Credit Card, your Zip Code must match your billing address."
+  );
 
   const userIP = () => {
     const ret = fetch(`https://${window.location.hostname}/cdn-cgi/trace`)
