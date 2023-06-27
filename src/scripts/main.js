@@ -72,12 +72,14 @@ export const customScript = function (App, EnForm) {
     "The three or four digit security code on your debit or credit card"
   );
 
-  addTooltip(
-    document.querySelector(".en__field--postcode > label"),
-    "postcode",
-    "?",
-    "If donating with a Credit Card, your Zip Code must match your billing address."
-  );
+  if (App.getPageType() === "DONATION") {
+    addTooltip(
+      document.querySelector(".en__field--postcode > label"),
+      "postcode",
+      "?",
+      "If donating with a Credit Card, your Zip Code must match your billing address."
+    );
+  }
 
   const userIP = () => {
     const ret = fetch(`https://${window.location.hostname}/cdn-cgi/trace`)

@@ -17,7 +17,7 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Tuesday, June 27, 2023 @ 11:29:47 ET
+ *  Date: Tuesday, June 27, 2023 @ 11:35:07 ET
  *  By: michael
  *  ENGrid styles: v0.13.53
  *  ENGrid scripts: v0.13.53
@@ -18899,7 +18899,7 @@ const customScript = function (App, EnForm) {
 
   if (enFieldCVV) {
     enFieldCVV.placeholder = "3 Digits";
-  } //On form block with .us-only and a country field, add a notice, set field to US and disable field;
+  } //On form block with .us-only and a country field, add a notice, set value to US and disable field
 
 
   if (document.querySelector(".en__component--formblock.us-only .en__field--country")) {
@@ -18936,7 +18936,10 @@ const customScript = function (App, EnForm) {
 
   addTooltip(document.querySelector(".en__field--title.en__mandatory > label"), "title", "Why is this required?", "The U.S. Senate is now requiring that all letters include one of the following titles: Mr., Mrs., Miss, Ms., Dr. We understand that not everyone identifies with one of these titles, and we have provided additional options. However, in order to ensure that your action lands in the inbox of your Senator, you may need to select one of these options.");
   addTooltip(document.querySelector(".en__field--ccvv > label"), "ccv", "What's this?", "The three or four digit security code on your debit or credit card");
-  addTooltip(document.querySelector(".en__field--postcode > label"), "postcode", "?", "If donating with a Credit Card, your Zip Code must match your billing address.");
+
+  if (App.getPageType() === "DONATION") {
+    addTooltip(document.querySelector(".en__field--postcode > label"), "postcode", "?", "If donating with a Credit Card, your Zip Code must match your billing address.");
+  }
 
   const userIP = () => {
     const ret = fetch(`https://${window.location.hostname}/cdn-cgi/trace`).then(res => res.text()).then(t => {
