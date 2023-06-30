@@ -30,8 +30,13 @@ export const customScript = function (App, EnForm) {
         "after"
       );
     }
-    App.getField("supporter.country").setAttribute("disabled", "disabled");
+    const countrySelect = App.getField("supporter.country");
+    countrySelect.setAttribute("disabled", "disabled");
     App.setFieldValue("supporter.country", "US");
+    App.createHiddenInput("supporter.country", "US");
+    countrySelect.addEventListener("change", () => {
+      countrySelect.value = "US";
+    });
   }
 
   function addTooltip(labelElement, fieldName, labelText, tooltipText) {
