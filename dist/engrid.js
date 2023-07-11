@@ -17,7 +17,7 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Tuesday, July 11, 2023 @ 13:56:04 ET
+ *  Date: Tuesday, July 11, 2023 @ 14:06:53 ET
  *  By: michael
  *  ENGrid styles: v0.14.10
  *  ENGrid scripts: v0.14.10
@@ -19624,10 +19624,8 @@ const customScript = function (App, EnForm) {
 
   document.addEventListener("change", function (event) {
     const target = event.target;
-    console.log(target.tagName, target);
 
     if (target && target.tagName === "SELECT") {
-      console.log(target, target.value);
       target.dataset.selectedValue = target.value ?? "";
     }
   });
