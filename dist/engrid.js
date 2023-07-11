@@ -17,7 +17,7 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Friday, June 30, 2023 @ 07:38:38 ET
+ *  Date: Tuesday, July 11, 2023 @ 06:30:30 ET
  *  By: michael
  *  ENGrid styles: v0.14.3
  *  ENGrid scripts: v0.14.4
@@ -19608,7 +19608,7 @@ const customScript = function (App, EnForm) {
 
   if (document.querySelector(".en__component--formblock.us-only .en__field--country")) {
     if (!document.querySelector(".en__field--country .en__field__notice")) {
-      App.addHtml('<div class="en__field__notice">Note: This action is limited to US addresses.</div>', ".us-only .en__field--country .en__field__element", "after");
+      App.addHtml('<div class="en__field__notice"><em>Note: This action is limited to US addresses.</em></div>', ".us-only .en__field--country .en__field__element", "after");
     }
 
     const countrySelect = App.getField("supporter.country");

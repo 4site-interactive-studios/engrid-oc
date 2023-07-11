@@ -25,7 +25,7 @@ export const customScript = function (App, EnForm) {
   ) {
     if (!document.querySelector(".en__field--country .en__field__notice")) {
       App.addHtml(
-        '<div class="en__field__notice">Note: This action is limited to US addresses.</div>',
+        '<div class="en__field__notice"><em>Note: This action is limited to US addresses.</em></div>',
         ".us-only .en__field--country .en__field__element",
         "after"
       );
