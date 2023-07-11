@@ -1,17 +1,17 @@
-// import {
-//   Options,
-//   App,
-//   DonationAmount,
-//   DonationFrequency,
-//   EnForm
-// } from "@4site/engrid-common"; // Uses ENGrid via NPM
 import {
   Options,
   App,
   DonationAmount,
   DonationFrequency,
   EnForm,
-} from "../../engrid-scripts/packages/common"; // Uses ENGrid via Visual Studio Workspace
+} from "@4site/engrid-common"; // Uses ENGrid via NPM
+// import {
+//   Options,
+//   App,
+//   DonationAmount,
+//   DonationFrequency,
+//   EnForm,
+// } from "../../engrid-scripts/packages/common"; // Uses ENGrid via Visual Studio Workspace
 import "./sass/main.scss";
 import { customScript } from "./scripts/main.js";
 
@@ -183,7 +183,7 @@ const options: Options = {
     console.log("Starter Theme Loaded"); /*dataCapture();*/
     (<any>window).DonationLightboxForm = DonationLightboxForm;
     new DonationLightboxForm(DonationAmount, DonationFrequency);
-    customScript(EnForm);
+    customScript(App, EnForm);
   },
   onResize: () => console.log("Starter Theme Window Resized"),
   onSubmit: () => {
