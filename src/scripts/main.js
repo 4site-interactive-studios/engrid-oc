@@ -238,4 +238,20 @@ export const customScript = function (App, EnForm) {
       });
     });
   }
+
+  const selects = document.querySelectorAll("select");
+  if (selects) {
+    selects.forEach((select) => {
+      select.dataset.selectedValue = select.value ?? "";
+    });
+  }
+
+  document.addEventListener("change", function (event) {
+    const target = event.target;
+    console.log(target.tagName, target);
+    if (target && target.tagName === "SELECT") {
+      console.log(target, target.value);
+      target.dataset.selectedValue = target.value ?? "";
+    }
+  });
 };

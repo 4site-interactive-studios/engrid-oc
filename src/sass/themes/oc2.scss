@@ -16,9 +16,9 @@
   --engrid__body-title_background-color: var(--top_background-color);
   --engrid__body-banner_background-color: var(--top_background-color);
   --engrid__body-top_background-color: var(--top_background-color);
-  --engrid__body-footerOutside_background-color: var(--bottom_background-color);
-  --engrid__content-footerSpacer_background-color: var(--bottom_background-color);
-  --engrid__content-preFooter_background-color: var(--bottom_background-color);
+  --engrid__body-footerOutside_background-color: var(--engrid__body_background-color);
+  --engrid__content-footerSpacer_background-color: var(--engrid__body_background-color);
+  --engrid__content-preFooter_background-color: var(--engrid__body_background-color);
   --engrid__content-footer_background-color: var(--bottom_background-color);
 
   // BODY LAYOUT
@@ -99,6 +99,8 @@
   --input_border-color: var(--color-primary);
   --input_border-radius: 8px;
   --input_placeholder-color: rgba(13, 54, 105, 0.7);
+  --input_placeholder-opacity: 0.7;
+  --input_placeholder-font-weight: 300;
 
   // TYPOGRAPHY INPUT:FOCUS
 
@@ -132,6 +134,24 @@
   --click-to-expand__cta-image_url: url(https://aaf1a18515da0e792f78-c27fdabe952dfc357fe25ebf5c8897ee.ssl.cf5.rackcdn.com/1991/read-more.png?v=1687780063000);
   --click-to-expand__cta-image_width: auto;
   --click-to-expand__cta-image_height: 28px;
+
+  //Hide unused page sections in page builder
+  &#en__pagebuilder .en__component--advrow {
+    .page-alert,
+    .content-header,
+    .body-headerOutside,
+    .body-footer,
+    .body-footerOutside,
+    .content-footerSpacer,
+    .content-preFooter {
+      display: none;
+    }
+  }
+
+  // We need to display this even when empty because it has the wave image attached to it.
+  .body-top {
+    display: block!important;
+  }
 
   @keyframes pulse {
     0% {
@@ -296,8 +316,10 @@
       width: 24px;
       height: 20px;
       background-size: 100%;
+      background-repeat: no-repeat;
       //since we need to use "before" we have to overwrite some of the default standard radio styling in EN Grid.
       border: none;
+      border-radius: 0;
       //background: none;
       box-shadow: none;
       //height: 0;
@@ -315,18 +337,21 @@
     }
 
     input[value="MONTHLY"] + label:after {
-      background-image: url("data:image/svg+xml,%3Csvg width='52' height='39' viewBox='0 0 52 39' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cg clip-path='url(%23clip0_2104_37304)'%3E%3Crect width='52' height='26' fill='%23EFF6FE'/%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M7.73679 0.139893L1.14852 4.68257C0.466507 5.15283 0.294842 6.08694 0.765099 6.76895C1.23536 7.45097 2.16946 7.62264 2.85148 7.15238L6.35703 4.73527C7.07341 10.266 9.92281 15.0254 13.8111 18.8781C13.6956 18.9821 13.581 19.0875 13.4673 19.1942C9.1652 23.2336 6.30639 29.0679 6.18161 36.9764C6.16855 37.8047 6.82944 38.4868 7.65776 38.4999C8.48609 38.5129 9.16817 37.8521 9.18124 37.0237C9.29394 29.8806 11.8437 24.8338 15.5208 21.3813C15.6936 21.219 15.8691 21.0601 16.0473 20.9045C19.743 23.9745 24.078 26.3341 28.3236 27.8933C33.7636 29.8911 39.335 30.6936 43.6521 29.9207C45.8182 29.5329 47.7787 28.7276 49.2156 27.3603C50.689 25.9584 51.5 24.069 51.5 21.7825C51.5 17.8717 48.0353 15.1348 43.98 13.6179C39.786 12.0492 34.284 11.4803 28.8078 12.2582C24.4243 12.881 19.9728 14.3794 16.1821 17.0041C12.802 13.7237 10.3252 9.77284 9.48941 5.31576L13.0266 8.0788C13.6794 8.58878 14.6221 8.47296 15.132 7.8201C15.642 7.16725 15.5262 6.22459 14.8733 5.71462L7.73679 0.139893ZM18.5156 19.0536C21.7131 16.9994 25.4498 15.7654 29.2298 15.2284C34.274 14.5118 39.2625 15.0564 42.929 16.4278C46.7342 17.8511 48.5 19.881 48.5 21.7825C48.5 23.3004 47.9886 24.3868 47.1476 25.187C46.2702 26.0219 44.9246 26.6452 43.1234 26.9677C39.5057 27.6153 34.4975 26.9648 29.3578 25.0772C25.5073 23.6631 21.7361 21.6203 18.5156 19.0536Z' fill='%23007CF9'/%3E%3C/g%3E%3Cdefs%3E%3CclipPath id='clip0_2104_37304'%3E%3Crect width='52' height='39' fill='white'/%3E%3C/clipPath%3E%3C/defs%3E%3C/svg%3E%0A");
+      //background-image: url("data:image/svg+xml,%3Csvg width='52' height='39' viewBox='0 0 52 39' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cg clip-path='url(%23clip0_2104_37304)'%3E%3Crect width='52' height='26' fill='%23EFF6FE'/%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M7.73679 0.139893L1.14852 4.68257C0.466507 5.15283 0.294842 6.08694 0.765099 6.76895C1.23536 7.45097 2.16946 7.62264 2.85148 7.15238L6.35703 4.73527C7.07341 10.266 9.92281 15.0254 13.8111 18.8781C13.6956 18.9821 13.581 19.0875 13.4673 19.1942C9.1652 23.2336 6.30639 29.0679 6.18161 36.9764C6.16855 37.8047 6.82944 38.4868 7.65776 38.4999C8.48609 38.5129 9.16817 37.8521 9.18124 37.0237C9.29394 29.8806 11.8437 24.8338 15.5208 21.3813C15.6936 21.219 15.8691 21.0601 16.0473 20.9045C19.743 23.9745 24.078 26.3341 28.3236 27.8933C33.7636 29.8911 39.335 30.6936 43.6521 29.9207C45.8182 29.5329 47.7787 28.7276 49.2156 27.3603C50.689 25.9584 51.5 24.069 51.5 21.7825C51.5 17.8717 48.0353 15.1348 43.98 13.6179C39.786 12.0492 34.284 11.4803 28.8078 12.2582C24.4243 12.881 19.9728 14.3794 16.1821 17.0041C12.802 13.7237 10.3252 9.77284 9.48941 5.31576L13.0266 8.0788C13.6794 8.58878 14.6221 8.47296 15.132 7.8201C15.642 7.16725 15.5262 6.22459 14.8733 5.71462L7.73679 0.139893ZM18.5156 19.0536C21.7131 16.9994 25.4498 15.7654 29.2298 15.2284C34.274 14.5118 39.2625 15.0564 42.929 16.4278C46.7342 17.8511 48.5 19.881 48.5 21.7825C48.5 23.3004 47.9886 24.3868 47.1476 25.187C46.2702 26.0219 44.9246 26.6452 43.1234 26.9677C39.5057 27.6153 34.4975 26.9648 29.3578 25.0772C25.5073 23.6631 21.7361 21.6203 18.5156 19.0536Z' fill='%23007CF9'/%3E%3C/g%3E%3Cdefs%3E%3CclipPath id='clip0_2104_37304'%3E%3Crect width='52' height='39' fill='white'/%3E%3C/clipPath%3E%3C/defs%3E%3C/svg%3E%0A");
+      background-image: url("data:image/svg+xml,%3Csvg width='62' height='39' viewBox='0 0 52 39' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cg clip-path='url(%23a)' transform='translate(-4.876 .1)'%3E%3Cpath fill='%23eff6fe' d='M0 0h62v26H0z'/%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M12.713.04 6.124 4.583a1.5 1.5 0 0 0 1.703 2.47l3.506-2.417c.716 5.53 3.566 10.29 7.454 14.143-.115.104-.23.209-.344.316-4.302 4.04-7.16 9.873-7.285 17.782a1.5 1.5 0 0 0 3 .047c.112-7.143 2.662-12.19 6.339-15.642.173-.163.348-.321.526-.477 3.696 3.07 8.03 5.43 12.277 6.989 5.44 1.998 11.01 2.8 15.328 2.027 2.166-.388 4.127-1.193 5.564-2.56 1.473-1.402 2.284-3.292 2.284-5.578 0-3.91-3.465-6.648-7.52-8.165-4.194-1.568-9.696-2.137-15.172-1.36-4.384.623-8.835 2.122-12.626 4.747-3.38-3.28-5.857-7.232-6.693-11.689l3.538 2.763a1.5 1.5 0 1 0 1.846-2.364zm10.779 18.914c3.197-2.054 6.934-3.288 10.714-3.825 5.044-.717 10.032-.172 13.699 1.2 3.805 1.423 5.57 3.452 5.57 5.354 0 1.518-.51 2.604-1.351 3.404-.878.835-2.223 1.459-4.025 1.781-3.617.648-8.626-.003-13.765-1.89-3.85-1.414-7.622-3.457-10.842-6.024z' fill='%23007cf9'/%3E%3C/g%3E%3Cdefs%3E%3CclipPath id='a'%3E%3Cpath fill='%23fff' d='M0 0h62v39H0z'/%3E%3C/clipPath%3E%3C/defs%3E%3C/svg%3E%0A");
+      background-repeat: no-repeat;
       content: '';
       position: absolute;
-      bottom: -12px;
+      bottom: -13.9px;
       left: calc(50% - 15px);
       background-size: 100%;
-      width: 48px;
-      height: 35px;
+      width: 62px;
+      height: 39px;
     }
 
     input[value="MONTHLY"]:hover + label:after {
-      background-image: url("data:image/svg+xml,%3Csvg width='52' height='39' viewBox='0 0 52 39' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cg clip-path='url(%23clip0_2104_37304)'%3E%3Crect width='52' height='26' fill='%230D3669'/%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M7.73679 0.139893L1.14852 4.68257C0.466507 5.15283 0.294842 6.08694 0.765099 6.76895C1.23536 7.45097 2.16946 7.62264 2.85148 7.15238L6.35703 4.73527C7.07341 10.266 9.92281 15.0254 13.8111 18.8781C13.6956 18.9821 13.581 19.0875 13.4673 19.1942C9.1652 23.2336 6.30639 29.0679 6.18161 36.9764C6.16855 37.8047 6.82944 38.4868 7.65776 38.4999C8.48609 38.5129 9.16817 37.8521 9.18124 37.0237C9.29394 29.8806 11.8437 24.8338 15.5208 21.3813C15.6936 21.219 15.8691 21.0601 16.0473 20.9045C19.743 23.9745 24.078 26.3341 28.3236 27.8933C33.7636 29.8911 39.335 30.6936 43.6521 29.9207C45.8182 29.5329 47.7787 28.7276 49.2156 27.3603C50.689 25.9584 51.5 24.069 51.5 21.7825C51.5 17.8717 48.0353 15.1348 43.98 13.6179C39.786 12.0492 34.284 11.4803 28.8078 12.2582C24.4243 12.881 19.9728 14.3794 16.1821 17.0041C12.802 13.7237 10.3252 9.77284 9.48941 5.31576L13.0266 8.0788C13.6794 8.58878 14.6221 8.47296 15.132 7.8201C15.642 7.16725 15.5262 6.22459 14.8733 5.71462L7.73679 0.139893ZM18.5156 19.0536C21.7131 16.9994 25.4498 15.7654 29.2298 15.2284C34.274 14.5118 39.2625 15.0564 42.929 16.4278C46.7342 17.8511 48.5 19.881 48.5 21.7825C48.5 23.3004 47.9886 24.3868 47.1476 25.187C46.2702 26.0219 44.9246 26.6452 43.1234 26.9677C39.5057 27.6153 34.4975 26.9648 29.3578 25.0772C25.5073 23.6631 21.7361 21.6203 18.5156 19.0536Z' fill='%23007CF9'/%3E%3C/g%3E%3Cdefs%3E%3CclipPath id='clip0_2104_37304'%3E%3Crect width='52' height='39' fill='white'/%3E%3C/clipPath%3E%3C/defs%3E%3C/svg%3E%0A");
+      //background-image: url("data:image/svg+xml,%3Csvg width='52' height='39' viewBox='0 0 52 39' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cg clip-path='url(%23clip0_2104_37304)'%3E%3Crect width='52' height='26' fill='%230D3669'/%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M7.73679 0.139893L1.14852 4.68257C0.466507 5.15283 0.294842 6.08694 0.765099 6.76895C1.23536 7.45097 2.16946 7.62264 2.85148 7.15238L6.35703 4.73527C7.07341 10.266 9.92281 15.0254 13.8111 18.8781C13.6956 18.9821 13.581 19.0875 13.4673 19.1942C9.1652 23.2336 6.30639 29.0679 6.18161 36.9764C6.16855 37.8047 6.82944 38.4868 7.65776 38.4999C8.48609 38.5129 9.16817 37.8521 9.18124 37.0237C9.29394 29.8806 11.8437 24.8338 15.5208 21.3813C15.6936 21.219 15.8691 21.0601 16.0473 20.9045C19.743 23.9745 24.078 26.3341 28.3236 27.8933C33.7636 29.8911 39.335 30.6936 43.6521 29.9207C45.8182 29.5329 47.7787 28.7276 49.2156 27.3603C50.689 25.9584 51.5 24.069 51.5 21.7825C51.5 17.8717 48.0353 15.1348 43.98 13.6179C39.786 12.0492 34.284 11.4803 28.8078 12.2582C24.4243 12.881 19.9728 14.3794 16.1821 17.0041C12.802 13.7237 10.3252 9.77284 9.48941 5.31576L13.0266 8.0788C13.6794 8.58878 14.6221 8.47296 15.132 7.8201C15.642 7.16725 15.5262 6.22459 14.8733 5.71462L7.73679 0.139893ZM18.5156 19.0536C21.7131 16.9994 25.4498 15.7654 29.2298 15.2284C34.274 14.5118 39.2625 15.0564 42.929 16.4278C46.7342 17.8511 48.5 19.881 48.5 21.7825C48.5 23.3004 47.9886 24.3868 47.1476 25.187C46.2702 26.0219 44.9246 26.6452 43.1234 26.9677C39.5057 27.6153 34.4975 26.9648 29.3578 25.0772C25.5073 23.6631 21.7361 21.6203 18.5156 19.0536Z' fill='%23007CF9'/%3E%3C/g%3E%3Cdefs%3E%3CclipPath id='clip0_2104_37304'%3E%3Crect width='52' height='39' fill='white'/%3E%3C/clipPath%3E%3C/defs%3E%3C/svg%3E%0A");
+      background-image: url("data:image/svg+xml,%3Csvg width='62' height='39' viewBox='0 0 52 39' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cg clip-path='url(%23a)' transform='translate(-4.876 .1)'%3E%3Cpath fill='%230D3669' d='M0 0h62v26H0z'/%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M12.713.04 6.124 4.583a1.5 1.5 0 0 0 1.703 2.47l3.506-2.417c.716 5.53 3.566 10.29 7.454 14.143-.115.104-.23.209-.344.316-4.302 4.04-7.16 9.873-7.285 17.782a1.5 1.5 0 0 0 3 .047c.112-7.143 2.662-12.19 6.339-15.642.173-.163.348-.321.526-.477 3.696 3.07 8.03 5.43 12.277 6.989 5.44 1.998 11.01 2.8 15.328 2.027 2.166-.388 4.127-1.193 5.564-2.56 1.473-1.402 2.284-3.292 2.284-5.578 0-3.91-3.465-6.648-7.52-8.165-4.194-1.568-9.696-2.137-15.172-1.36-4.384.623-8.835 2.122-12.626 4.747-3.38-3.28-5.857-7.232-6.693-11.689l3.538 2.763a1.5 1.5 0 1 0 1.846-2.364zm10.779 18.914c3.197-2.054 6.934-3.288 10.714-3.825 5.044-.717 10.032-.172 13.699 1.2 3.805 1.423 5.57 3.452 5.57 5.354 0 1.518-.51 2.604-1.351 3.404-.878.835-2.223 1.459-4.025 1.781-3.617.648-8.626-.003-13.765-1.89-3.85-1.414-7.622-3.457-10.842-6.024z' fill='%23007cf9'/%3E%3C/g%3E%3Cdefs%3E%3CclipPath id='a'%3E%3Cpath fill='%23fff' d='M0 0h62v39H0z'/%3E%3C/clipPath%3E%3C/defs%3E%3C/svg%3E%0A");
     }
 
     input[value="MONTHLY"]:checked + label:after {
@@ -378,6 +403,7 @@
     background-size: 100%;
     display: flex!important;
     //since we need to use "before" we have to overwrite some of the default standard radio styling in EN Grid.
+    border-radius: 0;
     border: none;
     box-shadow: none;
     margin-right: 2px;
@@ -504,11 +530,11 @@
       width: 80px;
     }
 
-    img.paypal,
-    img.paypal-venmo {
+    img.paypal {
       width: 125px;
     }
 
+    img.paypal-venmo,
     img.credit-card-logos {
       width: 280px;
       max-width: 100%;
@@ -611,55 +637,16 @@
 
   @media screen and (max-width: 840px) {
     --engrid__body_padding: 0 4rem;
-    --engrid__body-top_padding: 0 4rem 65px;
+    --engrid__body-top_padding: 0 4rem;
     --engrid__body-main_padding: 25px 4rem;
+    --top_background-color: white;
 
     .content-footer {
       margin-top: 0;
     }
-  }
 
-  @media screen and (max-width: 599px) {
-    --engrid__body_padding: 0 1.5rem;
-    --engrid__body-top_padding: 0 1.5rem;
-    --engrid__body-main_padding: 25px 1.5rem;
-    --engrid__body-top_background-color: var(--color-secondary);
-    --top_background-color: white;
-    --h1_font-size: 2rem;
-    --h2_font-size: 1.3rem;
-    --button_border-radius: 6px;
-    --recurring-frequency__button_border-radius: 6px;
-    --recurring-frequency__button_padding: 15px .5em;
-    --button_font-size: 1.25rem;
-    --donation-amount__button_font-size: 1.5rem;
-    --donation-amount__button_count: 2;
-    --donation-amount__button_padding: 15px 5px;
-    --input_border-radius: 4px;
-    --input_font-size: 18px;
-    --input_padding: 17px 12px;
-    --label_font-size: 1rem;
-    --checkbox_border-radius: 9px;
-    --submit__button_padding-top: 15px;
-    --submit__button_padding-bottom: 15px;
-    --fields_spacing-inline: 0;
-    --engrid__content-footer_padding: 70px 1.5rem 1rem;
-
-    .body-top:after {
-      display: none;
-    }
-
-    .body-title {
-      text-align: center;
-    }
-
-    .body-title h1 {
-      margin-top: 2rem;
-    }
-
-    .body-title h2 {
-      display: block;
-      margin-top: 1rem;
-    }
+    @include engrid_replace-banner-with-background("leftleft1col");
+    @include engrid_replace-banner-with-background("rightright1col");
 
     // Put the Body Banner at the top of the page
     #engrid > .en__component--advrow,
@@ -689,6 +676,8 @@
 
     &[data-replace-banner-with-background="if-banner-empty"][data-engrid-body-banner="empty"][data-engrid-page-background="image"] {
       [class*=page-backgroundImage] {
+        grid-row: body-banner!important;
+
         &:after {
           content: '';
           display: block;
@@ -716,10 +705,63 @@
         figattribution {
           top: 0;
           bottom: auto;
-          //TODO: implement media attribution on mobile
           display: none;
         }
       }
+    }
+
+    #mobile-bg-tooltip {
+      display: block;
+      border-radius: 50%;
+      position: absolute;
+      width: 28px;
+      height: 28px;
+      top: 10px;
+      right: 10px;
+      background-image: url('https://aaf1a18515da0e792f78-c27fdabe952dfc357fe25ebf5c8897ee.ssl.cf5.rackcdn.com/1991/media-attribution.png?v=1687547161000');
+      background-size: 100%;
+    }
+
+    .body-top:after {
+      display: none;
+    }
+  }
+
+  @media screen and (max-width: 599px) {
+    --engrid__body_padding: 0 1.5rem;
+    --engrid__body-top_padding: 0 1.5rem;
+    --engrid__body-main_padding: 25px 1.5rem;
+    --engrid__body-top_background-color: var(--color-secondary);
+    --h1_font-size: 2rem;
+    --h2_font-size: 1.3rem;
+    --button_border-radius: 6px;
+    --recurring-frequency__button_border-radius: 6px;
+    --recurring-frequency__button_padding: 15px .5em;
+    --button_font-size: 1.25rem;
+    --donation-amount__button_font-size: 1.5rem;
+    --donation-amount__button_count: 2;
+    --donation-amount__button_padding: 15px 5px;
+    --input_border-radius: 4px;
+    --input_font-size: 18px;
+    --input_padding: 17px 12px;
+    --label_font-size: 1rem;
+    --checkbox_border-radius: 9px;
+    --submit__button_padding-top: 15px;
+    --submit__button_padding-bottom: 15px;
+    --fields_spacing-inline: 0;
+    --engrid__content-footer_padding: 70px 1.5rem 1rem;
+
+    .body-title {
+      text-align: center;
+    }
+
+    .body-title h1 {
+      margin-top: 2rem;
+    }
+
+    .body-title h2 {
+      display: block;
+      margin-top: 1rem;
     }
 
     .header-logo img:not(.logo-horizontal) {
@@ -774,6 +816,7 @@
         width: 75px;
       }
 
+      img.paypal-venmo,
       img.credit-card-logos {
         width: 216px;
         max-width: 100%;
@@ -808,7 +851,7 @@
       input[value="MONTHLY"] + label:after {
         width: 34px;
         height: 25px;
-        bottom: -9px;
+        bottom: -12px;
       }
     }
 
@@ -817,18 +860,6 @@
       min-width: 7px;
       height: 13px;
       margin-top: -5px;
-    }
-
-    #mobile-bg-tooltip {
-      display: block;
-      border-radius: 50%;
-      position: absolute;
-      width: 28px;
-      height: 28px;
-      top: 10px;
-      right: 10px;
-      background-image: url('https://aaf1a18515da0e792f78-c27fdabe952dfc357fe25ebf5c8897ee.ssl.cf5.rackcdn.com/1991/media-attribution.png?v=1687547161000');
-      background-size: 100%;
     }
   }
 
