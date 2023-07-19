@@ -556,8 +556,8 @@
 
   .gift-summary {
     text-align: center;
-    border-top: 1px solid var(--color-primary);
-    border-bottom: 1px solid var(--color-primary);
+    border-top: 0.5px solid var(--color-primary);
+    border-bottom: 0.5px solid var(--color-primary);
     padding-top: 10px;
     padding-bottom: 10px;
   }
@@ -633,6 +633,29 @@
 
   #mobile-bg-tooltip {
     display: none;
+  }
+
+  .enWidget.enWidget--progressBar {
+    padding: 0 0 20px;
+  }
+
+  .en__supporterHubLogin {
+    border: none;
+    width: 100%;
+  }
+
+  .en__supporterHubLogin__header {
+    border: none;
+    padding:0;
+    background: var(--engrid__body-main_background-color);
+  }
+
+  .en__supporterHubLogin__body {
+    padding: 0;
+  }
+
+  .en__field.en__field--hublogin {
+    width: 100%;
   }
 
   @media screen and (max-width: 840px) {
