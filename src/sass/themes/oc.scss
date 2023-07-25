@@ -2164,3 +2164,9 @@ div[id^="nb-wrapper"].nb-loading #nb-feedback:after {
     text-decoration: underline;
   }
 }
+
+&[data-engrid-errors="fancy"] {
+  .en__field__error {
+    font-size: calc(max(75%, 12px)); // Do not let the font size fall below 12px
+  }
+}
