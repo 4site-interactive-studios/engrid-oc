@@ -17,10 +17,10 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Tuesday, July 25, 2023 @ 09:02:26 ET
+ *  Date: Tuesday, July 25, 2023 @ 09:10:20 ET
  *  By: fernando
- *  ENGrid styles: v0.14.3
- *  ENGrid scripts: v0.14.4
+ *  ENGrid styles: v0.14.12
+ *  ENGrid scripts: v0.14.12
  *
  *  Created by 4Site Studios
  *  Come work with us or join our team, we would love to hear from you
@@ -10849,6 +10849,21 @@ const TranslateOptionsDefaults = {
     NLD: nlTranslation,
 };
 
+;// CONCATENATED MODULE: ./node_modules/@4site/engrid-common/dist/interfaces/exit-intent-options.js
+const ExitIntentOptionsDefaults = {
+    enabled: false,
+    title: "We are sad that you are leaving",
+    text: "Would you mind telling us why you are leaving this page?",
+    buttonText: "Send us your comments",
+    buttonLink: "https://www.4sitestudios.com/",
+    cookieName: "engrid-exit-intent-lightbox",
+    cookieDuration: 30,
+    triggers: {
+        visibilityState: true,
+        mousePosition: true,
+    }
+};
+
 ;// CONCATENATED MODULE: ./node_modules/@4site/engrid-common/dist/loader.js
 // Ref: https://app.getguru.com/card/iMgx968T/ENgrid-Loader
 
@@ -11979,13 +11994,12 @@ class app_App extends engrid_ENGrid {
             // Enable debug if available is the first thing
             app_App.setBodyData("debug", "");
         // TODO: Abstract everything to the App class so we can remove custom-methods
-        inputPlaceholder();
-        preventAutocomplete();
         watchInmemField();
         simpleUnsubscribe();
         contactDetailLabels();
         easyEdit();
-        enInput.init();
+        new InputPlaceholders();
+        new InputHasValueAndFocus();
         new ShowHideRadioCheckboxes("transaction.giveBySelect", "giveBySelect-");
         new ShowHideRadioCheckboxes("transaction.inmem", "inmem-");
         new ShowHideRadioCheckboxes("transaction.recurrpay", "recurrpay-");
@@ -12159,6 +12173,8 @@ class app_App extends engrid_ENGrid {
         // Give By Select
         new GiveBySelect();
         this.setDataAttributes();
+        //Exit Intent Lightbox
+        new ExitIntentLightbox();
         new UrlParamsToBodyAttrs();
         //Debug panel
         if (this.options.Debug ||
@@ -12208,11 +12224,6 @@ class app_App extends engrid_ENGrid {
         }
     }
     onError() {
-        // Smooth Scroll to the first .en__field--validationFailed element
-        const firstError = document.querySelector(".en__field--validationFailed");
-        if (firstError) {
-            firstError.scrollIntoView({ behavior: "smooth" });
-        }
         if (this.options.onError) {
             this.logger.danger("Client onError Triggered");
             this.options.onError();
@@ -12959,326 +12970,11 @@ class ClickToExpand {
 ;// CONCATENATED MODULE: ./node_modules/@4site/engrid-common/dist/custom-methods.js
 const body = document.body;
 const enGrid = document.getElementById("engrid");
-const enInput = (() => {
-    /************************************
-     * Globablly Scoped Constants and Variables
-     ***********************************/
-    // @TODO Needs to be expanded to bind other EN elements (checkbox, radio) and compound elements (split-text, split-select, select with other input, etc...)
-    // @TODO A "Not" condition is needed for #en__field_transaction_email because someone could name their email opt in "Email" and it will get the .en_field--email class generated for it
-    // get DOM elements
-    const init = () => {
-        const formInput = document.querySelectorAll(".en__field--text, .en__field--email:not(.en__field--checkbox), .en__field--telephone, .en__field--number, .en__field--textarea, .en__field--select, .en__field--checkbox");
-        Array.from(formInput).forEach((e) => {
-            // @TODO Currently checkboxes always return as having a value, since they do but they're just not checked. Need to update and account for that, should also do Radio's while we're at it
-            let element = e.querySelector("input, textarea, select");
-            if (element && element.value) {
-                e.classList.add("has-value");
-            }
-            bindEvents(e);
-        });
-    };
-    return {
-        init: init,
-    };
-})();
-const bindEvents = (e) => {
-    /* @TODO */
-    /************************************
-     * INPUT, TEXTAREA, AND SELECT ACTIVITY CLASSES (FOCUS AND BLUR)
-     * NOTE: STILL NEEDS WORK TO FUNCTION ON "SPLIT" CUSTOM EN FIELDS
-     * REF: https://developer.mozilla.org/en-US/docs/Web/API/Element/blur_event
-     ***********************************/
-    // Occurs when an input field gets focus
-    const handleFocus = (e) => {
-        const target = e.target;
-        if (target && target.parentNode && target.parentNode.parentNode) {
-            const targetWrapper = target.parentNode.parentNode;
-            targetWrapper.classList.add("has-focus");
-        }
-    };
-    // Occurs when a user leaves an input field
-    const handleBlur = (e) => {
-        const target = e.target;
-        if (target && target.parentNode && target.parentNode.parentNode) {
-            const targetWrapper = target.parentNode.parentNode;
-            targetWrapper.classList.remove("has-focus");
-            if (target.value) {
-                targetWrapper.classList.add("has-value");
-            }
-            else {
-                targetWrapper.classList.remove("has-value");
-            }
-        }
-    };
-    // Occurs when a user changes the selected option of a <select> element
-    const handleChange = (e) => {
-        const target = e.target;
-        if (target && target.parentNode && target.parentNode.parentNode) {
-            const targetWrapper = target.parentNode.parentNode;
-            targetWrapper.classList.add("has-value");
-        }
-    };
-    // Occurs when a text or textarea element gets user input
-    const handleInput = (e) => {
-        const target = e.target;
-        if (target && target.parentNode && target.parentNode.parentNode) {
-            const targetWrapper = target.parentNode.parentNode;
-            targetWrapper.classList.add("has-value");
-        }
-    };
-    // Occurs when the web browser autofills a form fields
-    // REF: engrid-autofill.scss
-    // REF: https://medium.com/@brunn/detecting-autofilled-fields-in-javascript-aed598d25da7
-    const onAutoFillStart = (e) => {
-        e.parentNode.parentNode.classList.add("is-autofilled", "has-value");
-    };
-    const onAutoFillCancel = (e) => e.parentNode.parentNode.classList.remove("is-autofilled", "has-value");
-    const onAnimationStart = (e) => {
-        const target = e.target;
-        const animation = e.animationName;
-        switch (animation) {
-            case "onAutoFillStart":
-                return onAutoFillStart(target);
-            case "onAutoFillCancel":
-                return onAutoFillCancel(target);
-        }
-    };
-    const enField = e.querySelector("input, textarea, select");
-    if (enField) {
-        enField.addEventListener("focus", handleFocus);
-        enField.addEventListener("blur", handleBlur);
-        enField.addEventListener("change", handleChange);
-        enField.addEventListener("input", handleInput);
-        enField.addEventListener("animationstart", onAnimationStart);
-    }
-};
 const removeClassesByPrefix = (el, prefix) => {
     for (var i = el.classList.length - 1; i >= 0; i--) {
         if (el.classList[i].startsWith(prefix)) {
             el.classList.remove(el.classList[i]);
         }
-    }
-};
-const inputPlaceholder = () => {
-    // Personal Information
-    let enFieldFirstName = document.querySelector("input#en__field_supporter_firstName");
-    let enFieldLastName = document.querySelector("input#en__field_supporter_lastName");
-    let enFieldEmailAddress = document.querySelector("input#en__field_supporter_emailAddress");
-    let enFieldPhoneNumber = document.querySelector("input#en__field_supporter_phoneNumber");
-    let enFieldPhoneNumberRequired = document.querySelector(".en__mandatory > * > input#en__field_supporter_phoneNumber");
-    let enFieldPhoneNumber2 = document.querySelector("input#en__field_supporter_phoneNumber2");
-    let enFieldPhoneNumber2Required = document.querySelector(".en__mandatory > * > input#en__field_supporter_phoneNumber2");
-    let enFieldPhoneNumber2HideOptionalPlaceholder = document.querySelector(".hide-optional-phone-placeholder [name='supporter.phoneNumber2']");
-    // Address
-    let enFieldCountry = document.querySelector("input#en__field_supporter_country");
-    let enFieldAddress1 = document.querySelector("input#en__field_supporter_address1");
-    let enFieldAddress2 = document.querySelector("input#en__field_supporter_address2");
-    let enFieldCity = document.querySelector("input#en__field_supporter_city");
-    let enFieldRegion = document.querySelector("input#en__field_supporter_region");
-    let enFieldPostcode = document.querySelector("input#en__field_supporter_postcode");
-    // Donation
-    let enFieldDonationAmt = document.querySelector(".en__field--donationAmt.en__field--withOther .en__field__input--other");
-    let enFieldCcnumber = document.querySelector("input#en__field_transaction_ccnumber");
-    let enFieldCcexpire = document.querySelector("input#en__field_transaction_ccexpire");
-    let enFieldCcvv = document.querySelector("input#en__field_transaction_ccvv");
-    let enFieldBankAccountNumber = document.querySelector("input#en__field_supporter_bankAccountNumber");
-    let enFieldBankRoutingNumber = document.querySelector("input#en__field_supporter_bankRoutingNumber");
-    // In Honor
-    let enFieldHonname = document.querySelector("input#en__field_transaction_honname");
-    let enFieldInfname = document.querySelector("input#en__field_transaction_infname");
-    let enFieldInfemail = document.querySelector("input#en__field_transaction_infemail");
-    let enFieldInfcountry = document.querySelector("input#en__field_transaction_infcountry");
-    let enFieldInfadd1 = document.querySelector("input#en__field_transaction_infadd1");
-    let enFieldInfadd2 = document.querySelector("input#en__field_transaction_infadd2");
-    let enFieldInfcity = document.querySelector("input#en__field_transaction_infcity");
-    let enFieldInfpostcd = document.querySelector("input#en__field_transaction_infpostcd");
-    // Miscillaneous
-    let enFieldGftrsn = document.querySelector("input#en__field_transaction_gftrsn");
-    // Shipping Infromation
-    let enFieldShippingFirstName = document.querySelector("input#en__field_transaction_shipfname");
-    let enFieldShippingLastName = document.querySelector("input#en__field_transaction_shiplname");
-    let enFieldShippingEmailAddress = document.querySelector("input#en__field_transaction_shipemail");
-    let enFieldShippingCountry = document.querySelector("input#en__field_transaction_shipcountry");
-    let enFieldShippingAddress1 = document.querySelector("input#en__field_transaction_shipadd1");
-    let enFieldShippingAddress2 = document.querySelector("input#en__field_transaction_shipadd2");
-    let enFieldShippingCity = document.querySelector("input#en__field_transaction_shipcity");
-    let enFieldShippingRegion = document.querySelector("input#en__field_transaction_shipregion");
-    let enFieldShippingPostcode = document.querySelector("input#en__field_transaction_shippostcode");
-    // Billing Infromation
-    let enFieldBillingCountry = document.querySelector("input#en__field_supporter_billingCountry");
-    let enFieldBillingAddress1 = document.querySelector("input#en__field_supporter_billingAddress1");
-    let enFieldBillingAddress2 = document.querySelector("input#en__field_supporter_billingAddress2");
-    let enFieldBillingCity = document.querySelector("input#en__field_supporter_billingCity");
-    let enFieldBillingRegion = document.querySelector("input#en__field_supporter_billingRegion");
-    let enFieldBillingPostcode = document.querySelector("input#en__field_supporter_billingPostcode");
-    // CHANGE FIELD INPUT TYPES
-    if (enFieldDonationAmt) {
-        enFieldDonationAmt.setAttribute("inputmode", "decimal");
-    }
-    // ADD THE MISSING LABEL FOR IMPROVED ACCESSABILITY
-    if (enFieldDonationAmt) {
-        enFieldDonationAmt.setAttribute("aria-label", "Enter your custom donation amount");
-    }
-    // ADD FIELD PLACEHOLDERS
-    const enAddInputPlaceholder = document.querySelector("[data-engrid-add-input-placeholders]");
-    // Personal Information
-    if (enAddInputPlaceholder && enFieldFirstName) {
-        enFieldFirstName.placeholder = "First Name";
-    }
-    if (enAddInputPlaceholder && enFieldLastName) {
-        enFieldLastName.placeholder = "Last Name";
-    }
-    if (enAddInputPlaceholder && enFieldEmailAddress) {
-        enFieldEmailAddress.placeholder = "Email Address";
-    }
-    if (enAddInputPlaceholder &&
-        enFieldPhoneNumber &&
-        enFieldPhoneNumberRequired) {
-        enFieldPhoneNumber.placeholder = "Phone Number";
-    }
-    else if (enAddInputPlaceholder &&
-        enFieldPhoneNumber &&
-        !enFieldPhoneNumberRequired) {
-        enFieldPhoneNumber.placeholder = "Phone Number (Optional)";
-    }
-    if (enAddInputPlaceholder &&
-        enFieldPhoneNumber2 &&
-        enFieldPhoneNumber2Required) {
-        enFieldPhoneNumber2.placeholder = "000-000-0000";
-    }
-    else if (enAddInputPlaceholder &&
-        enFieldPhoneNumber2 &&
-        !enFieldPhoneNumber2Required &&
-        enFieldPhoneNumber2HideOptionalPlaceholder) {
-        enFieldPhoneNumber2.placeholder = "000-000-0000";
-    }
-    else if (enAddInputPlaceholder &&
-        enFieldPhoneNumber2 &&
-        !enFieldPhoneNumber2Required) {
-        enFieldPhoneNumber2.placeholder = "000-000-0000 (Optional)";
-    }
-    // Address
-    if (enAddInputPlaceholder && enFieldCountry) {
-        enFieldCountry.placeholder = "Country";
-    }
-    if (enAddInputPlaceholder && enFieldAddress1) {
-        enFieldAddress1.placeholder = "Street Address";
-    }
-    if (enAddInputPlaceholder && enFieldAddress2) {
-        enFieldAddress2.placeholder = "Apt., ste., bldg.";
-    }
-    if (enAddInputPlaceholder && enFieldCity) {
-        enFieldCity.placeholder = "City";
-    }
-    if (enAddInputPlaceholder && enFieldRegion) {
-        enFieldRegion.placeholder = "Region";
-    }
-    if (enAddInputPlaceholder && enFieldPostcode) {
-        enFieldPostcode.placeholder = "Postal Code";
-    }
-    // Donation
-    if (enAddInputPlaceholder && enFieldDonationAmt) {
-        enFieldDonationAmt.placeholder = "Other";
-    }
-    if (enAddInputPlaceholder && enFieldCcnumber) {
-        enFieldCcnumber.placeholder = "•••• •••• •••• ••••";
-    }
-    if (enAddInputPlaceholder && enFieldCcexpire) {
-        enFieldCcexpire.placeholder = "MM / YY";
-    }
-    if (enAddInputPlaceholder && enFieldCcvv) {
-        enFieldCcvv.placeholder = "CVV";
-    }
-    if (enAddInputPlaceholder && enFieldBankAccountNumber) {
-        enFieldBankAccountNumber.placeholder = "Bank Account Number";
-    }
-    if (enAddInputPlaceholder && enFieldBankRoutingNumber) {
-        enFieldBankRoutingNumber.placeholder = "Bank Routing Number";
-    }
-    // In Honor
-    if (enAddInputPlaceholder && enFieldHonname) {
-        enFieldHonname.placeholder = "Honoree Name";
-    }
-    if (enAddInputPlaceholder && enFieldInfname) {
-        enFieldInfname.placeholder = "Recipient Name";
-    }
-    if (enAddInputPlaceholder && enFieldInfemail) {
-        enFieldInfemail.placeholder = "Recipient Email Address";
-    }
-    if (enAddInputPlaceholder && enFieldInfcountry) {
-        enFieldInfcountry.placeholder = "Country";
-    }
-    if (enAddInputPlaceholder && enFieldInfadd1) {
-        enFieldInfadd1.placeholder = "Recipient Street Address";
-    }
-    if (enAddInputPlaceholder && enFieldInfadd2) {
-        enFieldInfadd2.placeholder = "Recipient Apt., ste., bldg.";
-    }
-    if (enAddInputPlaceholder && enFieldInfcity) {
-        enFieldInfcity.placeholder = "Recipient City";
-    }
-    if (enAddInputPlaceholder && enFieldInfpostcd) {
-        enFieldInfpostcd.placeholder = "Recipient Postal Code";
-    }
-    // Miscillaneous
-    if (enAddInputPlaceholder && enFieldGftrsn) {
-        enFieldGftrsn.placeholder = "Reason for your gift";
-    }
-    // Shipping Infromation
-    if (enAddInputPlaceholder && enFieldShippingFirstName) {
-        enFieldShippingFirstName.placeholder = "Shipping First Name";
-    }
-    if (enAddInputPlaceholder && enFieldShippingLastName) {
-        enFieldShippingLastName.placeholder = "Shipping Last Name";
-    }
-    if (enAddInputPlaceholder && enFieldShippingEmailAddress) {
-        enFieldShippingEmailAddress.placeholder = "Shipping Email Address";
-    }
-    if (enAddInputPlaceholder && enFieldShippingCountry) {
-        enFieldShippingCountry.placeholder = "Shipping Country";
-    }
-    if (enAddInputPlaceholder && enFieldShippingAddress1) {
-        enFieldShippingAddress1.placeholder = "Shipping Street Address";
-    }
-    if (enAddInputPlaceholder && enFieldShippingAddress2) {
-        enFieldShippingAddress2.placeholder = "Shipping Apt., ste., bldg.";
-    }
-    if (enAddInputPlaceholder && enFieldShippingCity) {
-        enFieldShippingCity.placeholder = "Shipping City";
-    }
-    if (enAddInputPlaceholder && enFieldShippingRegion) {
-        enFieldShippingRegion.placeholder = "Shipping Region";
-    }
-    if (enAddInputPlaceholder && enFieldShippingPostcode) {
-        enFieldShippingPostcode.placeholder = "Shipping Postal Code";
-    }
-    // Billing Information
-    if (enAddInputPlaceholder && enFieldBillingCountry) {
-        enFieldBillingCountry.placeholder = "Billing Country";
-    }
-    if (enAddInputPlaceholder && enFieldBillingAddress1) {
-        enFieldBillingAddress1.placeholder = "Billing Street Address";
-    }
-    if (enAddInputPlaceholder && enFieldBillingAddress2) {
-        enFieldBillingAddress2.placeholder = "Billing Apt., ste., bldg.";
-    }
-    if (enAddInputPlaceholder && enFieldBillingCity) {
-        enFieldBillingCity.placeholder = "Billing City";
-    }
-    if (enAddInputPlaceholder && enFieldBillingRegion) {
-        enFieldBillingRegion.placeholder = "Billing Region";
-    }
-    if (enAddInputPlaceholder && enFieldBillingPostcode) {
-        enFieldBillingPostcode.placeholder = "Billing Postal Code";
-    }
-};
-const preventAutocomplete = () => {
-    let enFieldDonationAmt = document.querySelector(".en__field--donationAmt.en__field--withOther .en__field__input--other");
-    if (enFieldDonationAmt) {
-        enFieldDonationAmt.setAttribute("autocomplete", "off");
-    }
-    if (enFieldDonationAmt) {
-        enFieldDonationAmt.setAttribute("data-lpignore", "true");
     }
 };
 const watchInmemField = () => {
@@ -13450,6 +13146,10 @@ class iFrame {
             window.setTimeout(() => {
                 this.sendIframeHeight();
             }, 300);
+            window.addEventListener("resize", this.debounceWithImmediate(() => {
+                this.logger.log("iFrame Event - window resized");
+                this.sendIframeHeight();
+            }));
             // Listen for the form submit event
             this._form.onSubmit.subscribe((e) => {
                 this.logger.log("iFrame Event - onSubmit");
@@ -13467,15 +13167,35 @@ class iFrame {
             if (skipLink) {
                 skipLink.remove();
             }
+            this._form.onError.subscribe(() => {
+                // Get the first .en__field--validationFailed element
+                const firstError = document.querySelector(".en__field--validationFailed");
+                // Send scrollTo message
+                // Parent pages listens for this message and scrolls to the correct position
+                const scrollTo = firstError
+                    ? firstError.getBoundingClientRect().top
+                    : 0;
+                this.logger.log(`iFrame Event 'scrollTo' - Position of top of first error ${scrollTo} px`); // check the message is being sent correctly
+                window.parent.postMessage({ scrollTo }, "*");
+            });
         }
         else {
-            // Parent Page Logic
+            // When not in iframe, default behaviour, smooth scroll to first error
+            this._form.onError.subscribe(() => {
+                // Smooth Scroll to the first .en__field--validationFailed element
+                const firstError = document.querySelector(".en__field--validationFailed");
+                if (firstError) {
+                    firstError.scrollIntoView({ behavior: "smooth" });
+                }
+            });
+            // Parent Page Logic (when an ENgrid form is embedded in an ENgrid page)
             window.addEventListener("message", (event) => {
                 const iframe = this.getIFrameByEvent(event);
                 if (iframe) {
                     if (event.data.hasOwnProperty("frameHeight")) {
                         iframe.style.height = event.data.frameHeight + "px";
                     }
+                    // Old scroll event logic "scroll", scrolls to correct iframe?
                     else if (event.data.hasOwnProperty("scroll") &&
                         event.data.scroll > 0) {
                         const elDistanceToTop = window.pageYOffset + iframe.getBoundingClientRect().top;
@@ -13486,6 +13206,18 @@ class iFrame {
                             behavior: "smooth",
                         });
                         this.logger.log("iFrame Event - Scrolling Window to " + scrollTo);
+                    }
+                    // New scroll event logic "scrollTo", scrolls to the first error
+                    else if (event.data.hasOwnProperty("scrollTo")) {
+                        const scrollToPosition = event.data.scrollTo +
+                            window.scrollY +
+                            iframe.getBoundingClientRect().top;
+                        window.scrollTo({
+                            top: scrollToPosition,
+                            left: 0,
+                            behavior: "smooth",
+                        });
+                        this.logger.log("iFrame Event - Scrolling Window to " + scrollToPosition);
                     }
                 }
             });
@@ -13590,6 +13322,145 @@ class iFrame {
             this.showFormComponents();
             banner.remove();
         });
+    }
+    debounceWithImmediate(func, timeout = 1000) {
+        let timer;
+        let firstEvent = true;
+        return (...args) => {
+            clearTimeout(timer);
+            if (firstEvent) {
+                func.apply(this, args);
+                firstEvent = false;
+            }
+            timer = setTimeout(() => {
+                func.apply(this, args);
+                firstEvent = true;
+            }, timeout);
+        };
+    }
+}
+
+;// CONCATENATED MODULE: ./node_modules/@4site/engrid-common/dist/input-has-value-and-focus.js
+// Component that adds has-value and has-focus classes to form inputs
+
+class InputHasValueAndFocus {
+    constructor() {
+        this.logger = new EngridLogger("InputHasValueAndFocus", "yellow", "#333", "🌈");
+        this.formInputs = document.querySelectorAll(".en__field--text, .en__field--email:not(.en__field--checkbox), .en__field--telephone, .en__field--number, .en__field--textarea, .en__field--select, .en__field--checkbox");
+        if (this.shouldRun()) {
+            this.run();
+        }
+    }
+    shouldRun() {
+        return this.formInputs.length > 0;
+    }
+    run() {
+        this.formInputs.forEach((el) => {
+            const input = el.querySelector("input, textarea, select");
+            if (input && input.value) {
+                el.classList.add("has-value");
+            }
+            this.bindEvents(el);
+        });
+    }
+    bindEvents(el) {
+        const input = el.querySelector("input, textarea, select");
+        if (!input) {
+            return;
+        }
+        input.addEventListener("focus", () => {
+            this.log("Focus added", input);
+            el.classList.add("has-focus");
+        });
+        input.addEventListener("blur", () => {
+            this.log("Focus removed", input);
+            el.classList.remove("has-focus");
+        });
+        input.addEventListener("input", () => {
+            if (input.value) {
+                this.log("Value added", input);
+                el.classList.add("has-value");
+            }
+            else {
+                this.log("Value removed", input);
+                el.classList.remove("has-value");
+            }
+        });
+    }
+    log(message, input) {
+        this.logger.log(`${message} on ${input.name}: ${input.value}`);
+    }
+}
+
+;// CONCATENATED MODULE: ./node_modules/@4site/engrid-common/dist/input-placeholders.js
+// Component that adds input placeholders
+
+class InputPlaceholders {
+    constructor() {
+        if (this.shouldRun()) {
+            this.run();
+        }
+    }
+    shouldRun() {
+        return engrid_ENGrid.hasBodyData("add-input-placeholders");
+    }
+    run() {
+        // Personal Information
+        this.addPlaceholder("input#en__field_supporter_firstName", "First Name");
+        this.addPlaceholder("input#en__field_supporter_lastName", "Last Name");
+        this.addPlaceholder("input#en__field_supporter_emailAddress", "Email Address");
+        this.addPlaceholder("input#en__field_supporter_phoneNumber", "Phone Number (Optional)");
+        this.addPlaceholder(".en__mandatory input#en__field_supporter_phoneNumber", "Phone Number");
+        this.addPlaceholder("input#en__field_supporter_phoneNumber2", "000-000-0000 (Optional)");
+        this.addPlaceholder(".en__mandatory input#en__field_supporter_phoneNumber2", "000-000-0000");
+        // Address
+        this.addPlaceholder("input#en__field_supporter_country", "Country");
+        this.addPlaceholder("input#en__field_supporter_address1", "Street Address");
+        this.addPlaceholder("input#en__field_supporter_address2", "Apt., ste., bldg.");
+        this.addPlaceholder("input#en__field_supporter_city", "City");
+        this.addPlaceholder("input#en__field_supporter_region", "Region");
+        this.addPlaceholder("input#en__field_supporter_postcode", "Zip Code");
+        // Donation
+        this.addPlaceholder(".en__field--donationAmt.en__field--withOther .en__field__input--other", "Other");
+        this.addPlaceholder("input#en__field_transaction_ccnumber", "•••• •••• •••• ••••");
+        this.addPlaceholder("input#en__field_transaction_ccexpire", "MM / YY");
+        this.addPlaceholder("input#en__field_transaction_ccvv", "CVV");
+        this.addPlaceholder("input#en__field_supporter_bankAccountNumber", "Bank Account Number");
+        this.addPlaceholder("input#en__field_supporter_bankRoutingNumber", "Bank Routing Number");
+        // In Honor
+        this.addPlaceholder("input#en__field_transaction_honname", "Honoree Name");
+        this.addPlaceholder("input#en__field_transaction_infname", "Recipient Name");
+        this.addPlaceholder("input#en__field_transaction_infemail", "Recipient Email Address");
+        this.addPlaceholder("input#en__field_transaction_infcountry", "Country");
+        this.addPlaceholder("input#en__field_transaction_infadd1", "Recipient Street Address");
+        this.addPlaceholder("input#en__field_transaction_infadd2", "Recipient Apt., ste., bldg.");
+        this.addPlaceholder("input#en__field_transaction_infcity", "Recipient City");
+        this.addPlaceholder("input#en__field_transaction_infpostcd", "Recipient Postal Code");
+        // Miscillaneous
+        this.addPlaceholder("input#en__field_transaction_gftrsn", "Reason for your gift");
+        // Shipping Information
+        this.addPlaceholder("input#en__field_transaction_shipfname", "Shipping First Name");
+        this.addPlaceholder("input#en__field_transaction_shiplname", "Shipping Last Name");
+        this.addPlaceholder("input#en__field_transaction_shipemail", "Shipping Email Address");
+        this.addPlaceholder("input#en__field_transaction_shipcountry", "Shipping Country");
+        this.addPlaceholder("input#en__field_transaction_shipadd1", "Shipping Street Address");
+        this.addPlaceholder("input#en__field_transaction_shipadd2", "Shipping Apt., ste., bldg.");
+        this.addPlaceholder("input#en__field_transaction_shipcity", "Shipping City");
+        this.addPlaceholder("input#en__field_transaction_shipregion", "Shipping Region");
+        this.addPlaceholder("input#en__field_transaction_shippostcode", "Shipping Postal Code");
+        // Billing Infromation
+        this.addPlaceholder("input#en__field_supporter_billingCountry", "Billing Country");
+        this.addPlaceholder("input#en__field_supporter_billingAddress1", "Billing Street Address");
+        this.addPlaceholder("input#en__field_supporter_billingAddress2", "Billing Apt., ste., bldg.");
+        this.addPlaceholder("input#en__field_supporter_billingCity", "Billing City");
+        this.addPlaceholder("input#en__field_supporter_billingRegion", "Billing Region");
+        this.addPlaceholder("input#en__field_supporter_billingPostcode", "Billing Postal Code");
+    }
+    addPlaceholder(selector, placeholder) {
+        const fieldEl = document.querySelector(selector);
+        if (fieldEl) {
+            fieldEl.placeholder = placeholder;
+        }
     }
 }
 
@@ -14790,12 +14661,14 @@ class TranslateFields {
                     select.classList.add("en__field__input");
                     select.classList.add("en__field__input--select");
                     select.autocomplete = "address-level1";
+                    let valueSelected = false;
                     values.forEach((value) => {
                         const option = document.createElement("option");
                         option.value = value.value;
                         option.innerHTML = value.label;
-                        if (selectedState === value.value) {
+                        if (selectedState === value.value && !valueSelected) {
                             option.selected = true;
+                            valueSelected = true;
                         }
                         if (value.disabled) {
                             option.disabled = true;
@@ -14805,6 +14678,7 @@ class TranslateFields {
                     elementWrapper.innerHTML = "";
                     elementWrapper.appendChild(select);
                     select.addEventListener("change", this.rememberState.bind(this, state));
+                    select.dispatchEvent(new Event("change", { bubbles: true }));
                 }
                 else {
                     elementWrapper.innerHTML = "";
@@ -16106,6 +15980,11 @@ class OtherAmount {
         });
         const otherAmountField = document.querySelector("[name='transaction.donationAmt.other'");
         if (otherAmountField) {
+            otherAmountField.setAttribute("inputmode", "decimal");
+            // ADD THE MISSING LABEL FOR IMPROVED ACCESSABILITY
+            otherAmountField.setAttribute("aria-label", "Enter your custom donation amount");
+            otherAmountField.setAttribute("autocomplete", "off");
+            otherAmountField.setAttribute("data-lpignore", "true");
             otherAmountField.addEventListener("change", (e) => {
                 const target = e.target;
                 const amount = target.value;
@@ -19094,7 +18973,8 @@ class DigitalWallets {
     }
     addOptionToPaymentTypeField(value, label) {
         const paymentTypeField = document.querySelector('[name="transaction.paymenttype"]');
-        if (paymentTypeField) {
+        if (paymentTypeField &&
+            !paymentTypeField.querySelector(`[value=${value}]`)) {
             const walletOption = document.createElement("option");
             walletOption.value = value;
             walletOption.innerText = label;
@@ -19455,9 +19335,8 @@ class Plaid {
 class GiveBySelect {
     constructor() {
         this.logger = new EngridLogger("GiveBySelect", "#FFF", "#333", "🐇");
-        this.enFieldGiveBySelect = document.querySelector(".en__field--give-by-select");
         this.transactionGiveBySelect = document.getElementsByName("transaction.giveBySelect");
-        if (!this.enFieldGiveBySelect || !this.transactionGiveBySelect)
+        if (!this.transactionGiveBySelect)
             return;
         this.transactionGiveBySelect.forEach((giveBySelect) => {
             giveBySelect.addEventListener("change", () => {
@@ -19516,11 +19395,142 @@ class UrlParamsToBodyAttrs {
     }
 }
 
+;// CONCATENATED MODULE: ./node_modules/@4site/engrid-common/dist/exit-intent-lightbox.js
+
+
+class ExitIntentLightbox {
+    constructor() {
+        this.opened = false;
+        this.dataLayer = window.dataLayer || [];
+        this.logger = new EngridLogger("ExitIntentLightbox", "yellow", "black", "🚪");
+        let options = "EngridExitIntent" in window ? window.EngridExitIntent : {};
+        this.options = Object.assign(Object.assign({}, ExitIntentOptionsDefaults), options);
+        if (!this.options.enabled) {
+            this.logger.log("Not enabled");
+            return;
+        }
+        if (get(this.options.cookieName)) {
+            this.logger.log("Not showing - cookie found.");
+            return;
+        }
+        const activeTriggers = Object.keys(this.options.triggers)
+            .filter((t) => this.options.triggers[t])
+            .join(", ");
+        this.logger.log("Enabled, waiting for trigger. Active triggers: " + activeTriggers);
+        this.watchForTriggers();
+    }
+    watchForTriggers() {
+        if (this.options.triggers.mousePosition) {
+            this.watchMouse();
+        }
+        if (this.options.triggers.visibilityState) {
+            this.watchDocumentVisibility();
+        }
+    }
+    watchMouse() {
+        document.addEventListener("mouseout", (e) => {
+            // If this is an autocomplete element.
+            if (e.target.tagName.toLowerCase() == "input")
+                return;
+            // Get the current viewport width.
+            const vpWidth = Math.max(document.documentElement.clientWidth, window.innerWidth || 0);
+            // If the current mouse X position is within 50px of the right edge
+            // of the viewport, return.
+            if (e.clientX >= vpWidth - 50)
+                return;
+            // If the current mouse Y position is not within 50px of the top
+            // edge of the viewport, return.
+            if (e.clientY >= 50)
+                return;
+            // Reliable, works on mouse exiting window and
+            // user switching active program
+            const from = e.relatedTarget;
+            if (!from) {
+                this.logger.log("Triggered by mouse position");
+                this.open();
+            }
+        });
+    }
+    watchDocumentVisibility() {
+        const visibilityListener = () => {
+            if (document.visibilityState === "hidden") {
+                this.logger.log("Triggered by visibilityState is hidden");
+                this.open();
+                document.removeEventListener("visibilitychange", visibilityListener);
+            }
+        };
+        document.addEventListener("visibilitychange", visibilityListener);
+    }
+    open() {
+        var _a, _b, _c;
+        if (this.opened)
+            return;
+        engrid_ENGrid.setBodyData("exit-intent-lightbox", "open");
+        set(this.options.cookieName, "1", {
+            expires: this.options.cookieDuration,
+        });
+        document.body.insertAdjacentHTML("beforeend", `
+        <div class="ExitIntent">
+          <div class="ExitIntent__overlay">
+            <div class="ExitIntent__container">
+              <div class="ExitIntent__close">X</div>
+              <div class="ExitIntent__body">
+                <h2>${this.options.title}</h2>
+                <p>${this.options.text}</p>
+                <button type="button" class="ExitIntent__button">
+                  ${this.options.buttonText}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      `);
+        this.opened = true;
+        this.dataLayer.push({ event: "exit_intent_lightbox_shown" });
+        (_a = document
+            .querySelector(".ExitIntent__close")) === null || _a === void 0 ? void 0 : _a.addEventListener("click", () => {
+            this.dataLayer.push({ event: "exit_intent_lightbox_closed" });
+            this.close();
+        });
+        (_b = document
+            .querySelector(".ExitIntent__overlay")) === null || _b === void 0 ? void 0 : _b.addEventListener("click", (event) => {
+            if (event.target === event.currentTarget) {
+                this.dataLayer.push({ event: "exit_intent_lightbox_closed" });
+                this.close();
+            }
+        });
+        (_c = document
+            .querySelector(".ExitIntent__button")) === null || _c === void 0 ? void 0 : _c.addEventListener("click", () => {
+            this.dataLayer.push({ event: "exit_intent_lightbox_cta_clicked" });
+            this.close();
+            const target = this.options.buttonLink;
+            if (target.startsWith(".") || target.startsWith("#")) {
+                const targetEl = document.querySelector(target);
+                if (targetEl) {
+                    targetEl.scrollIntoView({ behavior: "smooth" });
+                }
+            }
+            else {
+                window.open(target, "_blank");
+            }
+        });
+    }
+    close() {
+        var _a;
+        (_a = document.querySelector(".ExitIntent")) === null || _a === void 0 ? void 0 : _a.remove();
+        engrid_ENGrid.setBodyData("exit-intent-lightbox", "closed");
+    }
+}
+
 ;// CONCATENATED MODULE: ./node_modules/@4site/engrid-common/dist/version.js
-const AppVersion = "0.14.4";
+const AppVersion = "0.14.12";
 
 ;// CONCATENATED MODULE: ./node_modules/@4site/engrid-common/dist/index.js
  // Runs first so it can change the DOM markup before any markup dependent code fires
+
+
+
+
 
 
 
