@@ -203,42 +203,6 @@ export const customScript = function (App, EnForm) {
     }
   });
 
-  if (theme === "oc2") {
-    const bgImageTooltip = document.querySelector(
-      ".page-backgroundImage figattribution"
-    );
-
-    if (bgImageTooltip) {
-      const bgImageTooltipText = bgImageTooltip.innerHTML;
-
-      bgImageTooltip.insertAdjacentHTML(
-        "afterend",
-        `<div id="mobile-bg-tooltip"></div>`
-      );
-      tippy("#mobile-bg-tooltip", {
-        theme: "black",
-        content: bgImageTooltipText,
-        allowHTML: true,
-        arrow: true,
-        arrowType: "default",
-        placement: "left",
-        trigger: "click mouseenter focus",
-        interactive: true,
-      });
-    }
-
-    document.querySelectorAll(".click-to-expand-cta").forEach((el) => {
-      el.addEventListener("click", () => {
-        el.parentElement.classList.add("expanded");
-
-        const buttonContainer = document.querySelector(
-          ".engrid-mobile-cta-container"
-        );
-        if (buttonContainer) buttonContainer.style.display = "block";
-      });
-    });
-  }
-
   const selects = document.querySelectorAll("select");
   if (selects) {
     selects.forEach((select) => {
@@ -384,5 +348,79 @@ export const customScript = function (App, EnForm) {
 
   // Call the function to update recurrfreq values
   legacyUpdateRecurrfreqValues();
+
+  /**
+   * This function checks for the presence of ".content-footer > .en__component--copyblock + .en__component--copyblock > p"
+   * and if it exists, it gets its content and sets it as a data attribute on ".page-backgroundImage img" as "data-attribution-source".
+   * It also adds a new <figattribution> element with the same value inside wrapped in a <p> tag after the <img> tag,
+   * and removes the original attribution element.
+   */
+  function legacySetBackgroundImageAttributionSource() {
+    const attributionElement = document.querySelector(
+      '.content-footer > .en__component--copyblock + .en__component--copyblock > p'
+    );
+
+    if (attributionElement) {
+      const backgroundImage = document.querySelector('.page-backgroundImage img');
+
+      if (backgroundImage) {
+        const attributionContent = attributionElement.textContent.trim();
+        backgroundImage.setAttribute('data-attribution-source', attributionContent);
+        console.log(`Set "data-attribution-source" to "${attributionContent}"`);
+
+        // Create the <figattribution> element with the content and wrap it in a <p> tag
+        const figAttribution = document.createElement('figattribution');
+        const pTag = document.createElement('p');
+        pTag.textContent = attributionContent;
+        figAttribution.appendChild(pTag);
+
+        // Insert the <figattribution> element after the <img> tag
+        backgroundImage.insertAdjacentElement('afterend', figAttribution);
+
+        // Remove the original attribution element
+        attributionElement.remove();
+        console.log('Original attribution element removed.');
+      }
+    }
+  }
+
+  // Call the function to set the background image attribution source, add <figattribution> element, and remove the original attribution element
+  legacySetBackgroundImageAttributionSource();
+
+  if (theme === "oc2") {
+    const bgImageTooltip = document.querySelector(
+      ".page-backgroundImage figattribution"
+    );
+
+    if (bgImageTooltip) {
+      const bgImageTooltipText = bgImageTooltip.innerHTML;
+
+      bgImageTooltip.insertAdjacentHTML(
+        "afterend",
+        `<div id="mobile-bg-tooltip"></div>`
+      );
+      tippy("#mobile-bg-tooltip", {
+        theme: "black",
+        content: bgImageTooltipText,
+        allowHTML: true,
+        arrow: true,
+        arrowType: "default",
+        placement: "left",
+        trigger: "click mouseenter focus",
+        interactive: true,
+      });
+    }
+
+    document.querySelectorAll(".click-to-expand-cta").forEach((el) => {
+      el.addEventListener("click", () => {
+        el.parentElement.classList.add("expanded");
+
+        const buttonContainer = document.querySelector(
+          ".engrid-mobile-cta-container"
+        );
+        if (buttonContainer) buttonContainer.style.display = "block";
+      });
+    });
+  }
 
 };

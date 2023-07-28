@@ -727,6 +727,12 @@
           [page-customCode-end];
     }
 
+    // &[data-engrid-layout="leftleft1col"][data-replace-banner-with-background="if-background-image"][data-engrid-page-background="image"] [class*="page-backgroundImage"] img,
+    // &[data-engrid-layout="leftleft1col"][data-replace-banner-with-background="if-banner-empty"][data-engrid-body-banner="empty"][data-engrid-page-background="image"] [class*="page-backgroundImage"] img{
+    //   visibility: hidden !important;
+    //   display: block !important;
+    // }
+
     &[data-replace-banner-with-background="if-banner-empty"][data-engrid-body-banner="empty"][data-engrid-page-background="image"] {
       [class*=page-backgroundImage] {
         grid-row: body-banner!important;
@@ -748,11 +754,12 @@
 
         figure {
           // Change from absolute positioning so that it will have height
-          position: relative!important;
-          background-image: none;
-          height: 250px !important;
+          position: relative !important;
+          // background-image: none;
+          max-height: 250px;
           display: flex;
           align-items: center;
+          aspect-ratio: initial;
         }
 
         figattribution {
