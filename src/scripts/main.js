@@ -479,6 +479,35 @@ export const customScript = function (App, EnForm) {
   legacyWrapFigAttributionWithFigure();
 
 
+  /**
+   * Function to rearrange elements on the page by moving specific elements after and before other elements.
+   * Moves elements with the "moveafter-en__field--recurrfreq" class after the "en__field--recurrfreq" class,
+   * and moves elements with the "movebefore-en__field--donationAmt" class before the "en__field--donationAmt" class.
+   */
+  function rearrangePageElements() {
+    // Move elements with the "moveafter-en__field--recurrfreq" class after the "en__field--recurrfreq" class
+    const moveAfterElements = document.querySelectorAll(".moveafter-en__field--recurrfreq");
+    const afterElement = document.querySelector(".en__field--recurrfreq");
+    if (afterElement && moveAfterElements.length > 0) {
+      moveAfterElements.forEach((element) => {
+        afterElement.insertAdjacentElement("afterend", element);
+      });
+    }
+
+    // Move elements with the "movebefore-en__field--donationAmt" class before the "en__field--donationAmt" class
+    const moveBeforeElements = document.querySelectorAll(".movebefore-en__field--donationAmt");
+    const beforeElement = document.querySelector(".en__field--donationAmt");
+    if (beforeElement && moveBeforeElements.length > 0) {
+      moveBeforeElements.forEach((element) => {
+        beforeElement.insertAdjacentElement("beforebegin", element);
+      });
+    }
+  }
+
+  // Call the function to rearrange elements on the page
+  rearrangePageElements();
+
+
   if (theme === "oc2") {
     const bgImageTooltip = document.querySelector(
       ".page-backgroundImage figattribution"

@@ -19,7 +19,7 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Friday, July 28, 2023 @ 15:07:47 ET
+ *  Date: Friday, July 28, 2023 @ 15:58:18 ET
  *  By: bryancasler
  *  ENGrid styles: v0.14.10
  *  ENGrid scripts: v0.14.10
@@ -9955,6 +9955,7 @@ body[data-engrid-debug]:before{
   width:85%;
 }
 [data-engrid-theme=oc2] .header-with-divider{
+  flex-basis:100%;
   font-weight:500;
   margin:1rem 0;
   position:relative;
