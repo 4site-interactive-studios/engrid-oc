@@ -847,8 +847,9 @@
       text-align: center;
     }
 
-    .radio-to-buttons_donationAmt .en__field--donationAmt.en__field--radio>.en__field__element .en__field__item {
-      padding: 4px;
+    .radio-to-buttons_donationAmt{
+      --fields_spacing-inline: 4px;
+      --fields_spacing-inline: 4px;
     }
 
     &[data-engrid-transaction-recurring-frequency] .radio-to-buttons_donationAmt .en__field--donationAmt div:not(.en__field__item--other) .en__field__label--item:after {
