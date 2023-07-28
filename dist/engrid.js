@@ -17,8 +17,8 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Thursday, July 20, 2023 @ 04:11:17 ET
- *  By: michael
+ *  Date: Thursday, July 27, 2023 @ 15:52:23 ET
+ *  By: bryancasler
  *  ENGrid styles: v0.14.10
  *  ENGrid scripts: v0.14.10
  *
@@ -19629,6 +19629,134 @@ const customScript = function (App, EnForm) {
       target.dataset.selectedValue = target.value ?? "";
     }
   });
+  /**
+   * This function replaces the CSS class of a specified element that has a legacy class name.
+   * The replacement is applied only if the <body> element has the data attribute "data-engrid-theme" set to "oc2".
+   */
+
+  function legacyGiftFrequencyAndAmountFormComponent() {
+    // Check if the <body> element has the data attribute data-engrid-theme="oc2"
+    const bodyElement = document.querySelector("body[data-engrid-theme='oc2']");
+
+    if (!bodyElement) {
+      // If the data attribute is not present, exit the function
+      return;
+    } // Get the element with the old CSS class
+
+
+    const oldClassElement = document.querySelector(".en__component.en__component--formblock.recurring-frequency_count_3.radio-to-buttons_donationAmt.donation-amount_count_4.i1-hide-label.i2-hide.i3-hide-label"); // Check if the element with the old class exists
+
+    if (oldClassElement) {
+      // Define the new CSS class
+      const newClass = "en__component en__component--formblock recurring-frequency_count_2 radio-to-buttons_recurrfreq radio-to-buttons_donationAmt donation-amount_count_3 i1-hide-label i2-hide i3-hide-label"; // Remove the old class from the element
+
+      oldClassElement.classList.remove("en__component", "en__component--formblock", "recurring-frequency_count_3", "radio-to-buttons_donationAmt", "donation-amount_count_4", "i1-hide-label", "i2-hide", "i3-hide-label"); // Add the new class to the element
+
+      oldClassElement.classList.add(...newClass.split(" "));
+    }
+  } // Call the function to replace the class if the specified condition is met
+
+
+  legacyGiftFrequencyAndAmountFormComponent();
+  /**
+   * This function checks if there are no results for ".page-backgroundImage > img" and
+   * moves the contents of ".body-banner" to ".page-backgroundImage" if needed.
+   */
+
+  function legacyMoveBodyBannerToPageBackground() {
+    // Check if there are no results for ".page-backgroundImage > img"
+    const pageBackgroundImages = document.querySelectorAll(".page-backgroundImage img");
+
+    if (pageBackgroundImages.length === 0) {
+      console.log("No page background images found."); // Get the elements inside ".body-banner"
+
+      const bodyBanner = document.querySelector(".body-banner");
+
+      if (bodyBanner) {
+        console.log("Moving contents from .body-banner to .page-backgroundImage"); // Get the ".page-backgroundImage" element
+
+        const pageBackground = document.querySelector(".page-backgroundImage");
+
+        if (pageBackground) {
+          // Move the contents of ".body-banner" to ".page-backgroundImage"
+          while (bodyBanner.firstChild) {
+            pageBackground.appendChild(bodyBanner.firstChild);
+          }
+
+          console.log("Contents moved successfully."); // Get the image element inside ".pageBackground" again
+
+          const pageBackgroundImage = pageBackground.querySelector("img");
+
+          if (pageBackgroundImage) {
+            // Get the image source (src) from the pageBackgroundImage
+            const imageSrc = pageBackgroundImage.getAttribute("src"); // Set the image source as a CSS custom property on the ".page-backgroundImage" element
+
+            pageBackground.style.setProperty("--engrid__page-backgroundImage_url", `url('${imageSrc}')`);
+            console.log(`Image source set as CSS custom property: --engrid__page-backgroundImage_url: url('${imageSrc}')`); // Update the data attribute on the <body> element to be "image"
+
+            document.body.setAttribute("data-engrid-page-background", "image");
+            console.log("data-engrid-page-background attribute updated to 'image' on <body>."); // Set data-engrid-body-banner="empty" on the <body> element
+
+            document.body.setAttribute("data-engrid-body-banner", "empty");
+            console.log("data-engrid-body-banner attribute set to 'empty' on <body>."); // Set data-replace-banner-with-background="if-banner-empty" on the <body> element
+
+            document.body.setAttribute("data-replace-banner-with-background", "if-banner-empty");
+            console.log("data-replace-banner-with-background attribute set to 'if-banner-empty' on <body>.");
+          } else {
+            console.log("Image not found inside .page-backgroundImage.");
+          } // Remove the data attribute from the <body> element
+
+
+          document.body.removeAttribute("data-engrid-no-page-backgroundimage");
+          console.log("data-engrid-no-page-backgroundimage attribute removed from <body>.");
+        } else {
+          console.log(".page-backgroundImage not found. Cannot move contents.");
+        }
+      } else {
+        console.log(".body-banner not found. Nothing to move.");
+      }
+    } else {
+      console.log("Page background images found. No need to move contents.");
+    }
+  } // Call the function to move contents if needed
+
+
+  legacyMoveBodyBannerToPageBackground();
+  /**
+   * This function checks the values of [for*="en__field_transaction_recurrfreq"] elements
+   * and updates them based on specific criteria.
+   */
+
+  function legacyUpdateRecurrfreqValues() {
+    const recurrfreqElements = document.querySelectorAll('[for*="en__field_transaction_recurrfreq"]');
+    recurrfreqElements.forEach(element => {
+      const value = element.textContent.trim();
+
+      switch (value) {
+        case "Give Once":
+          element.textContent = "One-Time";
+          console.log(`Updated "${value}" to "One-Time"`);
+          break;
+
+        case "Give Monthly":
+          element.textContent = "Monthly";
+          console.log(`Updated "${value}" to "Monthly"`);
+          break;
+
+        case "Give Annually":
+          element.textContent = "Annually";
+          console.log(`Updated "${value}" to "Annually"`);
+          break;
+
+        default:
+          console.log(`No update needed for "${value}"`);
+          break;
+      }
+    });
+  } // Call the function to update recurrfreq values
+
+
+  legacyUpdateRecurrfreqValues();
 };
 // EXTERNAL MODULE: ./node_modules/smoothscroll-polyfill/dist/smoothscroll.js
 var smoothscroll = __webpack_require__(523);

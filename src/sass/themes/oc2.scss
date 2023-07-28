@@ -153,6 +153,12 @@
     display: block!important;
   }
 
+  // OC 1 Legacy Support
+  // To deprecate: Remove entire declaration
+  .body-top .en__component--copyblock > *[style="text-align: center;"]{
+    text-align: initial !important;
+  }
+
   @keyframes pulse {
     0% {
       transform: scale(1);
@@ -176,8 +182,28 @@
     color: var(--color-light-blue);
   }
 
-  .body-title h2 {
+  // OC 1 Legacy Support
+  // To deprecate: Remove ":only-child"
+  .body-title h1,
+  .body-title h2:only-child{
+    font-weight: 700;
+  }
+
+  // OC 1 Legacy Support
+  // To deprecate: Remove the entire declaration
+  .body-title h2:only-child,
+  .body-title h2:only-child span{
+    color: var(--h1_color)  !important;
+    font-size: var(--h1_font-size) !important;
+    line-height: var(--h1_line-height) !important;
+    text-align: initial !important;
+  }
+
+  // OC 1 Legacy Support
+  // To deprecate: Remove ":not(:only-child)"
+  .body-title h2:not(:only-child) {
     display: none;
+    font-style: italic;
   }
 
   &:not(#en__pagebuilder) .page-backgroundImage {
@@ -268,7 +294,11 @@
     }
   }
 
-  .body-title h1 {
+
+  // OC 1 Legacy Support
+  // To deprecate: Remove ":only-child"
+  .body-title h1,
+  .body-title h2:only-child{
     margin-top: 0;
   }
 
@@ -778,11 +808,17 @@
       text-align: center;
     }
 
-    .body-title h1 {
+    // OC 1 Legacy Support
+    // To deprecate: Remove ":only-child"
+    .body-title h1,
+    .body-title h2:only-child  // OC 1 Legacy Support
+    {
       margin-top: 2rem;
     }
 
-    .body-title h2 {
+    // OC 1 Legacy Support
+    // To deprecate: Remove ":not(:only-child)"
+    .body-title h2:not(:only-child) {
       display: block;
       margin-top: 1rem;
     }
