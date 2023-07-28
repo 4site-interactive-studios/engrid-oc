@@ -17,7 +17,7 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Friday, July 28, 2023 @ 13:37:31 ET
+ *  Date: Friday, July 28, 2023 @ 13:56:37 ET
  *  By: bryancasler
  *  ENGrid styles: v0.14.10
  *  ENGrid scripts: v0.14.10
@@ -19762,6 +19762,31 @@ const customScript = function (App, EnForm) {
 
 
   legacySetBackgroundImageAttributionSource();
+  /**
+   * This function moves the "--banner-image-height" custom attribute from the "img" tag inside ".page-backgroundImage"
+   * and adds it to the ".page-backgroundImage" element's style attribute, ensuring not to overwrite any existing styles.
+   */
+
+  function legacyMoveBannerImageHeightToBackgroundImage() {
+    const pageBackgroundImage = document.querySelector('.page-backgroundImage');
+    const backgroundImage = pageBackgroundImage.querySelector('img');
+
+    if (pageBackgroundImage && backgroundImage) {
+      // Get the "--banner-image-height" style from the "img" tag
+      const bannerImageHeightStyle = backgroundImage.getAttribute('style');
+
+      if (bannerImageHeightStyle) {
+        // Remove the "--banner-image-height" style from the "img" tag
+        backgroundImage.setAttribute('style', bannerImageHeightStyle.replace(/(--banner-image-height:[^;]+;?)/g, '').trim()); // Append the "--banner-image-height" style to the ".page-backgroundImage" style
+
+        const pageBackgroundImageStyle = pageBackgroundImage.getAttribute('style');
+        pageBackgroundImage.setAttribute('style', `${pageBackgroundImageStyle ? pageBackgroundImageStyle + ' ' : ''}${bannerImageHeightStyle}`);
+      }
+    }
+  } // Call the function to move "--banner-image-height" from the "img" tag to ".page-backgroundImage" style
+
+
+  legacyMoveBannerImageHeightToBackgroundImage();
 
   if (theme === "oc2") {
     const bgImageTooltip = document.querySelector(".page-backgroundImage figattribution");

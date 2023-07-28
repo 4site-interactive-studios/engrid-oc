@@ -756,7 +756,7 @@
           // Change from absolute positioning so that it will have height
           position: relative !important;
           // background-image: none;
-          max-height: 250px;
+          max-height: var(--banner-image-height, 250px);
           display: flex;
           align-items: center;
           aspect-ratio: initial;
@@ -808,7 +808,7 @@
     --checkbox_border-radius: 9px;
     --submit__button_padding-top: 15px;
     --submit__button_padding-bottom: 15px;
-    --fields_spacing-inline: 0;
+    // --fields_spacing-inline: 0;
     --engrid__content-footer_padding: 70px 1.5rem 1rem;
 
     .body-title {
