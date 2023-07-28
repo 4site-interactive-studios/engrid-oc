@@ -17,7 +17,7 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Friday, July 28, 2023 @ 14:26:51 ET
+ *  Date: Friday, July 28, 2023 @ 15:07:47 ET
  *  By: bryancasler
  *  ENGrid styles: v0.14.10
  *  ENGrid scripts: v0.14.10
@@ -19820,6 +19820,29 @@ const customScript = function (App, EnForm) {
   }
 
   legacyCheckDonationAmtLabelsForDollarSign();
+  /**
+   * Function to detect if ".page-backgroundImage figure > img + figattribution" exists.
+   * If it doesn't, check if ".page-backgroundImage img + figattribution" exists and wrap it in a <figure> tag with the "media-with-attribution" class.
+   */
+
+  function legacyWrapFigAttributionWithFigure() {
+    const existingFigureAttribution = document.querySelector('.page-backgroundImage figure > img + figattribution');
+
+    if (!existingFigureAttribution) {
+      const imgAttribution = document.querySelector('.page-backgroundImage img + figattribution');
+
+      if (imgAttribution) {
+        const figure = document.createElement('figure');
+        figure.classList.add('media-with-attribution'); // Wrap the imgAttribution inside the <figure> element
+
+        imgAttribution.parentNode.insertBefore(figure, imgAttribution);
+        figure.appendChild(imgAttribution);
+      }
+    }
+  } // Call the function to wrap figattribution with a figure element if needed
+
+
+  legacyWrapFigAttributionWithFigure();
 
   if (theme === "oc2") {
     const bgImageTooltip = document.querySelector(".page-backgroundImage figattribution");

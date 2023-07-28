@@ -192,11 +192,18 @@
   // OC 1 Legacy Support
   // To deprecate: Remove the entire declaration
   .body-title h2:only-child,
-  .body-title h2:only-child span{
+  .body-title h2:only-child span,
+  &[data-engrid-legacy-theme] .body-top h2 span span{
     color: var(--h1_color)  !important;
     font-size: var(--h1_font-size) !important;
     line-height: var(--h1_line-height) !important;
     text-align: initial !important;
+  }
+
+  // OC 1 Legacy Support
+  // To deprecate: Remove the entire declaration
+  &[data-engrid-legacy-theme="oc1"] .banner-text{
+    display: none;
   }
 
   // OC 1 Legacy Support
@@ -392,6 +399,10 @@
   &[data-engrid-legacy-theme="oc1"] .radio-to-buttons_donationAmt input[name="transaction.donationAmt"]+label:before{
     display: none !important;
     content: none;
+  }
+
+  [style*="color:#039BC4"]{
+    color: var(--color-primary) !important;
   }
 
   .recurring-upsell-text {

@@ -19,7 +19,7 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Friday, July 28, 2023 @ 14:26:51 ET
+ *  Date: Friday, July 28, 2023 @ 15:07:47 ET
  *  By: bryancasler
  *  ENGrid styles: v0.14.10
  *  ENGrid scripts: v0.14.10
@@ -9791,11 +9791,14 @@ body[data-engrid-debug]:before{
 [data-engrid-theme=oc2] .body-title h1,[data-engrid-theme=oc2] .body-title h2:only-child{
   font-weight:700;
 }
-[data-engrid-theme=oc2] .body-title h2:only-child,[data-engrid-theme=oc2] .body-title h2:only-child span{
+[data-engrid-theme=oc2] .body-title h2:only-child,[data-engrid-theme=oc2] .body-title h2:only-child span,[data-engrid-theme=oc2][data-engrid-legacy-theme] .body-top h2 span span{
   color:var(--h1_color) !important;
   font-size:var(--h1_font-size) !important;
   line-height:var(--h1_line-height) !important;
   text-align:initial !important;
+}
+[data-engrid-theme=oc2][data-engrid-legacy-theme=oc1] .banner-text{
+  display:none;
 }
 [data-engrid-theme=oc2] .body-title h2:not(:only-child){
   display:none;
@@ -9942,6 +9945,9 @@ body[data-engrid-debug]:before{
 [data-engrid-theme=oc2][data-engrid-legacy-theme=oc1] .radio-to-buttons_donationAmt input[name="transaction.donationAmt"]+label:before{
   content:none;
   display:none !important;
+}
+[data-engrid-theme=oc2] [style*="color:#039BC4"]{
+  color:var(--color-primary) !important;
 }
 [data-engrid-theme=oc2] .recurring-upsell-text p{
   font-family:Kalam,sans-serif;
