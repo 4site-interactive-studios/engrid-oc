@@ -17,7 +17,7 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Friday, July 28, 2023 @ 13:57:06 ET
+ *  Date: Friday, July 28, 2023 @ 14:26:51 ET
  *  By: bryancasler
  *  ENGrid styles: v0.14.10
  *  ENGrid scripts: v0.14.10
@@ -19602,9 +19602,17 @@ const customScript = function (App, EnForm) {
     }
   });
   /**
+   * Function to set the "data-engrid-legacy-theme'" data attribute on the "body" element to "oc1".
+   */
+
+  function legacySetLegacyThemeAttribute() {
+    document.body.setAttribute('data-engrid-legacy-theme', 'oc1');
+  }
+  /**
    * This function replaces the CSS class of a specified element that has a legacy class name.
    * The replacement is applied only if the <body> element has the data attribute "data-engrid-theme" set to "oc2".
    */
+
 
   function legacyGiftFrequencyAndAmountFormComponent() {
     // Check if the <body> element has the data attribute data-engrid-theme="oc2"
@@ -19681,6 +19689,8 @@ const customScript = function (App, EnForm) {
 
           document.body.removeAttribute("data-engrid-no-page-backgroundimage");
           console.log("data-engrid-no-page-backgroundimage attribute removed from <body>.");
+          legacySetLegacyThemeAttribute();
+          console.log("legacySetLegacyThemeAttribute 1 called");
         } else {
           console.log(".page-backgroundImage not found. Cannot move contents.");
         }
@@ -19708,16 +19718,19 @@ const customScript = function (App, EnForm) {
         case "Give Once":
           element.textContent = "One-Time";
           console.log(`Updated "${value}" to "One-Time"`);
+          legacySetLegacyThemeAttribute();
           break;
 
         case "Give Monthly":
           element.textContent = "Monthly";
           console.log(`Updated "${value}" to "Monthly"`);
+          legacySetLegacyThemeAttribute();
           break;
 
         case "Give Annually":
           element.textContent = "Annually";
           console.log(`Updated "${value}" to "Annually"`);
+          legacySetLegacyThemeAttribute();
           break;
 
         default:
@@ -19756,6 +19769,8 @@ const customScript = function (App, EnForm) {
 
         attributionElement.remove();
         console.log('Original attribution element removed.');
+        legacySetLegacyThemeAttribute();
+        console.log("legacySetLegacyThemeAttribute 6 called");
       }
     }
   } // Call the function to set the background image attribution source, add <figattribution> element, and remove the original attribution element
@@ -19787,6 +19802,24 @@ const customScript = function (App, EnForm) {
 
 
   legacyMoveBannerImageHeightToBackgroundImage();
+  /**
+   * Function to check if any of the ".en__field--donationAmt label" elements contain a dollar sign ($).
+   */
+
+  function legacyCheckDonationAmtLabelsForDollarSign() {
+    const donationAmtLabels = document.querySelectorAll('.en__field--donationAmt label');
+
+    for (const label of donationAmtLabels) {
+      const labelValue = label.textContent.trim(); // Check if the label value contains a dollar sign ($)
+
+      if (labelValue.includes('$')) {
+        legacySetLegacyThemeAttribute();
+        console.log("legacySetLegacyThemeAttribute 8 called");
+      }
+    }
+  }
+
+  legacyCheckDonationAmtLabelsForDollarSign();
 
   if (theme === "oc2") {
     const bgImageTooltip = document.querySelector(".page-backgroundImage figattribution");

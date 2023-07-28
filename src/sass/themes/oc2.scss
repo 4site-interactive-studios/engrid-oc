@@ -389,6 +389,11 @@
     }
   }
 
+  &[data-engrid-legacy-theme="oc1"] .radio-to-buttons_donationAmt input[name="transaction.donationAmt"]+label:before{
+    display: none !important;
+    content: none;
+  }
+
   .recurring-upsell-text {
     p {
       font-family: "Kalam", sans-serif;
