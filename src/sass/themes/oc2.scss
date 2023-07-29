@@ -732,6 +732,26 @@
     width: 100%;
   }
 
+  // Legacy OC1 page support
+  // Deprecate by removing entire background image
+  &:not(#en__pagebuilder)[data-engrid-layout="leftleft1col"]
+    .page-backgroundImage[style*="Unknown.jpg"]:before,
+  &:not(#en__pagebuilder)[data-engrid-layout="leftleft1col"]
+    .page-backgroundImage[style*="Unknown.jpg"]
+    figure.media-with-attribution {
+    background-position: 75% center !important;
+  }
+
+  // Legacy OC1 page support
+  // Deprecate by removing entire background image
+  &:not(#en__pagebuilder)[data-engrid-layout="leftleft1col"]
+    .page-backgroundImage[style*="Manatee-thankyou.jpg"]:before,
+  &:not(#en__pagebuilder)[data-engrid-layout="leftleft1col"]
+    .page-backgroundImage[style*="Manatee-thankyou.jpg"]
+    figure.media-with-attribution {
+    background-position: 30% center !important;
+  }
+
   @media screen and (max-width: 840px) {
     --engrid__body_padding: 0 4rem;
     --engrid__body-top_padding: 0 4rem;

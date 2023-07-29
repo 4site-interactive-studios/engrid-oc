@@ -397,7 +397,7 @@ export const customScript = function (App, EnForm) {
 
   /**
    * This function checks for the presence of ".content-footer > .en__component--copyblock + .en__component--copyblock > p"
-   * and if it exists, it gets its content and sets it as a data attribute on ".page-backgroundImage img" as "data-attribution-source".
+   * and if it exists, it gets its content and sets it as a data attribute on ".page-backgroundImage img" as "data-attribution-source" so long as it does not already have an attribution source.
    * It also adds a new <figattribution> element with the same value inside wrapped in a <p> tag after the <img> tag,
    * and removes the original attribution element.
    */
@@ -408,7 +408,7 @@ export const customScript = function (App, EnForm) {
 
     if (attributionElement) {
       const backgroundImage = document.querySelector(
-        ".page-backgroundImage img"
+        ".page-backgroundImage img:not([data-attribution-source])"
       );
 
       if (backgroundImage) {

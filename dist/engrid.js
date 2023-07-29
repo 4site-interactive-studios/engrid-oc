@@ -17,7 +17,7 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Saturday, July 29, 2023 @ 12:15:43 ET
+ *  Date: Saturday, July 29, 2023 @ 13:28:26 ET
  *  By: bryancasler
  *  ENGrid styles: v0.14.13
  *  ENGrid scripts: v0.14.14
@@ -19946,7 +19946,7 @@ const customScript = function (App, EnForm) {
   legacyUpdateRecurrfreqValues();
   /**
    * This function checks for the presence of ".content-footer > .en__component--copyblock + .en__component--copyblock > p"
-   * and if it exists, it gets its content and sets it as a data attribute on ".page-backgroundImage img" as "data-attribution-source".
+   * and if it exists, it gets its content and sets it as a data attribute on ".page-backgroundImage img" as "data-attribution-source" so long as it does not already have an attribution source.
    * It also adds a new <figattribution> element with the same value inside wrapped in a <p> tag after the <img> tag,
    * and removes the original attribution element.
    */
@@ -19955,7 +19955,7 @@ const customScript = function (App, EnForm) {
     const attributionElement = document.querySelector(".content-footer > .en__component--copyblock + .en__component--copyblock > p");
 
     if (attributionElement) {
-      const backgroundImage = document.querySelector(".page-backgroundImage img");
+      const backgroundImage = document.querySelector(".page-backgroundImage img:not([data-attribution-source])");
 
       if (backgroundImage) {
         const attributionContent = attributionElement.textContent.trim();
