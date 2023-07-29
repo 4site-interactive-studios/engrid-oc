@@ -19,7 +19,7 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Saturday, July 29, 2023 @ 11:02:43 ET
+ *  Date: Saturday, July 29, 2023 @ 11:05:49 ET
  *  By: bryancasler
  *  ENGrid styles: v0.14.13
  *  ENGrid scripts: v0.14.14
@@ -9792,9 +9792,15 @@ body[data-engrid-debug]:before{
   --engrid__body-title_background-color:var(--top_background-color);
   --engrid__body-banner_background-color:var(--top_background-color);
   --engrid__body-top_background-color:var(--top_background-color);
-  --engrid__body-footerOutside_background-color:var(--engrid__body_background-color);
-  --engrid__content-footerSpacer_background-color:var(--engrid__body_background-color);
-  --engrid__content-preFooter_background-color:var(--engrid__body_background-color);
+  --engrid__body-footerOutside_background-color:var(
+    --engrid__body_background-color
+  );
+  --engrid__content-footerSpacer_background-color:var(
+    --engrid__body_background-color
+  );
+  --engrid__content-preFooter_background-color:var(
+    --engrid__body_background-color
+  );
   --engrid__content-footer_background-color:var(--bottom_background-color);
   --engrid__body-header_padding:16px 24px;
   --engrid__body_padding:0 9rem;
@@ -9828,7 +9834,7 @@ body[data-engrid-debug]:before{
   --button_border-color_checked:var(--color-primary);
   --recurring-frequency__button_count:2;
   --recurring-frequency__button_border-radius:16px;
-  --recurring-frequency__button_padding:.6em .5em;
+  --recurring-frequency__button_padding:0.6em 0.5em;
   --give-by-select__button_count:1;
   --donation-amount__button_font-size:2.5rem;
   --donation-amount__button_padding:15px 5px;
@@ -10420,7 +10426,7 @@ body[data-engrid-debug]:before{
     --h2_font-size:1.3rem;
     --button_border-radius:6px;
     --recurring-frequency__button_border-radius:6px;
-    --recurring-frequency__button_padding:15px .5em;
+    --recurring-frequency__button_padding:15px 0.5em;
     --button_font-size:1.25rem;
     --donation-amount__button_font-size:1.5rem;
     --donation-amount__button_count:2;

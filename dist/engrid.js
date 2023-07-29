@@ -17,7 +17,7 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Saturday, July 29, 2023 @ 11:02:43 ET
+ *  Date: Saturday, July 29, 2023 @ 11:05:49 ET
  *  By: bryancasler
  *  ENGrid styles: v0.14.13
  *  ENGrid scripts: v0.14.14
@@ -19808,7 +19808,7 @@ const customScript = function (App, EnForm) {
    */
 
   function legacySetLegacyThemeAttribute() {
-    document.body.setAttribute('data-engrid-legacy-theme', 'oc1');
+    document.body.setAttribute("data-engrid-legacy-theme", "oc1");
   }
   /**
    * This function replaces the CSS class of a specified element that has a legacy class name.
@@ -19952,25 +19952,25 @@ const customScript = function (App, EnForm) {
    */
 
   function legacySetBackgroundImageAttributionSource() {
-    const attributionElement = document.querySelector('.content-footer > .en__component--copyblock + .en__component--copyblock > p');
+    const attributionElement = document.querySelector(".content-footer > .en__component--copyblock + .en__component--copyblock > p");
 
     if (attributionElement) {
-      const backgroundImage = document.querySelector('.page-backgroundImage img');
+      const backgroundImage = document.querySelector(".page-backgroundImage img");
 
       if (backgroundImage) {
         const attributionContent = attributionElement.textContent.trim();
-        backgroundImage.setAttribute('data-attribution-source', attributionContent);
+        backgroundImage.setAttribute("data-attribution-source", attributionContent);
         console.log(`Set "data-attribution-source" to "${attributionContent}"`); // Create the <figattribution> element with the content and wrap it in a <p> tag
 
-        const figAttribution = document.createElement('figattribution');
-        const pTag = document.createElement('p');
+        const figAttribution = document.createElement("figattribution");
+        const pTag = document.createElement("p");
         pTag.textContent = attributionContent;
         figAttribution.appendChild(pTag); // Insert the <figattribution> element after the <img> tag
 
-        backgroundImage.insertAdjacentElement('afterend', figAttribution); // Remove the original attribution element
+        backgroundImage.insertAdjacentElement("afterend", figAttribution); // Remove the original attribution element
 
         attributionElement.remove();
-        console.log('Original attribution element removed.');
+        console.log("Original attribution element removed.");
         legacySetLegacyThemeAttribute();
         console.log("legacySetLegacyThemeAttribute 6 called");
       }
@@ -19985,19 +19985,19 @@ const customScript = function (App, EnForm) {
    */
 
   function legacyMoveBannerImageHeightToBackgroundImage() {
-    const pageBackgroundImage = document.querySelector('.page-backgroundImage');
-    const backgroundImage = pageBackgroundImage.querySelector('img');
+    const pageBackgroundImage = document.querySelector(".page-backgroundImage");
+    const backgroundImage = pageBackgroundImage.querySelector("img");
 
     if (pageBackgroundImage && backgroundImage) {
       // Get the "--banner-image-height" style from the "img" tag
-      const bannerImageHeightStyle = backgroundImage.getAttribute('style');
+      const bannerImageHeightStyle = backgroundImage.getAttribute("style");
 
       if (bannerImageHeightStyle) {
         // Remove the "--banner-image-height" style from the "img" tag
-        backgroundImage.setAttribute('style', bannerImageHeightStyle.replace(/(--banner-image-height:[^;]+;?)/g, '').trim()); // Append the "--banner-image-height" style to the ".page-backgroundImage" style
+        backgroundImage.setAttribute("style", bannerImageHeightStyle.replace(/(--banner-image-height:[^;]+;?)/g, "").trim()); // Append the "--banner-image-height" style to the ".page-backgroundImage" style
 
-        const pageBackgroundImageStyle = pageBackgroundImage.getAttribute('style');
-        pageBackgroundImage.setAttribute('style', `${pageBackgroundImageStyle ? pageBackgroundImageStyle + ' ' : ''}${bannerImageHeightStyle}`);
+        const pageBackgroundImageStyle = pageBackgroundImage.getAttribute("style");
+        pageBackgroundImage.setAttribute("style", `${pageBackgroundImageStyle ? pageBackgroundImageStyle + " " : ""}${bannerImageHeightStyle}`);
       }
     }
   } // Call the function to move "--banner-image-height" from the "img" tag to ".page-backgroundImage" style
@@ -20009,12 +20009,12 @@ const customScript = function (App, EnForm) {
    */
 
   function legacyCheckDonationAmtLabelsForDollarSign() {
-    const donationAmtLabels = document.querySelectorAll('.en__field--donationAmt label');
+    const donationAmtLabels = document.querySelectorAll(".en__field--donationAmt label");
 
     for (const label of donationAmtLabels) {
       const labelValue = label.textContent.trim(); // Check if the label value contains a dollar sign ($)
 
-      if (labelValue.includes('$')) {
+      if (labelValue.includes("$")) {
         legacySetLegacyThemeAttribute();
         console.log("legacySetLegacyThemeAttribute 8 called");
       }
@@ -20028,14 +20028,14 @@ const customScript = function (App, EnForm) {
    */
 
   function legacyWrapFigAttributionWithFigure() {
-    const existingFigureAttribution = document.querySelector('.page-backgroundImage figure > img + figattribution');
+    const existingFigureAttribution = document.querySelector(".page-backgroundImage figure > img + figattribution");
 
     if (!existingFigureAttribution) {
-      const imgAttribution = document.querySelector('.page-backgroundImage img + figattribution');
+      const imgAttribution = document.querySelector(".page-backgroundImage img + figattribution");
 
       if (imgAttribution) {
-        const figure = document.createElement('figure');
-        figure.classList.add('media-with-attribution'); // Wrap the imgAttribution inside the <figure> element
+        const figure = document.createElement("figure");
+        figure.classList.add("media-with-attribution"); // Wrap the imgAttribution inside the <figure> element
 
         imgAttribution.parentNode.insertBefore(figure, imgAttribution);
         figure.appendChild(imgAttribution);
@@ -20093,9 +20093,8 @@ const customScript = function (App, EnForm) {
         interactive: true
       });
     }
-  }
+  } // Add click-to-expand-cta event listeners
 
-  ; // Add click-to-expand-cta event listeners
 
   function clickToExpandCta() {
     document.querySelectorAll(".click-to-expand-cta").forEach(el => {
@@ -20107,15 +20106,11 @@ const customScript = function (App, EnForm) {
     });
   }
 
-  ;
-
   if (theme === "oc2") {
     mobileMediaAttribution(); // Call the function to set the mobile media attribution tooltip
 
     clickToExpandCta(); // Call the function to add click-to-expand-cta event listeners
   }
-
-  ;
 };
 // EXTERNAL MODULE: ./node_modules/smoothscroll-polyfill/dist/smoothscroll.js
 var smoothscroll = __webpack_require__(523);
