@@ -17,7 +17,7 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Saturday, July 29, 2023 @ 11:05:49 ET
+ *  Date: Saturday, July 29, 2023 @ 12:15:43 ET
  *  By: bryancasler
  *  ENGrid styles: v0.14.13
  *  ENGrid scripts: v0.14.14
@@ -19830,7 +19830,7 @@ const customScript = function (App, EnForm) {
 
     if (oldClassElement) {
       // Define the new CSS class
-      const newClass = "en__component en__component--formblock recurring-frequency_count_2 radio-to-buttons_recurrfreq radio-to-buttons_donationAmt donation-amount_count_3 i1-hide-label i2-hide i3-hide-label"; // Remove the old class from the element
+      const newClass = "en__component en__component--formblock recurring-frequency_count_2 radio-to-buttons_recurrfreq radio-to-buttons_donationAmt donation-amount_count_3 hide-labels i2-hide"; // Remove the old class from the element
 
       oldClassElement.classList.remove("en__component", "en__component--formblock", "recurring-frequency_count_3", "radio-to-buttons_donationAmt", "donation-amount_count_4", "i1-hide-label", "i2-hide", "i3-hide-label"); // Add the new class to the element
 
@@ -20039,12 +20039,51 @@ const customScript = function (App, EnForm) {
 
         imgAttribution.parentNode.insertBefore(figure, imgAttribution);
         figure.appendChild(imgAttribution);
+        const backgroundImage = document.querySelector(".page-backgroundImage img");
+
+        if (backgroundImage) {
+          const figattribution = document.querySelector(".page-backgroundImage figattribution"); // Move the backgroundImage before the <figureattribution> element
+
+          if (figattribution) {
+            figattribution.parentNode.insertBefore(backgroundImage, figattribution);
+          }
+        }
       }
     }
   } // Call the function to wrap figattribution with a figure element if needed
 
 
   legacyWrapFigAttributionWithFigure();
+  /**
+   * Legacy function: Adds the markup "<div class="en__component en__component--copyblock header-with-divider movebefore-en__field--donationAmt"> <p>Select Gift Amount</p> </div>"
+   * before ".en__field--donationAmt" if the "<p>Select Gift Amount</p>" markup is not detected in ".body-main .en__component--copyblock p".
+   */
+
+  function legacyAddSelectGiftAmountMarkup() {
+    const selectGiftAmountParagraphs = document.querySelectorAll(".body-main .en__component--copyblock p");
+    const hasSelectGiftAmountMarkup = Array.from(selectGiftAmountParagraphs).some(paragraph => {
+      return paragraph.textContent.includes("Select Gift Amount");
+    });
+
+    if (!hasSelectGiftAmountMarkup) {
+      const giftAmountDiv = document.createElement("div");
+      giftAmountDiv.classList.add("en__component", "en__component--copyblock", "header-with-divider", "movebefore-en__field--donationAmt");
+      giftAmountDiv.innerHTML = "<p>Select Gift Amount</p>";
+      const donationAmtField = document.querySelector(".en__field--donationAmt");
+
+      if (donationAmtField && donationAmtField.parentNode) {
+        donationAmtField.parentNode.insertBefore(giftAmountDiv, donationAmtField);
+        console.log("Markup added successfully.");
+      } else {
+        console.log(".en__field--donationAmt not found. Cannot add markup.");
+      }
+    } else {
+      console.log("Markup already exists. Nothing to add.");
+    }
+  } // Call the function to add the markup if needed
+
+
+  legacyAddSelectGiftAmountMarkup();
   /**
    * Function to rearrange elements on the page by moving specific elements after and before other elements.
    * Moves elements with the "moveafter-en__field--recurrfreq" class after the "en__field--recurrfreq" class,
