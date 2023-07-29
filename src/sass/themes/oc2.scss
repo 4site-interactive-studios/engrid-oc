@@ -1,13 +1,13 @@
 //noinspection SassScssResolvedByNameOnly
 [data-engrid-theme="oc2"] {
   // COLORS
-  --color-primary: #0D3669;
-  --color-secondary: #EFF6FE;
-  --color-seashell: #FFF3EE;
-  --color-light-blue: #CDE4FC;
+  --color-primary: #0d3669;
+  --color-secondary: #eff6fe;
+  --color-seashell: #fff3ee;
+  --color-light-blue: #cde4fc;
   --top_background-color: var(--color-seashell);
   --bottom_background-color: black;
-  --color-error: #FF5721;
+  --color-error: #ff5721;
 
   // SECTION BACKGROUNDS
   --engrid__content-header_background-color: var(--top_background-color);
@@ -16,9 +16,15 @@
   --engrid__body-title_background-color: var(--top_background-color);
   --engrid__body-banner_background-color: var(--top_background-color);
   --engrid__body-top_background-color: var(--top_background-color);
-  --engrid__body-footerOutside_background-color: var(--engrid__body_background-color);
-  --engrid__content-footerSpacer_background-color: var(--engrid__body_background-color);
-  --engrid__content-preFooter_background-color: var(--engrid__body_background-color);
+  --engrid__body-footerOutside_background-color: var(
+    --engrid__body_background-color
+  );
+  --engrid__content-footerSpacer_background-color: var(
+    --engrid__body_background-color
+  );
+  --engrid__content-preFooter_background-color: var(
+    --engrid__body_background-color
+  );
   --engrid__content-footer_background-color: var(--bottom_background-color);
 
   // BODY LAYOUT
@@ -28,7 +34,6 @@
   --engrid__body-top_padding: 0 9rem 65px;
   --engrid__body-main_padding: 25px 9rem;
   --engrid__body-footer_padding: 0 0 35px;
-
 
   // FOOTER LAYOUT
   --engrid__content-footer_padding: 90px 1.5rem 1rem;
@@ -67,7 +72,7 @@
   //RECURRING FREQUENCY BUTTONS
   --recurring-frequency__button_count: 2;
   --recurring-frequency__button_border-radius: 16px;
-  --recurring-frequency__button_padding: .6em .5em;
+  --recurring-frequency__button_padding: 0.6em 0.5em;
 
   // GIVE BY SELECT
   --give-by-select__button_count: 1;
@@ -78,13 +83,12 @@
   --donation-amount__button_count: 3;
 
   // SUBMIT BUTTON
-  --submit__button_background-color: #007CF9;
+  --submit__button_background-color: #007cf9;
   --submit__button_color: white;
-  --submit__button_border-color: #007CF9;
-  --submit__button_background-color_hover: #007CF9;
+  --submit__button_border-color: #007cf9;
+  --submit__button_background-color_hover: #007cf9;
   --submit__button_color_hover: white;
-  --submit__button_border-color_hover: #007CF9;
-
+  --submit__button_border-color_hover: #007cf9;
 
   // LABEL
   --label_color: var(--color-primary);
@@ -94,7 +98,7 @@
   // INPUT
   --input_color: var(--color-primary);
   --input_font-size: 1.5rem;
-  --input_background-color: #F7FAFE;
+  --input_background-color: #f7fafe;
   --input_border-width: 1px;
   --input_border-color: var(--color-primary);
   --input_border-radius: 8px;
@@ -112,8 +116,8 @@
 
   // Errors
   --error__color: var(--color-error);
-  --error__color-faded: #FEF9F8;
-  --error__background-color: #FEF9F8;
+  --error__color-faded: #fef9f8;
+  --error__background-color: #fef9f8;
 
   // Checkbox / radio
   --radio_background-color_selected: var(--color-primary);
@@ -150,12 +154,19 @@
 
   // We need to display this even when empty because it has the wave image attached to it.
   .body-top {
-    display: block!important;
+    display: block !important;
+  }
+
+  // OC 1 Legacy Support
+  // Don't show the social sharing widget when in the .body-header
+  // To deprecate, remove entire block
+  .body-header .en__component--socialshareblock {
+    display: none;
   }
 
   // OC 1 Legacy Support
   // To deprecate: Remove entire declaration
-  .body-top .en__component--copyblock > *[style="text-align: center;"]{
+  .body-top .en__component--copyblock > *[style="text-align: center;"] {
     text-align: initial !important;
   }
 
@@ -185,7 +196,7 @@
   // OC 1 Legacy Support
   // To deprecate: Remove ":only-child"
   .body-title h1,
-  .body-title h2:only-child{
+  .body-title h2:only-child {
     font-weight: 700;
   }
 
@@ -193,8 +204,8 @@
   // To deprecate: Remove the entire declaration
   .body-title h2:only-child,
   .body-title h2:only-child span,
-  &[data-engrid-legacy-theme] .body-top h2 span span{
-    color: var(--h1_color)  !important;
+  &[data-engrid-legacy-theme] .body-top h2 span span {
+    color: var(--h1_color) !important;
     font-size: var(--h1_font-size) !important;
     line-height: var(--h1_line-height) !important;
     text-align: initial !important;
@@ -202,7 +213,7 @@
 
   // OC 1 Legacy Support
   // To deprecate: Remove the entire declaration
-  &[data-engrid-legacy-theme="oc1"] .banner-text{
+  &[data-engrid-legacy-theme="oc1"] .banner-text {
     display: none;
   }
 
@@ -217,34 +228,34 @@
     z-index: auto;
   }
 
-  .tippy-box[data-theme~='black'] {
+  .tippy-box[data-theme~="black"] {
     background-color: black;
     color: white;
     font-size: 12px;
-    max-width: 260px!important;
+    max-width: 260px !important;
     margin-top: 9px;
 
     p {
       font-size: 12px;
     }
 
-    &[data-placement^='top'] > .tippy-arrow::before {
+    &[data-placement^="top"] > .tippy-arrow::before {
       border-top-color: black;
     }
-    &[data-placement^='bottom'] > .tippy-arrow::before {
+    &[data-placement^="bottom"] > .tippy-arrow::before {
       border-bottom-color: black;
     }
-    &[data-placement^='left'] > .tippy-arrow::before {
+    &[data-placement^="left"] > .tippy-arrow::before {
       border-left-color: black;
     }
-    &[data-placement^='right'] > .tippy-arrow::before {
+    &[data-placement^="right"] > .tippy-arrow::before {
       border-right-color: black;
     }
   }
 
   &[data-engrid-layout="centercenter2col"] {
     --engrid__body-header_background-color: var(--top_background-color);
-    --engrid__body-top_background-color:  #ffffff;
+    --engrid__body-top_background-color: #ffffff;
     --engrid__body-title_background-color: #ffffff;
 
     // BODY LAYOUT
@@ -301,16 +312,15 @@
     }
   }
 
-
   // OC 1 Legacy Support
   // To deprecate: Remove ":only-child"
   .body-title h1,
-  .body-title h2:only-child{
+  .body-title h2:only-child {
     margin-top: 0;
   }
 
   .body-top:after {
-    content: '';
+    content: "";
     display: block;
     background-image: url("https://aaf1a18515da0e792f78-c27fdabe952dfc357fe25ebf5c8897ee.ssl.cf5.rackcdn.com/1991/wave-white.png?v=1686667298000");
     background-repeat: no-repeat;
@@ -330,24 +340,26 @@
       &:first-of-type {
         padding-right: 0;
         label {
-          border-radius: var(--recurring-frequency__button_border-radius) 0 0 var(--recurring-frequency__button_border-radius);
+          border-radius: var(--recurring-frequency__button_border-radius) 0 0
+            var(--recurring-frequency__button_border-radius);
         }
       }
       &:last-of-type {
         padding-left: 0;
         label {
           position: relative;
-          border-radius:  0 var(--recurring-frequency__button_border-radius) var(--recurring-frequency__button_border-radius) 0;
+          border-radius: 0 var(--recurring-frequency__button_border-radius)
+            var(--recurring-frequency__button_border-radius) 0;
         }
       }
     }
 
-    .en__field__input--radio:focus+.en__field__label {
+    .en__field__input--radio:focus + .en__field__label {
       outline: none;
     }
 
     input[value="MONTHLY"] + label:before {
-      content: '';
+      content: "";
       background-image: url("data:image/svg+xml,%3Csvg width='24' height='20' viewBox='0 0 24 20' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M21.6641 2.13887C19.2199 -0.0877973 15.4291 0.0975226 12.9823 2.32774L12.0324 3.198L11.167 2.23487C8.957 -0.216042 5.18393 -0.782691 2.54379 1.19473C-0.480977 3.45855 -0.839824 7.7988 1.63645 10.5486L10.1831 20C10.1831 20 20.1093 12.9636 21.6839 11.5289C24.4103 9.03368 24.4734 4.69689 21.6641 2.13887Z' fill='%23007CF9'/%3E%3C/svg%3E");
       display: flex;
       width: 24px;
@@ -377,7 +389,7 @@
       //background-image: url("data:image/svg+xml,%3Csvg width='52' height='39' viewBox='0 0 52 39' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cg clip-path='url(%23clip0_2104_37304)'%3E%3Crect width='52' height='26' fill='%23EFF6FE'/%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M7.73679 0.139893L1.14852 4.68257C0.466507 5.15283 0.294842 6.08694 0.765099 6.76895C1.23536 7.45097 2.16946 7.62264 2.85148 7.15238L6.35703 4.73527C7.07341 10.266 9.92281 15.0254 13.8111 18.8781C13.6956 18.9821 13.581 19.0875 13.4673 19.1942C9.1652 23.2336 6.30639 29.0679 6.18161 36.9764C6.16855 37.8047 6.82944 38.4868 7.65776 38.4999C8.48609 38.5129 9.16817 37.8521 9.18124 37.0237C9.29394 29.8806 11.8437 24.8338 15.5208 21.3813C15.6936 21.219 15.8691 21.0601 16.0473 20.9045C19.743 23.9745 24.078 26.3341 28.3236 27.8933C33.7636 29.8911 39.335 30.6936 43.6521 29.9207C45.8182 29.5329 47.7787 28.7276 49.2156 27.3603C50.689 25.9584 51.5 24.069 51.5 21.7825C51.5 17.8717 48.0353 15.1348 43.98 13.6179C39.786 12.0492 34.284 11.4803 28.8078 12.2582C24.4243 12.881 19.9728 14.3794 16.1821 17.0041C12.802 13.7237 10.3252 9.77284 9.48941 5.31576L13.0266 8.0788C13.6794 8.58878 14.6221 8.47296 15.132 7.8201C15.642 7.16725 15.5262 6.22459 14.8733 5.71462L7.73679 0.139893ZM18.5156 19.0536C21.7131 16.9994 25.4498 15.7654 29.2298 15.2284C34.274 14.5118 39.2625 15.0564 42.929 16.4278C46.7342 17.8511 48.5 19.881 48.5 21.7825C48.5 23.3004 47.9886 24.3868 47.1476 25.187C46.2702 26.0219 44.9246 26.6452 43.1234 26.9677C39.5057 27.6153 34.4975 26.9648 29.3578 25.0772C25.5073 23.6631 21.7361 21.6203 18.5156 19.0536Z' fill='%23007CF9'/%3E%3C/g%3E%3Cdefs%3E%3CclipPath id='clip0_2104_37304'%3E%3Crect width='52' height='39' fill='white'/%3E%3C/clipPath%3E%3C/defs%3E%3C/svg%3E%0A");
       background-image: url("data:image/svg+xml,%3Csvg width='62' height='39' viewBox='0 0 52 39' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cg clip-path='url(%23a)' transform='translate(-4.876 .1)'%3E%3Cpath fill='%23eff6fe' d='M0 0h62v26H0z'/%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M12.713.04 6.124 4.583a1.5 1.5 0 0 0 1.703 2.47l3.506-2.417c.716 5.53 3.566 10.29 7.454 14.143-.115.104-.23.209-.344.316-4.302 4.04-7.16 9.873-7.285 17.782a1.5 1.5 0 0 0 3 .047c.112-7.143 2.662-12.19 6.339-15.642.173-.163.348-.321.526-.477 3.696 3.07 8.03 5.43 12.277 6.989 5.44 1.998 11.01 2.8 15.328 2.027 2.166-.388 4.127-1.193 5.564-2.56 1.473-1.402 2.284-3.292 2.284-5.578 0-3.91-3.465-6.648-7.52-8.165-4.194-1.568-9.696-2.137-15.172-1.36-4.384.623-8.835 2.122-12.626 4.747-3.38-3.28-5.857-7.232-6.693-11.689l3.538 2.763a1.5 1.5 0 1 0 1.846-2.364zm10.779 18.914c3.197-2.054 6.934-3.288 10.714-3.825 5.044-.717 10.032-.172 13.699 1.2 3.805 1.423 5.57 3.452 5.57 5.354 0 1.518-.51 2.604-1.351 3.404-.878.835-2.223 1.459-4.025 1.781-3.617.648-8.626-.003-13.765-1.89-3.85-1.414-7.622-3.457-10.842-6.024z' fill='%23007cf9'/%3E%3C/g%3E%3Cdefs%3E%3CclipPath id='a'%3E%3Cpath fill='%23fff' d='M0 0h62v39H0z'/%3E%3C/clipPath%3E%3C/defs%3E%3C/svg%3E%0A");
       background-repeat: no-repeat;
-      content: '';
+      content: "";
       position: absolute;
       bottom: -13.9px;
       left: calc(50% - 15px);
@@ -396,12 +408,15 @@
     }
   }
 
-  &[data-engrid-legacy-theme="oc1"] .radio-to-buttons_donationAmt input[name="transaction.donationAmt"]+label:before{
+  &[data-engrid-legacy-theme="oc1"]
+    .radio-to-buttons_donationAmt
+    input[name="transaction.donationAmt"]
+    + label:before {
     display: none !important;
     content: none;
   }
 
-  [style*="color:#039BC4"]{
+  [style*="color:#039BC4"] {
     color: var(--color-primary) !important;
   }
 
@@ -441,14 +456,16 @@
   }
 
   //Adding $ icon to donation amount buttons
-  .radio-to-buttons_donationAmt input[name="transaction.donationAmt"] + label:before {
+  .radio-to-buttons_donationAmt
+    input[name="transaction.donationAmt"]
+    + label:before {
     background-image: url("data:image/svg+xml,%3Csvg width='12' height='22' viewBox='0 0 12 22' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11.8314 13.3937C11.7201 13.0339 11.585 12.7208 11.4264 12.4549C11.2679 12.1887 11.0409 11.9291 10.7449 11.6751C10.4492 11.4213 10.1833 11.2168 9.94747 11.0614C9.71179 10.9059 9.38804 10.732 8.97641 10.5395C8.56514 10.3471 8.23927 10.2039 7.9994 10.1097C7.75921 10.0157 7.41177 9.88677 6.9573 9.72307C6.55436 9.57583 6.25436 9.46325 6.05696 9.38555C5.8598 9.30776 5.60051 9.19734 5.27897 9.05402C4.95757 8.91091 4.71747 8.78397 4.55882 8.67354C4.40021 8.56312 4.23093 8.42809 4.05083 8.26852C3.87074 8.10894 3.74429 7.93909 3.67136 7.75904C3.59861 7.57895 3.56212 7.38248 3.56212 7.16967C3.56212 6.61324 3.81925 6.15885 4.33368 5.80702C4.84815 5.45518 5.51272 5.27918 6.32729 5.27918C6.68721 5.27918 7.05415 5.32618 7.42686 5.42039C7.79958 5.51461 8.119 5.62074 8.38482 5.7395C8.65086 5.85827 8.90154 5.98925 9.1374 6.1324C9.37322 6.27568 9.54034 6.38405 9.63904 6.45771C9.73765 6.53141 9.80012 6.58047 9.82557 6.60507C9.9372 6.6869 10.0527 6.7155 10.1727 6.69103C10.3013 6.68286 10.4 6.61728 10.4687 6.49464L11.5106 4.70219C11.6135 4.53857 11.5922 4.38304 11.4463 4.23563C11.3948 4.18653 11.3307 4.12929 11.253 4.06376C11.1761 3.99823 11.0088 3.87959 10.7514 3.70763C10.4942 3.53579 10.222 3.38232 9.93499 3.24726C9.64764 3.11232 9.27457 2.97515 8.81582 2.83608C8.35734 2.6968 7.8835 2.60276 7.39466 2.5537V0.392856C7.39466 0.278345 7.35614 0.184173 7.2792 0.110469C7.20208 0.0369378 7.10343 0 6.9832 0H5.24685C5.13541 0 5.03896 0.0388298 4.95752 0.116618C4.87608 0.194407 4.83536 0.286429 4.83536 0.392856V2.60272C3.4892 2.84817 2.39601 3.39656 1.55577 4.24776C0.71561 5.09901 0.295374 6.08919 0.295374 7.21878C0.295374 7.55432 0.331952 7.87351 0.404837 8.17619C0.477631 8.47914 0.567723 8.75129 0.674933 8.9927C0.782053 9.23428 0.93431 9.47155 1.13148 9.70488C1.32864 9.93811 1.51518 10.1387 1.69091 10.3064C1.86672 10.474 2.0961 10.648 2.37894 10.828C2.66197 11.0082 2.90418 11.1536 3.10572 11.264C3.3073 11.3741 3.57519 11.5014 3.90948 11.6443C4.24385 11.7876 4.5076 11.8959 4.70053 11.9697C4.89347 12.0433 5.15708 12.1457 5.49159 12.2764C5.95453 12.4483 6.29756 12.5813 6.52044 12.6755C6.74351 12.7697 7.02636 12.9006 7.36952 13.0684C7.71237 13.236 7.96305 13.3895 8.12179 13.5287C8.2804 13.6679 8.42396 13.8398 8.55266 14.0444C8.68136 14.2489 8.74582 14.4658 8.74582 14.6951C8.74582 15.3417 8.48216 15.8409 7.95471 16.1925C7.42749 16.5446 6.8164 16.7205 6.12201 16.7205C5.80507 16.7205 5.48758 16.688 5.17045 16.6225C4.05583 16.4095 3.01414 15.8979 2.04528 15.0877L2.01956 15.0631C1.94235 14.9733 1.83942 14.9365 1.71095 14.9529C1.57374 14.9693 1.47509 15.0184 1.41513 15.1004L0.0904136 16.7577C-0.0382384 16.9213 -0.0295442 17.0891 0.11618 17.261C0.159109 17.3101 0.234111 17.3839 0.341231 17.482C0.448621 17.5804 0.647996 17.7336 0.939355 17.9427C1.2308 18.1515 1.54806 18.3477 1.89109 18.5321C2.23407 18.7162 2.66913 18.8982 3.19653 19.0783C3.72393 19.2582 4.27039 19.385 4.8363 19.4586V21.6071C4.8363 21.7136 4.87707 21.8056 4.95847 21.8834C5.03996 21.9613 5.13635 22 5.2478 22H6.98415C7.10438 22 7.20303 21.9632 7.2801 21.8897C7.35718 21.8161 7.39556 21.7219 7.39556 21.6071V19.4586C8.75906 19.2459 9.86724 18.6873 10.7202 17.7828C11.5733 16.8784 12 15.8 12 14.5479C11.9995 14.1387 11.9439 13.7541 11.8314 13.3937Z' fill='%230D3669'/%3E%3C/svg%3E");
-    content: '';
+    content: "";
     width: 12px;
     min-width: 12px;
     height: 22px;
     background-size: 100%;
-    display: flex!important;
+    display: flex !important;
     //since we need to use "before" we have to overwrite some of the default standard radio styling in EN Grid.
     border-radius: 0;
     border: none;
@@ -458,14 +475,19 @@
   }
 
   //white $ icon
-  .radio-to-buttons_donationAmt input[name="transaction.donationAmt"]:checked + label:before,
-  .radio-to-buttons_donationAmt input[name="transaction.donationAmt"]:hover + label:before {
+  .radio-to-buttons_donationAmt
+    input[name="transaction.donationAmt"]:checked
+    + label:before,
+  .radio-to-buttons_donationAmt
+    input[name="transaction.donationAmt"]:hover
+    + label:before {
     background-image: url("data:image/svg+xml,%3Csvg width='12' height='22' viewBox='0 0 12 22' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11.8314 13.3937C11.7201 13.0339 11.585 12.7208 11.4264 12.4549C11.2679 12.1887 11.0409 11.9291 10.7449 11.6751C10.4492 11.4213 10.1833 11.2168 9.94747 11.0614C9.71179 10.9059 9.38804 10.732 8.97641 10.5395C8.56514 10.3471 8.23927 10.2039 7.9994 10.1097C7.75921 10.0157 7.41177 9.88677 6.9573 9.72307C6.55436 9.57583 6.25436 9.46325 6.05696 9.38555C5.8598 9.30776 5.60051 9.19734 5.27897 9.05402C4.95757 8.91091 4.71747 8.78397 4.55882 8.67354C4.40021 8.56312 4.23093 8.42809 4.05083 8.26852C3.87074 8.10894 3.74429 7.93909 3.67136 7.75904C3.59861 7.57895 3.56212 7.38248 3.56212 7.16967C3.56212 6.61324 3.81925 6.15885 4.33368 5.80702C4.84815 5.45518 5.51272 5.27918 6.32729 5.27918C6.68721 5.27918 7.05415 5.32618 7.42686 5.42039C7.79958 5.51461 8.119 5.62074 8.38482 5.7395C8.65086 5.85827 8.90154 5.98925 9.1374 6.1324C9.37322 6.27568 9.54034 6.38405 9.63904 6.45771C9.73765 6.53141 9.80012 6.58047 9.82557 6.60507C9.9372 6.6869 10.0527 6.7155 10.1727 6.69103C10.3013 6.68286 10.4 6.61728 10.4687 6.49464L11.5106 4.70219C11.6135 4.53857 11.5922 4.38304 11.4463 4.23563C11.3948 4.18653 11.3307 4.12929 11.253 4.06376C11.1761 3.99823 11.0088 3.87959 10.7514 3.70763C10.4942 3.53579 10.222 3.38232 9.93499 3.24726C9.64764 3.11232 9.27457 2.97515 8.81582 2.83608C8.35734 2.6968 7.8835 2.60276 7.39466 2.5537V0.392856C7.39466 0.278345 7.35614 0.184173 7.2792 0.110469C7.20208 0.0369378 7.10343 0 6.9832 0H5.24685C5.13541 0 5.03896 0.0388298 4.95752 0.116618C4.87608 0.194407 4.83536 0.286429 4.83536 0.392856V2.60272C3.4892 2.84817 2.39601 3.39656 1.55577 4.24776C0.71561 5.09901 0.295374 6.08919 0.295374 7.21878C0.295374 7.55432 0.331952 7.87351 0.404837 8.17619C0.477631 8.47914 0.567723 8.75129 0.674933 8.9927C0.782053 9.23428 0.93431 9.47155 1.13148 9.70488C1.32864 9.93811 1.51518 10.1387 1.69091 10.3064C1.86672 10.474 2.0961 10.648 2.37894 10.828C2.66197 11.0082 2.90418 11.1536 3.10572 11.264C3.3073 11.3741 3.57519 11.5014 3.90948 11.6443C4.24385 11.7876 4.5076 11.8959 4.70053 11.9697C4.89347 12.0433 5.15708 12.1457 5.49159 12.2764C5.95453 12.4483 6.29756 12.5813 6.52044 12.6755C6.74351 12.7697 7.02636 12.9006 7.36952 13.0684C7.71237 13.236 7.96305 13.3895 8.12179 13.5287C8.2804 13.6679 8.42396 13.8398 8.55266 14.0444C8.68136 14.2489 8.74582 14.4658 8.74582 14.6951C8.74582 15.3417 8.48216 15.8409 7.95471 16.1925C7.42749 16.5446 6.8164 16.7205 6.12201 16.7205C5.80507 16.7205 5.48758 16.688 5.17045 16.6225C4.05583 16.4095 3.01414 15.8979 2.04528 15.0877L2.01956 15.0631C1.94235 14.9733 1.83942 14.9365 1.71095 14.9529C1.57374 14.9693 1.47509 15.0184 1.41513 15.1004L0.0904136 16.7577C-0.0382384 16.9213 -0.0295442 17.0891 0.11618 17.261C0.159109 17.3101 0.234111 17.3839 0.341231 17.482C0.448621 17.5804 0.647996 17.7336 0.939355 17.9427C1.2308 18.1515 1.54806 18.3477 1.89109 18.5321C2.23407 18.7162 2.66913 18.8982 3.19653 19.0783C3.72393 19.2582 4.27039 19.385 4.8363 19.4586V21.6071C4.8363 21.7136 4.87707 21.8056 4.95847 21.8834C5.03996 21.9613 5.13635 22 5.2478 22H6.98415C7.10438 22 7.20303 21.9632 7.2801 21.8897C7.35718 21.8161 7.39556 21.7219 7.39556 21.6071V19.4586C8.75906 19.2459 9.86724 18.6873 10.7202 17.7828C11.5733 16.8784 12 15.8 12 14.5479C11.9995 14.1387 11.9439 13.7541 11.8314 13.3937Z' fill='%23ffffff'/%3E%3C/svg%3E");
     background-color: var(--color-primary);
   }
 
   //Other amount input
-  .en__field--withOther.en__field--radio.en__field--donationAmt .en__field__item--other {
+  .en__field--withOther.en__field--radio.en__field--donationAmt
+    .en__field__item--other {
     flex-basis: 100%;
     position: relative;
 
@@ -489,7 +511,7 @@
       line-height: 0;
       position: absolute;
       top: 50%;
-      color: var(--color-primary)
+      color: var(--color-primary);
     }
 
     input {
@@ -498,7 +520,8 @@
     }
   }
 
-  .en__field--withOther--active.en__field--radio.en__field--donationAmt .en__field__item--other {
+  .en__field--withOther--active.en__field--radio.en__field--donationAmt
+    .en__field__item--other {
     &:before {
       content: url("data:image/svg+xml,%3Csvg width='12' height='22' viewBox='0 0 12 22' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11.8314 13.3937C11.7201 13.0339 11.585 12.7208 11.4264 12.4549C11.2679 12.1887 11.0409 11.9291 10.7449 11.6751C10.4492 11.4213 10.1833 11.2168 9.94747 11.0614C9.71179 10.9059 9.38804 10.732 8.97641 10.5395C8.56514 10.3471 8.23927 10.2039 7.9994 10.1097C7.75921 10.0157 7.41177 9.88677 6.9573 9.72307C6.55436 9.57583 6.25436 9.46325 6.05696 9.38555C5.8598 9.30776 5.60051 9.19734 5.27897 9.05402C4.95757 8.91091 4.71747 8.78397 4.55882 8.67354C4.40021 8.56312 4.23093 8.42809 4.05083 8.26852C3.87074 8.10894 3.74429 7.93909 3.67136 7.75904C3.59861 7.57895 3.56212 7.38248 3.56212 7.16967C3.56212 6.61324 3.81925 6.15885 4.33368 5.80702C4.84815 5.45518 5.51272 5.27918 6.32729 5.27918C6.68721 5.27918 7.05415 5.32618 7.42686 5.42039C7.79958 5.51461 8.119 5.62074 8.38482 5.7395C8.65086 5.85827 8.90154 5.98925 9.1374 6.1324C9.37322 6.27568 9.54034 6.38405 9.63904 6.45771C9.73765 6.53141 9.80012 6.58047 9.82557 6.60507C9.9372 6.6869 10.0527 6.7155 10.1727 6.69103C10.3013 6.68286 10.4 6.61728 10.4687 6.49464L11.5106 4.70219C11.6135 4.53857 11.5922 4.38304 11.4463 4.23563C11.3948 4.18653 11.3307 4.12929 11.253 4.06376C11.1761 3.99823 11.0088 3.87959 10.7514 3.70763C10.4942 3.53579 10.222 3.38232 9.93499 3.24726C9.64764 3.11232 9.27457 2.97515 8.81582 2.83608C8.35734 2.6968 7.8835 2.60276 7.39466 2.5537V0.392856C7.39466 0.278345 7.35614 0.184173 7.2792 0.110469C7.20208 0.0369378 7.10343 0 6.9832 0H5.24685C5.13541 0 5.03896 0.0388298 4.95752 0.116618C4.87608 0.194407 4.83536 0.286429 4.83536 0.392856V2.60272C3.4892 2.84817 2.39601 3.39656 1.55577 4.24776C0.71561 5.09901 0.295374 6.08919 0.295374 7.21878C0.295374 7.55432 0.331952 7.87351 0.404837 8.17619C0.477631 8.47914 0.567723 8.75129 0.674933 8.9927C0.782053 9.23428 0.93431 9.47155 1.13148 9.70488C1.32864 9.93811 1.51518 10.1387 1.69091 10.3064C1.86672 10.474 2.0961 10.648 2.37894 10.828C2.66197 11.0082 2.90418 11.1536 3.10572 11.264C3.3073 11.3741 3.57519 11.5014 3.90948 11.6443C4.24385 11.7876 4.5076 11.8959 4.70053 11.9697C4.89347 12.0433 5.15708 12.1457 5.49159 12.2764C5.95453 12.4483 6.29756 12.5813 6.52044 12.6755C6.74351 12.7697 7.02636 12.9006 7.36952 13.0684C7.71237 13.236 7.96305 13.3895 8.12179 13.5287C8.2804 13.6679 8.42396 13.8398 8.55266 14.0444C8.68136 14.2489 8.74582 14.4658 8.74582 14.6951C8.74582 15.3417 8.48216 15.8409 7.95471 16.1925C7.42749 16.5446 6.8164 16.7205 6.12201 16.7205C5.80507 16.7205 5.48758 16.688 5.17045 16.6225C4.05583 16.4095 3.01414 15.8979 2.04528 15.0877L2.01956 15.0631C1.94235 14.9733 1.83942 14.9365 1.71095 14.9529C1.57374 14.9693 1.47509 15.0184 1.41513 15.1004L0.0904136 16.7577C-0.0382384 16.9213 -0.0295442 17.0891 0.11618 17.261C0.159109 17.3101 0.234111 17.3839 0.341231 17.482C0.448621 17.5804 0.647996 17.7336 0.939355 17.9427C1.2308 18.1515 1.54806 18.3477 1.89109 18.5321C2.23407 18.7162 2.66913 18.8982 3.19653 19.0783C3.72393 19.2582 4.27039 19.385 4.8363 19.4586V21.6071C4.8363 21.7136 4.87707 21.8056 4.95847 21.8834C5.03996 21.9613 5.13635 22 5.2478 22H6.98415C7.10438 22 7.20303 21.9632 7.2801 21.8897C7.35718 21.8161 7.39556 21.7219 7.39556 21.6071V19.4586C8.75906 19.2459 9.86724 18.6873 10.7202 17.7828C11.5733 16.8784 12 15.8 12 14.5479C11.9995 14.1387 11.9439 13.7541 11.8314 13.3937Z' fill='%23ffffff'/%3E%3C/svg%3E");
     }
@@ -508,7 +531,11 @@
     }
   }
 
-  &[data-engrid-transaction-recurring-frequency] .radio-to-buttons_donationAmt .en__field--donationAmt div:not(.en__field__item--other) .en__field__label--item:after {
+  &[data-engrid-transaction-recurring-frequency]
+    .radio-to-buttons_donationAmt
+    .en__field--donationAmt
+    div:not(.en__field__item--other)
+    .en__field__label--item:after {
     font-size: 16px;
   }
 
@@ -520,7 +547,7 @@
 
     &:after {
       background-image: url("data:image/svg+xml,%3Csvg width='22' height='6' viewBox='0 0 22 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 2.61685C2.74419 0.951211 6.25713 0.020546 10.5349 2.61685C15.2105 5.45464 18.9457 4.28248 21 2.61685' stroke='%230E4C8C' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E%0A");
-      content: '';
+      content: "";
       background-size: 100%;
       background-repeat: no-repeat;
       display: block;
@@ -534,19 +561,19 @@
   }
 
   input:not([type="radio"]):not([type="checkbox"]):focus {
-    outline: 1px solid #007CF9;
-    border-color: #007CF9;
+    outline: 1px solid #007cf9;
+    border-color: #007cf9;
   }
 
   .en__component .en__field__error {
     font-size: 14px;
   }
 
-  input[type=checkbox] + label {
+  input[type="checkbox"] + label {
     align-items: start;
   }
 
-  input[type=checkbox] + label:before {
+  input[type="checkbox"] + label:before {
     margin-top: 9px;
     margin-right: 1rem;
   }
@@ -556,7 +583,7 @@
     font-weight: 300;
 
     a {
-      color: var(--color-primary)!important;
+      color: var(--color-primary) !important;
     }
   }
 
@@ -670,7 +697,7 @@
     text-decoration: none;
 
     &:after {
-      content: '?';
+      content: "?";
       color: white;
       position: absolute;
       font-size: 14px;
@@ -693,7 +720,7 @@
 
   .en__supporterHubLogin__header {
     border: none;
-    padding:0;
+    padding: 0;
     background: var(--engrid__body-main_background-color);
   }
 
@@ -722,26 +749,26 @@
     #engrid > .en__component--advrow,
     form > .en__component--advrow {
       grid-template-rows:
-          [page-start page-alert-start] min-content
-          [page-alert-end content-header-start] min-content
-          [content-header-end body-headerOutside-start] min-content
-          [body-headerOutside-end body-banner-start] min-content
-          [body-banner-end body-bannerOverlay-start] min-content
-          [body-bannerOverlay-end body-header-start] min-content
-          [body-header-end body-title-start] min-content
-          [body-title-end body-top-start] min-content
-          [body-top-end body-side-start] min-content
-          [body-side-end body-main-start] min-content
-          [body-main-end body-bottom-start] min-content
-          [body-bottom-end body-footer-start] min-content
-          [body-footer-end body-footerOutside-start] min-content
-          [body-footerOutside-end content-footerSpacer-start] minmax(0, 1fr)
-          [content-footerSpacer-end content-preFooter-start] min-content
-          [content-preFooter-end content-footer-start] min-content
-          [content-footer-end page-backgroundImage-start] min-content
-          [page-backgroundImage-end page-backgroundImageOverlay-start] min-content
-          [page-backgroundImageOverlay-end page-end page-customCode-start] min-content
-          [page-customCode-end];
+        [page-start page-alert-start] min-content
+        [page-alert-end content-header-start] min-content
+        [content-header-end body-headerOutside-start] min-content
+        [body-headerOutside-end body-banner-start] min-content
+        [body-banner-end body-bannerOverlay-start] min-content
+        [body-bannerOverlay-end body-header-start] min-content
+        [body-header-end body-title-start] min-content
+        [body-title-end body-top-start] min-content
+        [body-top-end body-side-start] min-content
+        [body-side-end body-main-start] min-content
+        [body-main-end body-bottom-start] min-content
+        [body-bottom-end body-footer-start] min-content
+        [body-footer-end body-footerOutside-start] min-content
+        [body-footerOutside-end content-footerSpacer-start] minmax(0, 1fr)
+        [content-footerSpacer-end content-preFooter-start] min-content
+        [content-preFooter-end content-footer-start] min-content
+        [content-footer-end page-backgroundImage-start] min-content
+        [page-backgroundImage-end page-backgroundImageOverlay-start] min-content
+        [page-backgroundImageOverlay-end page-end page-customCode-start] min-content
+        [page-customCode-end];
     }
 
     // &[data-engrid-layout="leftleft1col"][data-replace-banner-with-background="if-background-image"][data-engrid-page-background="image"] [class*="page-backgroundImage"] img,
@@ -751,11 +778,11 @@
     // }
 
     &[data-replace-banner-with-background="if-banner-empty"][data-engrid-body-banner="empty"][data-engrid-page-background="image"] {
-      [class*=page-backgroundImage] {
-        grid-row: body-banner!important;
+      [class*="page-backgroundImage"] {
+        grid-row: body-banner !important;
 
         &:after {
-          content: '';
+          content: "";
           display: block;
           background-image: url("https://aaf1a18515da0e792f78-c27fdabe952dfc357fe25ebf5c8897ee.ssl.cf5.rackcdn.com/1991/wave-white-mobile.png?v=1687473795000");
           background-repeat: no-repeat;
@@ -795,7 +822,7 @@
       height: 28px;
       top: 10px;
       right: 10px;
-      background-image: url('https://aaf1a18515da0e792f78-c27fdabe952dfc357fe25ebf5c8897ee.ssl.cf5.rackcdn.com/1991/media-attribution.png');
+      background-image: url("https://aaf1a18515da0e792f78-c27fdabe952dfc357fe25ebf5c8897ee.ssl.cf5.rackcdn.com/1991/media-attribution.png");
       background-size: 100%;
     }
 
@@ -813,7 +840,7 @@
     --h2_font-size: 1.3rem;
     --button_border-radius: 6px;
     --recurring-frequency__button_border-radius: 6px;
-    --recurring-frequency__button_padding: 15px .5em;
+    --recurring-frequency__button_padding: 15px 0.5em;
     --button_font-size: 1.25rem;
     --donation-amount__button_font-size: 1.5rem;
     --donation-amount__button_count: 2;
@@ -864,22 +891,32 @@
       text-align: center;
     }
 
-    .radio-to-buttons_donationAmt{
+    .radio-to-buttons_donationAmt {
       --fields_spacing-inline: 4px;
       --fields_spacing-inline: 4px;
     }
 
-    &[data-engrid-transaction-recurring-frequency] .radio-to-buttons_donationAmt .en__field--donationAmt div:not(.en__field__item--other) .en__field__label--item:after {
+    &[data-engrid-transaction-recurring-frequency]
+      .radio-to-buttons_donationAmt
+      .en__field--donationAmt
+      div:not(.en__field__item--other)
+      .en__field__label--item:after {
       font-size: 12px;
       opacity: 1;
     }
 
-    &[data-engrid-transaction-recurring-frequency] .radio-to-buttons_donationAmt .en__field--donationAmt div:not(.en__field__item--other) input:checked .en__field__label--item:after {
+    &[data-engrid-transaction-recurring-frequency]
+      .radio-to-buttons_donationAmt
+      .en__field--donationAmt
+      div:not(.en__field__item--other)
+      input:checked
+      .en__field__label--item:after {
       color: white;
     }
 
     //Other amount input
-    .en__field--withOther.en__field--radio.en__field--donationAmt .en__field__item--other {
+    .en__field--withOther.en__field--radio.en__field--donationAmt
+      .en__field__item--other {
       input {
         padding: 15px 52px 15px 40px;
         font-size: 24px;
@@ -939,7 +976,9 @@
       }
     }
 
-    .radio-to-buttons_donationAmt input[name="transaction.donationAmt"] + label:before {
+    .radio-to-buttons_donationAmt
+      input[name="transaction.donationAmt"]
+      + label:before {
       width: 7px;
       min-width: 7px;
       height: 13px;
@@ -991,18 +1030,17 @@
     }
   }
 
-
   .engrid-mobile-cta-container {
     background-color: #ffffff;
     bottom: 0;
     left: 0;
     padding: 0.5rem;
     width: 100%;
-    box-shadow: 0px -25px 50px 8px rgb(255,255,255);
+    box-shadow: 0px -25px 50px 8px rgb(255, 255, 255);
 
     .primary {
       --submit__button_font-size: 20px;
-      --submit__button_background-color: #007CF9;
+      --submit__button_background-color: #007cf9;
       --submit__button_color: #000000;
 
       &:after {
@@ -1023,13 +1061,14 @@
     z-index: 100;
   }
 
-
   .en__field__input.en__field__input--radio[value="applepay"] {
     + label {
-      border-width: 1px!important;
+      border-width: 1px !important;
     }
     &:checked + label {
-        background-color: var(--give-by-select__button_background-color_checked)!important;
-      }
+      background-color: var(
+        --give-by-select__button_background-color_checked
+      ) !important;
     }
+  }
 }

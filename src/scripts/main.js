@@ -221,7 +221,7 @@ export const customScript = function (App, EnForm) {
    * Function to set the "data-engrid-legacy-theme'" data attribute on the "body" element to "oc1".
    */
   function legacySetLegacyThemeAttribute() {
-    document.body.setAttribute('data-engrid-legacy-theme', 'oc1');
+    document.body.setAttribute("data-engrid-legacy-theme", "oc1");
   }
 
   /**
@@ -238,19 +238,30 @@ export const customScript = function (App, EnForm) {
     }
 
     // Get the element with the old CSS class
-    const oldClassElement = document.querySelector(".en__component.en__component--formblock.recurring-frequency_count_3.radio-to-buttons_donationAmt.donation-amount_count_4.i1-hide-label.i2-hide.i3-hide-label");
+    const oldClassElement = document.querySelector(
+      ".en__component.en__component--formblock.recurring-frequency_count_3.radio-to-buttons_donationAmt.donation-amount_count_4.i1-hide-label.i2-hide.i3-hide-label"
+    );
 
     // Check if the element with the old class exists
     if (oldClassElement) {
       // Define the new CSS class
-      const newClass = "en__component en__component--formblock recurring-frequency_count_2 radio-to-buttons_recurrfreq radio-to-buttons_donationAmt donation-amount_count_3 i1-hide-label i2-hide i3-hide-label";
+      const newClass =
+        "en__component en__component--formblock recurring-frequency_count_2 radio-to-buttons_recurrfreq radio-to-buttons_donationAmt donation-amount_count_3 i1-hide-label i2-hide i3-hide-label";
 
       // Remove the old class from the element
-      oldClassElement.classList.remove("en__component", "en__component--formblock", "recurring-frequency_count_3", "radio-to-buttons_donationAmt", "donation-amount_count_4", "i1-hide-label", "i2-hide", "i3-hide-label");
+      oldClassElement.classList.remove(
+        "en__component",
+        "en__component--formblock",
+        "recurring-frequency_count_3",
+        "radio-to-buttons_donationAmt",
+        "donation-amount_count_4",
+        "i1-hide-label",
+        "i2-hide",
+        "i3-hide-label"
+      );
 
       // Add the new class to the element
       oldClassElement.classList.add(...newClass.split(" "));
-
     }
   }
 
@@ -263,14 +274,18 @@ export const customScript = function (App, EnForm) {
    */
   function legacyMoveBodyBannerToPageBackground() {
     // Check if there are no results for ".page-backgroundImage > img"
-    const pageBackgroundImages = document.querySelectorAll(".page-backgroundImage img");
+    const pageBackgroundImages = document.querySelectorAll(
+      ".page-backgroundImage img"
+    );
     if (pageBackgroundImages.length === 0) {
       console.log("No page background images found.");
 
       // Get the elements inside ".body-banner"
       const bodyBanner = document.querySelector(".body-banner");
       if (bodyBanner) {
-        console.log("Moving contents from .body-banner to .page-backgroundImage");
+        console.log(
+          "Moving contents from .body-banner to .page-backgroundImage"
+        );
 
         // Get the ".page-backgroundImage" element
         const pageBackground = document.querySelector(".page-backgroundImage");
@@ -289,27 +304,43 @@ export const customScript = function (App, EnForm) {
             const imageSrc = pageBackgroundImage.getAttribute("src");
 
             // Set the image source as a CSS custom property on the ".page-backgroundImage" element
-            pageBackground.style.setProperty("--engrid__page-backgroundImage_url", `url('${imageSrc}')`);
-            console.log(`Image source set as CSS custom property: --engrid__page-backgroundImage_url: url('${imageSrc}')`);
+            pageBackground.style.setProperty(
+              "--engrid__page-backgroundImage_url",
+              `url('${imageSrc}')`
+            );
+            console.log(
+              `Image source set as CSS custom property: --engrid__page-backgroundImage_url: url('${imageSrc}')`
+            );
 
             // Update the data attribute on the <body> element to be "image"
             document.body.setAttribute("data-engrid-page-background", "image");
-            console.log("data-engrid-page-background attribute updated to 'image' on <body>.");
+            console.log(
+              "data-engrid-page-background attribute updated to 'image' on <body>."
+            );
 
             // Set data-engrid-body-banner="empty" on the <body> element
             document.body.setAttribute("data-engrid-body-banner", "empty");
-            console.log("data-engrid-body-banner attribute set to 'empty' on <body>.");
+            console.log(
+              "data-engrid-body-banner attribute set to 'empty' on <body>."
+            );
 
             // Set data-replace-banner-with-background="if-banner-empty" on the <body> element
-            document.body.setAttribute("data-replace-banner-with-background", "if-banner-empty");
-            console.log("data-replace-banner-with-background attribute set to 'if-banner-empty' on <body>.");
+            document.body.setAttribute(
+              "data-replace-banner-with-background",
+              "if-banner-empty"
+            );
+            console.log(
+              "data-replace-banner-with-background attribute set to 'if-banner-empty' on <body>."
+            );
           } else {
             console.log("Image not found inside .page-backgroundImage.");
           }
 
           // Remove the data attribute from the <body> element
           document.body.removeAttribute("data-engrid-no-page-backgroundimage");
-          console.log("data-engrid-no-page-backgroundimage attribute removed from <body>.");
+          console.log(
+            "data-engrid-no-page-backgroundimage attribute removed from <body>."
+          );
           legacySetLegacyThemeAttribute();
           console.log("legacySetLegacyThemeAttribute 1 called");
         } else {
@@ -331,7 +362,9 @@ export const customScript = function (App, EnForm) {
    * and updates them based on specific criteria.
    */
   function legacyUpdateRecurrfreqValues() {
-    const recurrfreqElements = document.querySelectorAll('[for*="en__field_transaction_recurrfreq"]');
+    const recurrfreqElements = document.querySelectorAll(
+      '[for*="en__field_transaction_recurrfreq"]'
+    );
 
     recurrfreqElements.forEach((element) => {
       const value = element.textContent.trim();
@@ -370,29 +403,34 @@ export const customScript = function (App, EnForm) {
    */
   function legacySetBackgroundImageAttributionSource() {
     const attributionElement = document.querySelector(
-      '.content-footer > .en__component--copyblock + .en__component--copyblock > p'
+      ".content-footer > .en__component--copyblock + .en__component--copyblock > p"
     );
 
     if (attributionElement) {
-      const backgroundImage = document.querySelector('.page-backgroundImage img');
+      const backgroundImage = document.querySelector(
+        ".page-backgroundImage img"
+      );
 
       if (backgroundImage) {
         const attributionContent = attributionElement.textContent.trim();
-        backgroundImage.setAttribute('data-attribution-source', attributionContent);
+        backgroundImage.setAttribute(
+          "data-attribution-source",
+          attributionContent
+        );
         console.log(`Set "data-attribution-source" to "${attributionContent}"`);
 
         // Create the <figattribution> element with the content and wrap it in a <p> tag
-        const figAttribution = document.createElement('figattribution');
-        const pTag = document.createElement('p');
+        const figAttribution = document.createElement("figattribution");
+        const pTag = document.createElement("p");
         pTag.textContent = attributionContent;
         figAttribution.appendChild(pTag);
 
         // Insert the <figattribution> element after the <img> tag
-        backgroundImage.insertAdjacentElement('afterend', figAttribution);
+        backgroundImage.insertAdjacentElement("afterend", figAttribution);
 
         // Remove the original attribution element
         attributionElement.remove();
-        console.log('Original attribution element removed.');
+        console.log("Original attribution element removed.");
 
         legacySetLegacyThemeAttribute();
         console.log("legacySetLegacyThemeAttribute 6 called");
@@ -408,25 +446,30 @@ export const customScript = function (App, EnForm) {
    * and adds it to the ".page-backgroundImage" element's style attribute, ensuring not to overwrite any existing styles.
    */
   function legacyMoveBannerImageHeightToBackgroundImage() {
-    const pageBackgroundImage = document.querySelector('.page-backgroundImage');
-    const backgroundImage = pageBackgroundImage.querySelector('img');
+    const pageBackgroundImage = document.querySelector(".page-backgroundImage");
+    const backgroundImage = pageBackgroundImage.querySelector("img");
 
     if (pageBackgroundImage && backgroundImage) {
       // Get the "--banner-image-height" style from the "img" tag
-      const bannerImageHeightStyle = backgroundImage.getAttribute('style');
+      const bannerImageHeightStyle = backgroundImage.getAttribute("style");
 
       if (bannerImageHeightStyle) {
         // Remove the "--banner-image-height" style from the "img" tag
         backgroundImage.setAttribute(
-          'style',
-          bannerImageHeightStyle.replace(/(--banner-image-height:[^;]+;?)/g, '').trim()
+          "style",
+          bannerImageHeightStyle
+            .replace(/(--banner-image-height:[^;]+;?)/g, "")
+            .trim()
         );
 
         // Append the "--banner-image-height" style to the ".page-backgroundImage" style
-        const pageBackgroundImageStyle = pageBackgroundImage.getAttribute('style');
+        const pageBackgroundImageStyle =
+          pageBackgroundImage.getAttribute("style");
         pageBackgroundImage.setAttribute(
-          'style',
-          `${pageBackgroundImageStyle ? pageBackgroundImageStyle + ' ' : ''}${bannerImageHeightStyle}`
+          "style",
+          `${
+            pageBackgroundImageStyle ? pageBackgroundImageStyle + " " : ""
+          }${bannerImageHeightStyle}`
         );
       }
     }
@@ -439,13 +482,15 @@ export const customScript = function (App, EnForm) {
    * Function to check if any of the ".en__field--donationAmt label" elements contain a dollar sign ($).
    */
   function legacyCheckDonationAmtLabelsForDollarSign() {
-    const donationAmtLabels = document.querySelectorAll('.en__field--donationAmt label');
+    const donationAmtLabels = document.querySelectorAll(
+      ".en__field--donationAmt label"
+    );
 
     for (const label of donationAmtLabels) {
       const labelValue = label.textContent.trim();
 
       // Check if the label value contains a dollar sign ($)
-      if (labelValue.includes('$')) {
+      if (labelValue.includes("$")) {
         legacySetLegacyThemeAttribute();
         console.log("legacySetLegacyThemeAttribute 8 called");
       }
@@ -459,15 +504,19 @@ export const customScript = function (App, EnForm) {
    * If it doesn't, check if ".page-backgroundImage img + figattribution" exists and wrap it in a <figure> tag with the "media-with-attribution" class.
    */
   function legacyWrapFigAttributionWithFigure() {
-    const existingFigureAttribution = document.querySelector('.page-backgroundImage figure > img + figattribution');
+    const existingFigureAttribution = document.querySelector(
+      ".page-backgroundImage figure > img + figattribution"
+    );
 
     if (!existingFigureAttribution) {
-      const imgAttribution = document.querySelector('.page-backgroundImage img + figattribution');
-      
+      const imgAttribution = document.querySelector(
+        ".page-backgroundImage img + figattribution"
+      );
+
       if (imgAttribution) {
-        const figure = document.createElement('figure');
-        figure.classList.add('media-with-attribution');
-        
+        const figure = document.createElement("figure");
+        figure.classList.add("media-with-attribution");
+
         // Wrap the imgAttribution inside the <figure> element
         imgAttribution.parentNode.insertBefore(figure, imgAttribution);
         figure.appendChild(imgAttribution);
@@ -478,7 +527,6 @@ export const customScript = function (App, EnForm) {
   // Call the function to wrap figattribution with a figure element if needed
   legacyWrapFigAttributionWithFigure();
 
-
   /**
    * Function to rearrange elements on the page by moving specific elements after and before other elements.
    * Moves elements with the "moveafter-en__field--recurrfreq" class after the "en__field--recurrfreq" class,
@@ -486,7 +534,9 @@ export const customScript = function (App, EnForm) {
    */
   function rearrangePageElements() {
     // Move elements with the "moveafter-en__field--recurrfreq" class after the "en__field--recurrfreq" class
-    const moveAfterElements = document.querySelectorAll(".moveafter-en__field--recurrfreq");
+    const moveAfterElements = document.querySelectorAll(
+      ".moveafter-en__field--recurrfreq"
+    );
     const afterElement = document.querySelector(".en__field--recurrfreq");
     if (afterElement && moveAfterElements.length > 0) {
       moveAfterElements.forEach((element) => {
@@ -495,7 +545,9 @@ export const customScript = function (App, EnForm) {
     }
 
     // Move elements with the "movebefore-en__field--donationAmt" class before the "en__field--donationAmt" class
-    const moveBeforeElements = document.querySelectorAll(".movebefore-en__field--donationAmt");
+    const moveBeforeElements = document.querySelectorAll(
+      ".movebefore-en__field--donationAmt"
+    );
     const beforeElement = document.querySelector(".en__field--donationAmt");
     if (beforeElement && moveBeforeElements.length > 0) {
       moveBeforeElements.forEach((element) => {
@@ -507,8 +559,7 @@ export const customScript = function (App, EnForm) {
   // Call the function to rearrange elements on the page
   rearrangePageElements();
 
-
-  if (theme === "oc2") {
+  function mobileMediaAttribution() {
     const bgImageTooltip = document.querySelector(
       ".page-backgroundImage figattribution"
     );
@@ -531,7 +582,10 @@ export const customScript = function (App, EnForm) {
         interactive: true,
       });
     }
+  }
 
+  // Add click-to-expand-cta event listeners
+  function clickToExpandCta() {
     document.querySelectorAll(".click-to-expand-cta").forEach((el) => {
       el.addEventListener("click", () => {
         el.parentElement.classList.add("expanded");
@@ -544,4 +598,8 @@ export const customScript = function (App, EnForm) {
     });
   }
 
+  if (theme === "oc2") {
+    mobileMediaAttribution(); // Call the function to set the mobile media attribution tooltip
+    clickToExpandCta(); // Call the function to add click-to-expand-cta event listeners
+  }
 };
