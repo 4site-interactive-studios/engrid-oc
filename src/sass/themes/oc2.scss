@@ -1091,4 +1091,26 @@
       ) !important;
     }
   }
+
+  // Sub-theme: Dark Blue
+  // Background Color: Dark Blue
+  // Logo Color: White
+  // Font Color: White
+  &[data-engrid-top-subtheme="dark-blue"] {
+    /* Make the top area's background color the dark brand blue */
+    --top_background-color: #0d3669;
+    --engrid__body-top_background-color: #0d3669; /* Mobile area */
+
+    /* Invert the logo image and make it white */
+    .body-header img {
+      filter: brightness(0) invert(1);
+    }
+
+    /* Make the top area's font color white */
+    .body-title h1,
+    .body-title h2,
+    .body-top {
+      color: #ffffff;
+    }
+  }
 }
