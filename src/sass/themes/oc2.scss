@@ -1112,5 +1112,12 @@
     .body-top {
       color: #ffffff;
     }
+
+    /* Adjust the color of mobile wavy divider */
+    [class*="page-backgroundImage"]:after {
+      /* Used to calculate the difference, run multiple times to get different results: https://codepen.io/4SiteStudios/pen/YzRgzeZ */
+      filter: invert(84%) sepia(34%) saturate(2738%) hue-rotate(191deg)
+        brightness(97%) contrast(98%);
+    }
   }
 }
