@@ -19,7 +19,7 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Thursday, August 3, 2023 @ 17:37:12 ET
+ *  Date: Tuesday, August 8, 2023 @ 16:51:41 ET
  *  By: bryancasler
  *  ENGrid styles: v0.14.13
  *  ENGrid scripts: v0.14.14
@@ -10595,6 +10595,10 @@ body[data-engrid-debug]:before{
 }
 [data-engrid-theme=oc2] .en__field__input.en__field__input--radio[value=applepay]:checked+label{
   background-color:var(--give-by-select__button_background-color_checked) !important;
+}
+[data-engrid-theme=oc2] label span span.highlight{
+  display:block;
+  width:fit-content;
 }
 [data-engrid-theme=oc2][data-engrid-top-subtheme=dark-blue]{
   --top_background-color:#0d3669;
