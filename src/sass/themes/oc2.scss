@@ -1097,6 +1097,16 @@
     width: fit-content;
   }
 
+  /* Temporary styles to make desktop background videos work on OC2 pages */
+  .page-backgroundImage video:not(.crop-on-right):not(.crop-on-left) {
+    min-width: initial;
+    max-width: calc(100vw - 840px);
+    right: 0;
+    transform: translate(0px);
+    left: initial;
+    top: 0;
+  }
+
   // Sub-theme: Dark Blue
   // Background Color: Dark Blue
   // Logo Color: White
