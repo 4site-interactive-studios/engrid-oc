@@ -43,7 +43,7 @@
   --default_color: var(--color-primary);
   --p_font-size: 18px;
   --p_line-height: 1.7em;
-  --h1_font-size: 4.5rem;
+  --h1_font-size: 3.5rem;
   --h1_line-height: 1.1;
 
   // BUTTON
@@ -135,6 +135,7 @@
   --media-attribution__padding: 0;
 
   // CLick to expand
+  --click-to-expand__copy-area_height: 195px;
   --click-to-expand__cta-image_url: url(https://aaf1a18515da0e792f78-c27fdabe952dfc357fe25ebf5c8897ee.ssl.cf5.rackcdn.com/1991/read-more.png?v=1687780063000);
   --click-to-expand__cta-image_width: auto;
   --click-to-expand__cta-image_height: 28px;
@@ -517,6 +518,14 @@
     input {
       padding: 24px 52px 24px 40px;
       font-size: 28px;
+    }
+  }
+
+  &:not([data-engrid-country="US"]) {
+    .en__field--withOther.en__field--radio.en__field--donationAmt .en__field__item--other {
+      &:after {
+        font-size: 22px;
+      }
     }
   }
 

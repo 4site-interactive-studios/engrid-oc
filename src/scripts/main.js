@@ -5,19 +5,21 @@ export const customScript = function (App, EnForm) {
   // Add your client scripts here
   const theme = document.body.dataset.engridTheme;
 
-  let enFieldPhoneNumber = document.querySelectorAll(
-    "input#en__field_supporter_phoneNumber"
-  )[0];
-  if (enFieldPhoneNumber) {
-    enFieldPhoneNumber.placeholder = "000-000-0000 (Optional)";
+  function addPlaceholder(selector, placeholder) {
+    let el = document.querySelector(selector);
+    if (el) {
+      el.placeholder = placeholder;
+    }
   }
 
-  let enFieldCVV = document.querySelectorAll(
-    "input#en__field_transaction_ccvv"
-  )[0];
-  if (enFieldCVV) {
-    enFieldCVV.placeholder = "3 Digits";
-  }
+  addPlaceholder(
+    "input#en__field_supporter_phoneNumber",
+    "000-000-0000 (Optional)"
+  );
+  addPlaceholder("input#en__field_transaction_ccvv", "3 Digits");
+  addPlaceholder("input#en__field_supporter_postcode", "ZIP Code");
+  addPlaceholder("input#en__field_supporter_address1", "Address Line 1");
+  addPlaceholder("input#en__field_supporter_address2", "Address Line 2");
 
   //On form block with .us-only and a country field, add a notice, set value to US and disable field
   if (
@@ -27,7 +29,7 @@ export const customScript = function (App, EnForm) {
   ) {
     if (!document.querySelector(".en__field--country .en__field__notice")) {
       App.addHtml(
-        '<div class="en__field__notice"><em>Note: This action is limited to US addresses.</em></div>',
+        '<div class="en__field__notice"><em>Note: This action is limited to U.S. addresses.</em></div>',
         ".us-only .en__field--country .en__field__element",
         "after"
       );
