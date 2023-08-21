@@ -1027,6 +1027,14 @@
     }
   }
 
+  // Prevents reflow from happening when the click-to-expand element wrapper is added to its content
+  @media screen and (min-width: 600px) {
+    .body-top > p:first-child,
+    .click-to-expand > *:first-child {
+      margin-top: 0px;
+    }
+  }
+
   //Remove click-to-expand when element also has .click-to-expand-mobile class
   &:not(#en__pagebuilder) .click-to-expand-mobile:not(.expanded) {
     max-height: none;
