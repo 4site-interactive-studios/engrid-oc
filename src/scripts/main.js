@@ -86,7 +86,7 @@ export const customScript = function (App, EnForm) {
       document.querySelector(".en__field--postcode > label"),
       "postcode",
       "?",
-      "If donating with a Credit Card, your Zip Code must match your billing address."
+      "If donating with a Credit Card, your ZIP Code must match your billing address."
     );
   }
 
