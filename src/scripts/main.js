@@ -639,11 +639,8 @@ export const customScript = function (App, EnForm) {
         theme: "black",
         content: bgImageTooltipText,
         allowHTML: true,
-        arrow: true,
-        arrowType: "default",
         placement: "left",
         trigger: "click mouseenter focus",
-        interactive: true,
       });
     }
   }

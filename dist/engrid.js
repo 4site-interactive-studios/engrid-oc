@@ -17,7 +17,7 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Thursday, September 14, 2023 @ 07:42:18 ET
+ *  Date: Monday, September 18, 2023 @ 07:23:21 ET
  *  By: michael
  *  ENGrid styles: v0.15.0
  *  ENGrid scripts: v0.15.2
@@ -20198,11 +20198,8 @@ const customScript = function (App, EnForm) {
         theme: "black",
         content: bgImageTooltipText,
         allowHTML: true,
-        arrow: true,
-        arrowType: "default",
         placement: "left",
-        trigger: "click mouseenter focus",
-        interactive: true
+        trigger: "click mouseenter focus"
       });
     }
   } // Add click-to-expand-cta event listeners

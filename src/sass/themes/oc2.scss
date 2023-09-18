@@ -185,8 +185,13 @@
     }
   }
 
-  .header-logo img.logo-horizontal {
+  .header-logo img:not(.logo-horizontal) {
     display: none;
+  }
+
+  .header-logo img.logo-horizontal {
+    width: 250px;
+    height: auto;
   }
 
   .content-footer {
@@ -229,15 +234,30 @@
     z-index: auto;
   }
 
+  .media-with-attribution > figattribution {
+    display: none;
+  }
+
   .tippy-box[data-theme~="black"] {
     background-color: black;
     color: white;
-    font-size: 12px;
-    max-width: 260px !important;
-    margin-top: 9px;
+    font-size: 18px;
+    ////max-width: 260px !important;
+    max-width: 400px !important;
+    //margin-top: 9px;
+    padding: 15px;
 
     p {
-      font-size: 12px;
+      font-size: 18px;
+      margin: 0;
+    }
+
+    p + p {
+      margin-top: 15px;
+    }
+
+    .tippy-content {
+      padding: 0;
     }
 
     &[data-placement^="top"] > .tippy-arrow::before {
@@ -717,7 +737,14 @@
   }
 
   #mobile-bg-tooltip {
-    display: none;
+    border-radius: 50%;
+    position: absolute;
+    width: 28px;
+    height: 28px;
+    bottom: 20px;
+    right: 20px;
+    background-image: url("https://aaf1a18515da0e792f78-c27fdabe952dfc357fe25ebf5c8897ee.ssl.cf5.rackcdn.com/1991/media-attribution.png");
+    background-size: 100%;
   }
 
   .enWidget.enWidget--progressBar {
@@ -849,15 +876,8 @@
     }
 
     #mobile-bg-tooltip {
-      display: block;
-      border-radius: 50%;
-      position: absolute;
-      width: 28px;
-      height: 28px;
       top: 10px;
       right: 10px;
-      background-image: url("https://aaf1a18515da0e792f78-c27fdabe952dfc357fe25ebf5c8897ee.ssl.cf5.rackcdn.com/1991/media-attribution.png");
-      background-size: 100%;
     }
 
     .body-top:after {
@@ -889,6 +909,22 @@
     // --fields_spacing-inline: 0;
     --engrid__content-footer_padding: 70px 1.5rem 1rem;
 
+    .tippy-box[data-theme~="black"] {
+      font-size: 12px;
+      max-width: 260px !important;
+
+      p {
+        font-size: 12px;
+      }
+    }
+
+    .header-logo img.logo-horizontal {
+      display: block;
+      width: 250px;
+      height: auto;
+      margin-top: 1.4rem;
+    }
+
     .body-title {
       text-align: center;
     }
@@ -906,17 +942,6 @@
     .body-title h2:not(:only-child) {
       display: block;
       margin-top: 1rem;
-    }
-
-    .header-logo img:not(.logo-horizontal) {
-      display: none;
-    }
-
-    .header-logo img.logo-horizontal {
-      display: block;
-      width: 250px;
-      height: auto;
-      margin-top: 1.4rem;
     }
 
     .recurring-upsell-text p {
