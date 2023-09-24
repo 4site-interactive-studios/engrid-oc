@@ -19,7 +19,7 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Monday, September 18, 2023 @ 07:23:21 ET
+ *  Date: Sunday, September 24, 2023 @ 10:20:34 ET
  *  By: michael
  *  ENGrid styles: v0.15.0
  *  ENGrid scripts: v0.15.2
@@ -9899,6 +9899,35 @@ body[data-engrid-debug]:before{
 }
 [data-engrid-theme=oc2] .body-top .en__component--copyblock>[style="text-align: center;"]{
   text-align:initial !important;
+}
+[data-engrid-theme=oc2] .content-footer span[style*="13px"]{
+  display:block;
+  text-align:center;
+  width:100%;
+}
+[data-engrid-theme=oc2] #en__pagebuilder .merge-with-give-by-select{
+  background-color:#ff00001a !important;
+}
+[data-engrid-theme=oc2] .give-by-select:not([show-wallets]) #en__digitalWallet .digital-divider{
+  display:none;
+}
+[data-engrid-theme=oc2] .digital-divider{
+  align-items:center;
+  color:#9b9b94;
+  display:flex;
+  margin-bottom:calc(var(--fields_spacing-block) - 4px);
+  padding-left:var(--fields_spacing-inline);
+  padding-right:var(--fields_spacing-inline);
+  width:100%;
+}
+[data-engrid-theme=oc2] .divider-left,[data-engrid-theme=oc2] .divider-right{
+  background:#dfdfd7;
+  content:"";
+  flex:1 1;
+  height:1px;
+}
+[data-engrid-theme=oc2] .divider-center{
+  margin:0 .5rem;
 }
 @keyframes pulse{
   0%{

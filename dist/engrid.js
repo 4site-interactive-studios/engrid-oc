@@ -17,7 +17,7 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Monday, September 18, 2023 @ 07:23:21 ET
+ *  Date: Sunday, September 24, 2023 @ 10:20:34 ET
  *  By: michael
  *  ENGrid styles: v0.15.0
  *  ENGrid scripts: v0.15.2
@@ -19781,9 +19781,9 @@ const customScript = function (App, EnForm) {
     window.dataLayer.push({
       event: "hasUserIP"
     });
-  }); // Digital Wallets Moving Parts
+  });
 
-  if (theme === "oc") {
+  function legacyDigitalWalletsSetup() {
     const digitalWalletWrapper = document.querySelector("#en__digitalWallet");
     const giveBySelect = document.querySelector(".give-by-select");
 
@@ -19828,7 +19828,7 @@ const customScript = function (App, EnForm) {
       const observer = new MutationObserver(mutations => {
         mutations.forEach(mutation => {
           if (mutation.type === "childList" && mutation.addedNodes.length > 0 && !isLoaded) {
-            const giveBySelectItems = document.querySelectorAll(".give-by-select .card, .give-by-select .paypal, .give-by-select .check");
+            const giveBySelectItems = document.querySelectorAll(".give-by-select .card, .give-by-select .paypal, .give-by-select .check, .give-by-select .paypaltouch");
             giveBySelectItems.forEach(item => {
               item.classList.add("recurring-frequency-n-hide");
             });
@@ -19838,6 +19838,11 @@ const customScript = function (App, EnForm) {
       });
       observer.observe(digitalWalletWrapper, config);
     }
+  } // Digital Wallets Moving Parts
+
+
+  if (theme === "oc") {
+    legacyDigitalWalletsSetup();
   } //GTM event handling for opted in on previous page in session
 
 
@@ -20219,6 +20224,12 @@ const customScript = function (App, EnForm) {
     mobileMediaAttribution(); // Call the function to set the mobile media attribution tooltip
 
     clickToExpandCta(); // Call the function to add click-to-expand-cta event listeners
+    //support for digital wallets on legacy page layouts running on oc2 theme
+    //detecting old payment method layout (digital wallets block inside the card fields form block).
+
+    if (document.querySelector(".en__component--formblock.giveBySelect-Card > #en__digitalWallet")) {
+      legacyDigitalWalletsSetup();
+    }
   }
 };
 // EXTERNAL MODULE: ./node_modules/smoothscroll-polyfill/dist/smoothscroll.js

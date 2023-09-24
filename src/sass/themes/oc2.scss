@@ -171,6 +171,44 @@
     text-align: initial !important;
   }
 
+  // OC 1 Legacy Support for attribution styling in footer
+  // To deprecate: Remove entire declaration
+  .content-footer span[style*="13px"] {
+    width: 100%;
+    display: block;
+    text-align: center;
+  }
+
+  // OC 1 Legacy Support for Digital wallets using OC1 page layout
+  // To deprecate: Remove all declarations in this block
+  #en__pagebuilder .merge-with-give-by-select {
+    background-color: #ff00001a !important;
+  }
+  /* If Give by Select has a Digital Wallet, hide it until we add our data-attribute */
+  .give-by-select:not([show-wallets]) #en__digitalWallet .digital-divider {
+    display: none;
+  }
+  .digital-divider {
+    width: 100%;
+    align-items: center;
+    color: #9b9b94;
+    display: flex;
+    padding-left: var(--fields_spacing-inline);
+    padding-right: var(--fields_spacing-inline);
+    margin-bottom: calc(var(--fields_spacing-block) - 4px);
+  }
+  .divider-left,
+  .divider-right {
+    background: #dfdfd7;
+    content: "";
+    flex: 1 1;
+    height: 1px;
+  }
+  .divider-center {
+    margin: 0 0.5rem;
+  }
+  //END: OC 1 Legacy Support for Digital wallets using OC1 page layout
+
   @keyframes pulse {
     0% {
       transform: scale(1);
