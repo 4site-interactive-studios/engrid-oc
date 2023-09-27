@@ -17,7 +17,7 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Monday, August 14, 2023 @ 15:21:55 ET
+ *  Date: Wednesday, September 27, 2023 @ 13:14:47 ET
  *  By: fernando
  *  ENGrid styles: v0.14.13
  *  ENGrid scripts: v0.14.15
@@ -20610,7 +20610,6 @@ class DonationLightboxForm {
 
 
 
-console.log("??????");
 
 function getUserData() {
   let phone = app_App.getFieldValue("supporter.phoneNumber");

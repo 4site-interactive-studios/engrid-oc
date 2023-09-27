@@ -24,8 +24,6 @@ declare global {
   }
 }
 
-console.log("??????");
-
 function getUserData() {
   let phone = App.getFieldValue("supporter.phoneNumber");
   let sms_message_opt_in = document.getElementById(
