@@ -17,7 +17,7 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Wednesday, September 27, 2023 @ 13:14:47 ET
+ *  Date: Tuesday, October 3, 2023 @ 15:14:10 ET
  *  By: fernando
  *  ENGrid styles: v0.14.13
  *  ENGrid scripts: v0.14.15
@@ -20725,6 +20725,7 @@ function dataCapture() {
 }
 
 const options = {
+  AutoYear: true,
   applePay: true,
   CapitalizeFields: true,
   ClickToExpand: true,

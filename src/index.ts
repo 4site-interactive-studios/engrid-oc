@@ -160,6 +160,7 @@ function dataCapture() {
 }
 
 const options: Options = {
+  AutoYear: true,
   applePay: true,
   CapitalizeFields: true,
   ClickToExpand: true,
