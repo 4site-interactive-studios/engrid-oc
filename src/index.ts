@@ -163,6 +163,7 @@ function dataCapture() {
 
 const options: Options = {
   applePay: true,
+  AutoYear: true,
   CapitalizeFields: true,
   ClickToExpand: true,
   CurrencySymbol: "$",

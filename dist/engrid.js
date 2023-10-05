@@ -17,7 +17,7 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Sunday, September 24, 2023 @ 10:20:34 ET
+ *  Date: Thursday, October 5, 2023 @ 07:29:57 ET
  *  By: michael
  *  ENGrid styles: v0.15.0
  *  ENGrid scripts: v0.15.2
@@ -21173,6 +21173,7 @@ function dataCapture() {
 
 const options = {
   applePay: true,
+  AutoYear: true,
   CapitalizeFields: true,
   ClickToExpand: true,
   CurrencySymbol: "$",
