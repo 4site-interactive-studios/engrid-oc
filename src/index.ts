@@ -162,6 +162,7 @@ function dataCapture() {
 }
 
 const options: Options = {
+  ENValidators: true,
   applePay: true,
   AutoYear: true,
   CapitalizeFields: true,
