@@ -24,6 +24,8 @@ declare global {
   }
 }
 
+const theme = document.body.dataset.engridTheme;
+
 function getUserData() {
   let phone = App.getFieldValue("supporter.phoneNumber");
   let sms_message_opt_in = document.getElementById(
@@ -160,8 +162,9 @@ function dataCapture() {
 }
 
 const options: Options = {
-  AutoYear: true,
+  ENValidators: true,
   applePay: true,
+  AutoYear: true,
   CapitalizeFields: true,
   ClickToExpand: true,
   CurrencySymbol: "$",
@@ -208,4 +211,13 @@ const options: Options = {
     });
   },
 };
+
+if (theme === "oc2") {
+  options.AddCurrencySymbol = false;
+  options.MobileCTA = {
+    label: "Add Your Name",
+    pages: ["ADVOCACY", "EMAILTOTARGET", "TWEETPAGE"],
+  };
+}
+
 new App(options);

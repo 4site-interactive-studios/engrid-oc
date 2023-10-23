@@ -17,10 +17,10 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Tuesday, October 3, 2023 @ 15:14:10 ET
- *  By: fernando
- *  ENGrid styles: v0.14.13
- *  ENGrid scripts: v0.14.15
+ *  Date: Monday, October 23, 2023 @ 09:42:59 ET
+ *  By: michael
+ *  ENGrid styles: v0.15.3
+ *  ENGrid scripts: v0.15.11
  *
  *  Created by 4Site Studios
  *  Come work with us or join our team, we would love to hear from you
@@ -10761,6 +10761,8 @@ const OptionsDefaults = {
     RegionLongFormat: "",
     CountryDisable: [],
     Plaid: false,
+    Placeholders: false,
+    ENValidators: false,
     MobileCTA: false,
     PageLayouts: [
         "leftleft1col",
@@ -11104,15 +11106,12 @@ class EnForm {
         }
     }
     get onSubmit() {
-        // if(ENGrid.debug) console.log("onSubmit");
         return this._onSubmit.asEvent();
     }
     get onError() {
-        // if(ENGrid.debug) console.log("onError");
         return this._onError.asEvent();
     }
     get onValidate() {
-        // if(ENGrid.debug) console.log("onError");
         return this._onValidate.asEvent();
     }
 }
@@ -11206,8 +11205,15 @@ class DonationAmount {
         }
         else {
             const otherField = document.querySelector('input[name="' + this._other + '"]');
-            otherField.focus();
-            otherField.value = parseFloat(amount.toString()).toFixed(2);
+            if (otherField) {
+                const enFieldOtherAmountRadio = document.querySelector('input[name="' + this._radios + '"][value="other" i]');
+                if (enFieldOtherAmountRadio) {
+                    enFieldOtherAmountRadio.checked = true;
+                }
+                otherField.value = parseFloat(amount.toString()).toFixed(2);
+                const otherWrapper = otherField.parentNode;
+                otherWrapper.classList.remove("en__field__item--hidden");
+            }
         }
         // Set the new amount and trigger all live variables
         this.amount = amount;
@@ -11358,7 +11364,7 @@ class engrid_ENGrid {
                             if ("actions" in dependency && dependency.actions.length > 0) {
                                 let amountIdFound = false;
                                 dependency.actions.forEach((action) => {
-                                    if ("target" in action && action.target === amountID) {
+                                    if ("target" in action && action.target == amountID) {
                                         amountIdFound = true;
                                     }
                                 });
@@ -11736,6 +11742,17 @@ class engrid_ENGrid {
             enFieldPaymentType.dispatchEvent(event);
         }
     }
+    static isInViewport(element) {
+        const rect = element.getBoundingClientRect();
+        return (rect.top >= 0 &&
+            rect.left >= 0 &&
+            rect.bottom <=
+                (window.innerHeight ||
+                    document.documentElement.clientHeight) /* or $(window).height() */ &&
+            rect.right <=
+                (window.innerWidth ||
+                    document.documentElement.clientWidth) /* or $(window).width() */);
+    }
 }
 
 ;// CONCATENATED MODULE: ./node_modules/@4site/engrid-common/dist/events/donation-frequency.js
@@ -11934,7 +11951,46 @@ class ProcessingFees {
     }
 }
 
+;// CONCATENATED MODULE: ./node_modules/@4site/engrid-common/dist/events/remember-me-events.js
+/**
+ * This class is responsible for managing events related to the "Remember Me" functionality.
+ * It uses the Singleton design pattern to ensure only one instance of this class exists.
+ * It provides methods for dispatching load and clear events, and getters for accessing these events.
+ */
+
+
+class RememberMeEvents {
+    constructor() {
+        this.logger = new EngridLogger("RememberMeEvents");
+        this._onLoad = new dist/* SimpleEventDispatcher */.FK();
+        this._onClear = new dist/* SignalDispatcher */.nz();
+        this.hasData = false;
+    }
+    static getInstance() {
+        if (!RememberMeEvents.instance) {
+            RememberMeEvents.instance = new RememberMeEvents();
+        }
+        return RememberMeEvents.instance;
+    }
+    dispatchLoad(hasData) {
+        this.hasData = hasData;
+        this._onLoad.dispatch(hasData);
+        this.logger.log(`dispatchLoad: ${hasData}`);
+    }
+    dispatchClear() {
+        this._onClear.dispatch();
+        this.logger.log("dispatchClear");
+    }
+    get onLoad() {
+        return this._onLoad.asEvent();
+    }
+    get onClear() {
+        return this._onClear.asEvent();
+    }
+}
+
 ;// CONCATENATED MODULE: ./node_modules/@4site/engrid-common/dist/events/index.js
+
 
 
 
@@ -11995,11 +12051,7 @@ class app_App extends engrid_ENGrid {
         if (this.options.Debug || app_App.getUrlParameter("debug") == "true")
             // Enable debug if available is the first thing
             app_App.setBodyData("debug", "");
-        // TODO: Abstract everything to the App class so we can remove custom-methods
-        watchInmemField();
-        simpleUnsubscribe();
-        contactDetailLabels();
-        easyEdit();
+        new Advocacy();
         new InputPlaceholders();
         new InputHasValueAndFocus();
         new ShowHideRadioCheckboxes("transaction.giveBySelect", "giveBySelect-");
@@ -12023,8 +12075,6 @@ class app_App extends engrid_ENGrid {
                 new ShowHideRadioCheckboxes(checkbox.name, "engrid__" + checkbox.name.replace(/\./g, "") + "-");
             }
         });
-        // Controls if the Theme has a the "Debug Bar"
-        // legacy.debugBar();
         // Client onSubmit and onError functions
         this._form.onSubmit.subscribe(() => this.onSubmit());
         this._form.onError.subscribe(() => this.onError());
@@ -12093,6 +12143,8 @@ class app_App extends engrid_ENGrid {
         // On the end of the script, after all subscribers defined, let's load the current value
         this._amount.load();
         this._frequency.load();
+        // Fast Form Fill
+        new FastFormFill();
         // Auto Country Select
         new AutoCountrySelect();
         // Add Image Attribution
@@ -12144,6 +12196,8 @@ class app_App extends engrid_ENGrid {
         new UrlToForm();
         // Required if Visible Fields
         new RequiredIfVisible();
+        // EN Custom Validators (behind a feature flag, off by default)
+        new ENValidators();
         //Debug hidden fields
         if (this.options.Debug)
             new DebugHiddenFields();
@@ -12157,6 +12211,8 @@ class app_App extends engrid_ENGrid {
         new CountryDisable();
         // Premium Gift Features
         new PremiumGift();
+        // Supporter Hub Features
+        new SupporterHub();
         // Digital Wallets Features
         if (engrid_ENGrid.getPageType() === "DONATION") {
             new DigitalWallets();
@@ -12174,10 +12230,12 @@ class app_App extends engrid_ENGrid {
             new Plaid();
         // Give By Select
         new GiveBySelect();
-        this.setDataAttributes();
+        new DataAttributes();
         //Exit Intent Lightbox
         new ExitIntentLightbox();
         new UrlParamsToBodyAttrs();
+        new SetAttr();
+        new ShowIfPresent();
         //Debug panel
         if (this.options.Debug ||
             window.sessionStorage.hasOwnProperty(DebugPanel.debugSessionStorageKey)) {
@@ -12230,118 +12288,6 @@ class app_App extends engrid_ENGrid {
             this.logger.danger("Client onError Triggered");
             this.options.onError();
         }
-    }
-    // Use this function to add any Data Attributes to the Body tag
-    setDataAttributes() {
-        // Add the Page Type as a Data Attribute on the Body Tag
-        if (engrid_ENGrid.checkNested(window, "pageJson", "pageType")) {
-            app_App.setBodyData("page-type", window.pageJson.pageType);
-            this.logger.log("Page Type: " + window.pageJson.pageType);
-        }
-        else {
-            this.logger.log("Page Type: Not Found");
-        }
-        // Add the currency code as a Data Attribute on the Body Tag
-        app_App.setBodyData("currency-code", app_App.getCurrencyCode());
-        // Add a body banner data attribute if the banner contains no image or video
-        if (!document.querySelector(".body-banner img, .body-banner video")) {
-            app_App.setBodyData("body-banner", "empty");
-        }
-        // Add a page-alert data attribute if it is empty
-        if (!document.querySelector(".page-alert *")) {
-            app_App.setBodyData("no-page-alert", "");
-        }
-        // Add a content-header data attribute if it is empty
-        if (!document.querySelector(".content-header *")) {
-            app_App.setBodyData("no-content-header", "");
-        }
-        // Add a body-headerOutside data attribute if it is empty
-        if (!document.querySelector(".body-headerOutside *")) {
-            app_App.setBodyData("no-body-headerOutside", "");
-        }
-        // Add a body-header data attribute if it is empty
-        if (!document.querySelector(".body-header *")) {
-            app_App.setBodyData("no-body-header", "");
-        }
-        // Add a body-title data attribute if it is empty
-        if (!document.querySelector(".body-title *")) {
-            app_App.setBodyData("no-body-title", "");
-        }
-        // Add a body-banner data attribute if it is empty
-        if (!document.querySelector(".body-banner *")) {
-            app_App.setBodyData("no-body-banner", "");
-        }
-        // Add a body-bannerOverlay data attribute if it is empty
-        if (!document.querySelector(".body-bannerOverlay *")) {
-            app_App.setBodyData("no-body-bannerOverlay", "");
-        }
-        // Add a body-top data attribute if it is empty
-        if (!document.querySelector(".body-top *")) {
-            app_App.setBodyData("no-body-top", "");
-        }
-        // Add a body-main data attribute if it is empty
-        if (!document.querySelector(".body-main *")) {
-            app_App.setBodyData("no-body-main", "");
-        }
-        // Add a body-bottom data attribute if it is empty
-        if (!document.querySelector(".body-bottom *")) {
-            app_App.setBodyData("no-body-bottom", "");
-        }
-        // Add a body-footer data attribute if it is empty
-        if (!document.querySelector(".body-footer *")) {
-            app_App.setBodyData("no-body-footer", "");
-        }
-        // Add a body-footerOutside data attribute if it is empty
-        if (!document.querySelector(".body-footerOutside *")) {
-            app_App.setBodyData("no-body-footerOutside", "");
-        }
-        // Add a content-footerSpacer data attribute if it is empty
-        if (!document.querySelector(".content-footerSpacer *")) {
-            app_App.setBodyData("no-content-footerSpacer", "");
-        }
-        // Add a content-preFooter data attribute if it is empty
-        if (!document.querySelector(".content-preFooter *")) {
-            app_App.setBodyData("no-content-preFooter", "");
-        }
-        // Add a content-footer data attribute if it is empty
-        if (!document.querySelector(".content-footer *")) {
-            app_App.setBodyData("no-content-footer", "");
-        }
-        // Add a page-backgroundImage banner data attribute if the page background image contains no image or video
-        if (!document.querySelector(".page-backgroundImage img, .page-backgroundImage video")) {
-            app_App.setBodyData("no-page-backgroundImage", "");
-        }
-        // Add a page-backgroundImageOverlay data attribute if it is empty
-        if (!document.querySelector(".page-backgroundImageOverlay *")) {
-            app_App.setBodyData("no-page-backgroundImageOverlay", "");
-        }
-        // Add a page-customCode data attribute if it is empty
-        if (!document.querySelector(".page-customCode *")) {
-            app_App.setBodyData("no-page-customCode", "");
-        }
-        // Add a country data attribute
-        const countrySelect = document.querySelector("#en__field_supporter_country");
-        if (countrySelect) {
-            app_App.setBodyData("country", countrySelect.value);
-            countrySelect.addEventListener("change", () => {
-                app_App.setBodyData("country", countrySelect.value);
-            });
-        }
-        const otherAmountDiv = document.querySelector(".en__field--donationAmt .en__field__item--other");
-        if (otherAmountDiv) {
-            otherAmountDiv.setAttribute("data-currency-symbol", app_App.getCurrencySymbol());
-        }
-        // Add a payment type data attribute
-        const paymentTypeSelect = app_App.getField("transaction.paymenttype");
-        if (paymentTypeSelect) {
-            app_App.setBodyData("payment-type", paymentTypeSelect.value);
-            paymentTypeSelect.addEventListener("change", () => {
-                app_App.setBodyData("payment-type", paymentTypeSelect.value);
-            });
-        }
-        // Add demo data attribute
-        if (app_App.demo)
-            app_App.setBodyData("demo", "");
     }
     static log(message) {
         const logger = new EngridLogger("Client", "brown", "aliceblue", "🍪");
@@ -12637,7 +12583,9 @@ class CreditCard {
                 return;
             const current_date = new Date();
             const current_month = current_date.getMonth() + 1;
-            const current_year = current_date.getFullYear() - 2000;
+            const current_year = parseInt(this.field_expiration_year[this.field_expiration_year.length - 1].value) > 2000
+                ? current_date.getFullYear()
+                : current_date.getFullYear() - 2000;
             // handle if year is changed to current year (disable all months less than current month)
             // handle if month is changed to less than current month (disable current year)
             if (e == "month") {
@@ -12969,153 +12917,164 @@ class ClickToExpand {
     }
 }
 
-;// CONCATENATED MODULE: ./node_modules/@4site/engrid-common/dist/custom-methods.js
-const body = document.body;
-const enGrid = document.getElementById("engrid");
-const removeClassesByPrefix = (el, prefix) => {
-    for (var i = el.classList.length - 1; i >= 0; i--) {
-        if (el.classList[i].startsWith(prefix)) {
-            el.classList.remove(el.classList[i]);
-        }
+;// CONCATENATED MODULE: ./node_modules/@4site/engrid-common/dist/advocacy.js
+// Component to handle advocacy features
+// 1 - Adds EN Polyfill to support "label" clicking on Advocacy Recipient "labels"
+
+class Advocacy {
+    constructor() {
+        this.logger = new EngridLogger("Advocacy", "#232323", "#f7b500", "👨‍⚖️");
+        if (!this.shoudRun())
+            return;
+        this.setClickableLabels();
     }
-};
-const watchInmemField = () => {
-    const enFieldTransactionInmem = document.getElementById("en__field_transaction_inmem");
-    const handleEnFieldTransactionInmemChange = (e) => {
-        if (enGrid) {
-            if (enFieldTransactionInmem.checked) {
-                enGrid.classList.add("has-give-in-honor");
-            }
-            else {
-                enGrid.classList.remove("has-give-in-honor");
-            }
-        }
-    };
-    // Check Give In Honor State on Page Load
-    if (enFieldTransactionInmem && enGrid) {
-        // Run on page load
-        if (enFieldTransactionInmem.checked) {
-            enGrid.classList.add("has-give-in-honor");
-        }
-        else {
-            enGrid.classList.remove("has-give-in-honor");
-        }
-        // Run on change
-        enFieldTransactionInmem.addEventListener("change", handleEnFieldTransactionInmemChange);
+    shoudRun() {
+        return ["ADVOCACY", "EMAILTOTARGET"].includes(engrid_ENGrid.getPageType());
     }
-};
-// EN Polyfill to support "label" clicking on Advocacy Recipient "labels"
-const contactDetailLabels = () => {
-    const contact = document.querySelectorAll(".en__contactDetails__rows");
-    // @TODO Needs refactoring. Has to be a better way to do this.
-    const recipientChange = (e) => {
-        let recipientRow = e.target;
-        // console.log("recipientChange: recipientRow: ", recipientRow);
-        let recipientRowWrapper = recipientRow.parentNode;
-        // console.log("recipientChange: recipientRowWrapper: ", recipientRowWrapper);
-        let recipientRowsWrapper = recipientRowWrapper.parentNode;
-        // console.log("recipientChange: recipientRowsWrapper: ", recipientRowsWrapper);
-        let contactDetails = recipientRowsWrapper.parentNode;
-        // console.log("recipientChange: contactDetails: ", contactDetails);
-        let contactDetailsCheckbox = contactDetails.querySelector("input");
-        // console.log("recipientChange: contactDetailsCheckbox: ", contactDetailsCheckbox);
-        if (contactDetailsCheckbox.checked) {
-            contactDetailsCheckbox.checked = false;
-        }
-        else {
-            contactDetailsCheckbox.checked = true;
-        }
-    };
-    if (contact) {
-        Array.from(contact).forEach((e) => {
-            let element = e;
-            element.addEventListener("click", recipientChange);
+    setClickableLabels() {
+        const contactItems = document.querySelectorAll(".en__contactDetails__rows");
+        if (!contactItems)
+            return;
+        contactItems.forEach((contact) => {
+            contact.addEventListener("click", (e) => {
+                this.toggleCheckbox(contact);
+            });
         });
     }
-};
-// @TODO Adds a URL path "/edit" that can be used to easily arrive at the editable version of the current page. Should automatically detect if the client is using us.e-activist or e-activist and adjust accoridngly. Should also pass in page number and work for all page types without each needing to be specified.
-// @TODO Remove hard coded client values
-const easyEdit = () => {
-    const liveURL = window.location.href;
-    let editURL = "";
-    if (liveURL.search("edit") !== -1) {
-        if (liveURL.includes("https://act.ran.org/page/")) {
-            editURL = liveURL.replace("https://act.ran.org/page/", "https://us.e-activist.com/index.html#pages/");
-            editURL = editURL.replace("/donate/1", "/edit");
-            editURL = editURL.replace("/action/1", "/edit");
-            editURL = editURL.replace("/data/1", "/edit");
-            window.location.href = editURL;
-        }
+    toggleCheckbox(contact) {
+        const wrapper = contact.closest(".en__contactDetails");
+        if (!wrapper)
+            return;
+        const checkbox = wrapper.querySelector("input[type='checkbox']");
+        if (!checkbox)
+            return;
+        this.logger.log("toggleCheckbox", checkbox.checked);
+        checkbox.checked = !checkbox.checked;
     }
-};
-// If you go to and Engaging Networks Unsubscribe page anonymously
-// then the fields are in their default states. If you go to it via an email
-// link that authenticates who you are, it then populates the fields with corresponding
-// values from your account. This means to unsubscribe the user has to uncheck the
-// newsletter checkbox(s) before submitting.
-const simpleUnsubscribe = () => {
-    // console.log("simpleUnsubscribe fired");
-    // Check if we're on an Unsubscribe / Manage Subscriptions page
-    if (window.location.href.indexOf("/subscriptions") != -1) {
-        // console.log("On an subscription management page");
-        // Check if any form elements on this page have the "forceUncheck" class
-        const forceUncheck = document.querySelectorAll(".forceUncheck");
-        if (forceUncheck) {
-            // console.log("Found forceUnchecl dom elements", forceUncheck);
-            // Step through each DOM element with forceUncheck looking for checkboxes
-            Array.from(forceUncheck).forEach((e) => {
-                let element = e;
-                // console.log("Checking this formComponent for checkboxes", element);
-                // In the forceUncheck form component, find any checboxes
-                let uncheckCheckbox = element.querySelectorAll("input[type='checkbox']");
-                if (uncheckCheckbox) {
-                    // Step through each Checkbox in the forceUncheck form component
-                    Array.from(uncheckCheckbox).forEach((f) => {
-                        let checkbox = f;
-                        // console.log("Unchecking this checkbox", checkbox);
-                        // Uncheck the checbox
-                        checkbox.checked = false;
-                    });
-                }
+}
+
+;// CONCATENATED MODULE: ./node_modules/@4site/engrid-common/dist/data-attributes.js
+// Component that adds data attributes to the Body
+
+class DataAttributes {
+    constructor() {
+        this.setDataAttributes();
+    }
+    setDataAttributes() {
+        // Add the Page Type as a Data Attribute on the Body Tag
+        if (engrid_ENGrid.checkNested(window, "pageJson", "pageType")) {
+            engrid_ENGrid.setBodyData("page-type", window.pageJson.pageType);
+        }
+        // Add the currency code as a Data Attribute on the Body Tag
+        engrid_ENGrid.setBodyData("currency-code", engrid_ENGrid.getCurrencyCode());
+        // Add a body banner data attribute if the banner contains no image or video
+        if (!document.querySelector(".body-banner img, .body-banner video")) {
+            engrid_ENGrid.setBodyData("body-banner", "empty");
+        }
+        // Add a page-alert data attribute if it is empty
+        if (!document.querySelector(".page-alert *")) {
+            engrid_ENGrid.setBodyData("no-page-alert", "");
+        }
+        // Add a content-header data attribute if it is empty
+        if (!document.querySelector(".content-header *")) {
+            engrid_ENGrid.setBodyData("no-content-header", "");
+        }
+        // Add a body-headerOutside data attribute if it is empty
+        if (!document.querySelector(".body-headerOutside *")) {
+            engrid_ENGrid.setBodyData("no-body-headerOutside", "");
+        }
+        // Add a body-header data attribute if it is empty
+        if (!document.querySelector(".body-header *")) {
+            engrid_ENGrid.setBodyData("no-body-header", "");
+        }
+        // Add a body-title data attribute if it is empty
+        if (!document.querySelector(".body-title *")) {
+            engrid_ENGrid.setBodyData("no-body-title", "");
+        }
+        // Add a body-banner data attribute if it is empty
+        if (!document.querySelector(".body-banner *")) {
+            engrid_ENGrid.setBodyData("no-body-banner", "");
+        }
+        // Add a body-bannerOverlay data attribute if it is empty
+        if (!document.querySelector(".body-bannerOverlay *")) {
+            engrid_ENGrid.setBodyData("no-body-bannerOverlay", "");
+        }
+        // Add a body-top data attribute if it is empty
+        if (!document.querySelector(".body-top *")) {
+            engrid_ENGrid.setBodyData("no-body-top", "");
+        }
+        // Add a body-main data attribute if it is empty
+        if (!document.querySelector(".body-main *")) {
+            engrid_ENGrid.setBodyData("no-body-main", "");
+        }
+        // Add a body-bottom data attribute if it is empty
+        if (!document.querySelector(".body-bottom *")) {
+            engrid_ENGrid.setBodyData("no-body-bottom", "");
+        }
+        // Add a body-footer data attribute if it is empty
+        if (!document.querySelector(".body-footer *")) {
+            engrid_ENGrid.setBodyData("no-body-footer", "");
+        }
+        // Add a body-footerOutside data attribute if it is empty
+        if (!document.querySelector(".body-footerOutside *")) {
+            engrid_ENGrid.setBodyData("no-body-footerOutside", "");
+        }
+        // Add a content-footerSpacer data attribute if it is empty
+        if (!document.querySelector(".content-footerSpacer *")) {
+            engrid_ENGrid.setBodyData("no-content-footerSpacer", "");
+        }
+        // Add a content-preFooter data attribute if it is empty
+        if (!document.querySelector(".content-preFooter *")) {
+            engrid_ENGrid.setBodyData("no-content-preFooter", "");
+        }
+        // Add a content-footer data attribute if it is empty
+        if (!document.querySelector(".content-footer *")) {
+            engrid_ENGrid.setBodyData("no-content-footer", "");
+        }
+        // Add a page-backgroundImage banner data attribute if the page background image contains no image or video
+        if (!document.querySelector(".page-backgroundImage img, .page-backgroundImage video")) {
+            engrid_ENGrid.setBodyData("no-page-backgroundImage", "");
+        }
+        // Add a page-backgroundImageOverlay data attribute if it is empty
+        if (!document.querySelector(".page-backgroundImageOverlay *")) {
+            engrid_ENGrid.setBodyData("no-page-backgroundImageOverlay", "");
+        }
+        // Add a page-customCode data attribute if it is empty
+        if (!document.querySelector(".page-customCode *")) {
+            engrid_ENGrid.setBodyData("no-page-customCode", "");
+        }
+        // Add a country data attribute
+        const countrySelect = document.querySelector("#en__field_supporter_country");
+        if (countrySelect) {
+            engrid_ENGrid.setBodyData("country", countrySelect.value);
+            countrySelect.addEventListener("change", () => {
+                engrid_ENGrid.setBodyData("country", countrySelect.value);
             });
         }
+        const otherAmountDiv = document.querySelector(".en__field--donationAmt .en__field__item--other");
+        if (otherAmountDiv) {
+            otherAmountDiv.setAttribute("data-currency-symbol", engrid_ENGrid.getCurrencySymbol());
+        }
+        // Add a payment type data attribute
+        const paymentTypeSelect = engrid_ENGrid.getField("transaction.paymenttype");
+        if (paymentTypeSelect) {
+            engrid_ENGrid.setBodyData("payment-type", paymentTypeSelect.value);
+            paymentTypeSelect.addEventListener("change", () => {
+                engrid_ENGrid.setBodyData("payment-type", paymentTypeSelect.value);
+            });
+        }
+        // Footer in Viewport Check
+        const contentFooter = document.querySelector(".content-footer");
+        if (contentFooter && engrid_ENGrid.isInViewport(contentFooter)) {
+            engrid_ENGrid.setBodyData("footer-above-fold", "");
+        }
+        else {
+            engrid_ENGrid.setBodyData("footer-below-fold", "");
+        }
+        // Add demo data attribute
+        if (engrid_ENGrid.demo)
+            engrid_ENGrid.setBodyData("demo", "");
     }
-};
-// Watch the Region Field for changes. If there is only one option, hide it.
-// @TODO Should this be expanded where if a select only has one option it's always hidden?
-const country_select = document.getElementById("en__field_supporter_country");
-const region_select = document.getElementById("en__field_supporter_region");
-if (country_select) {
-    country_select.addEventListener("change", () => {
-        setTimeout(() => {
-            if (region_select.options.length == 1 &&
-                region_select.options[0].value == "other") {
-                region_select.classList.add("hide");
-            }
-            else {
-                region_select.classList.remove("hide");
-            }
-        }, 100);
-    });
-}
-// @TODO "Footer in Viewport Check" should be made its own TS file
-const contentFooter = document.querySelector(".content-footer");
-const isInViewport = (e) => {
-    const distance = e.getBoundingClientRect();
-    // console.log("Footer: ", distance);
-    return (distance.top >= 0 &&
-        distance.left >= 0 &&
-        distance.bottom <=
-            (window.innerHeight || document.documentElement.clientHeight) &&
-        distance.right <=
-            (window.innerWidth || document.documentElement.clientWidth));
-};
-// Checks to see if the page is so short, the footer is above the fold. If the footer is above the folde we'll use this class to ensure at a minimum the page fills the full viewport height.
-if (contentFooter && isInViewport(contentFooter)) {
-    document.body.setAttribute("data-engrid-footer-above-fold", "");
-}
-else {
-    document.body.setAttribute("data-engrid-footer-below-fold", "");
 }
 
 ;// CONCATENATED MODULE: ./node_modules/@4site/engrid-common/dist/iframe.js
@@ -13396,10 +13355,70 @@ class InputHasValueAndFocus {
 
 ;// CONCATENATED MODULE: ./node_modules/@4site/engrid-common/dist/input-placeholders.js
 // Component that adds input placeholders
+// You can override the default placeholders by adding a Placeholders option to the EngridOptions on the client theme.
+// You can also add an EngridPageOptions override to the page, if you want to override the placeholders on a specific page. Example:
+// <script type="text/javascript">
+//   EngridPageOptions = {
+//     Placeholders: {
+//       "input#en__field_supporter_firstName": "Nome",
+//       "input#en__field_supporter_lastName": "Sobrenome"
+//     }
+//   };
+// </script>
 
 class InputPlaceholders {
     constructor() {
+        this.defaultPlaceholders = {
+            "input#en__field_supporter_firstName": "First Name",
+            "input#en__field_supporter_lastName": "Last Name",
+            "input#en__field_supporter_emailAddress": "Email Address",
+            "input#en__field_supporter_phoneNumber": "Phone Number (Optional)",
+            ".en__mandatory input#en__field_supporter_phoneNumber": "Phone Number",
+            "input#en__field_supporter_phoneNumber2": "000-000-0000 (Optional)",
+            ".en__mandatory input#en__field_supporter_phoneNumber2": "000-000-0000",
+            "input#en__field_supporter_country": "Country",
+            "input#en__field_supporter_address1": "Street Address",
+            "input#en__field_supporter_address2": "Apt., Ste., Bldg.",
+            "input#en__field_supporter_city": "City",
+            "input#en__field_supporter_region": "Region",
+            "input#en__field_supporter_postcode": "ZIP Code",
+            ".en__field--donationAmt.en__field--withOther .en__field__input--other": "Other",
+            "input#en__field_transaction_ccnumber": "•••• •••• •••• ••••",
+            "input#en__field_transaction_ccexpire": "MM / YY",
+            "input#en__field_transaction_ccvv": "CVV",
+            "input#en__field_supporter_bankAccountNumber": "Bank Account Number",
+            "input#en__field_supporter_bankRoutingNumber": "Bank Routing Number",
+            "input#en__field_transaction_honname": "Honoree Name",
+            "input#en__field_transaction_infname": "Recipient Name",
+            "input#en__field_transaction_infemail": "Recipient Email Address",
+            "input#en__field_transaction_infcountry": "Country",
+            "input#en__field_transaction_infadd1": "Recipient Street Address",
+            "input#en__field_transaction_infadd2": "Recipient Apt., Ste., Bldg.",
+            "input#en__field_transaction_infcity": "Recipient City",
+            "input#en__field_transaction_infpostcd": "Recipient Postal Code",
+            "input#en__field_transaction_gftrsn": "Reason for your gift",
+            "input#en__field_transaction_shipfname": "Shipping First Name",
+            "input#en__field_transaction_shiplname": "Shipping Last Name",
+            "input#en__field_transaction_shipemail": "Shipping Email Address",
+            "input#en__field_transaction_shipcountry": "Shipping Country",
+            "input#en__field_transaction_shipadd1": "Shipping Street Address",
+            "input#en__field_transaction_shipadd2": "Shipping Apt., Ste., Bldg.",
+            "input#en__field_transaction_shipcity": "Shipping City",
+            "input#en__field_transaction_shipregion": "Shipping Region",
+            "input#en__field_transaction_shippostcode": "Shipping Postal Code",
+            "input#en__field_supporter_billingCountry": "Billing Country",
+            "input#en__field_supporter_billingAddress1": "Billing Street Address",
+            "input#en__field_supporter_billingAddress2": "Billing Apt., Ste., Bldg.",
+            "input#en__field_supporter_billingCity": "Billing City",
+            "input#en__field_supporter_billingRegion": "Billing Region",
+            "input#en__field_supporter_billingPostcode": "Billing Postal Code",
+        };
         if (this.shouldRun()) {
+            // If there's a Placeholders option, merge it with the default placeholders
+            const placeholders = engrid_ENGrid.getOption("Placeholders");
+            if (placeholders) {
+                this.defaultPlaceholders = Object.assign(Object.assign({}, this.defaultPlaceholders), placeholders);
+            }
             this.run();
         }
     }
@@ -13407,56 +13426,10 @@ class InputPlaceholders {
         return engrid_ENGrid.hasBodyData("add-input-placeholders");
     }
     run() {
-        // Personal Information
-        this.addPlaceholder("input#en__field_supporter_firstName", "First Name");
-        this.addPlaceholder("input#en__field_supporter_lastName", "Last Name");
-        this.addPlaceholder("input#en__field_supporter_emailAddress", "Email Address");
-        this.addPlaceholder("input#en__field_supporter_phoneNumber", "Phone Number (Optional)");
-        this.addPlaceholder(".en__mandatory input#en__field_supporter_phoneNumber", "Phone Number");
-        this.addPlaceholder("input#en__field_supporter_phoneNumber2", "000-000-0000 (Optional)");
-        this.addPlaceholder(".en__mandatory input#en__field_supporter_phoneNumber2", "000-000-0000");
-        // Address
-        this.addPlaceholder("input#en__field_supporter_country", "Country");
-        this.addPlaceholder("input#en__field_supporter_address1", "Street Address");
-        this.addPlaceholder("input#en__field_supporter_address2", "Apt., ste., bldg.");
-        this.addPlaceholder("input#en__field_supporter_city", "City");
-        this.addPlaceholder("input#en__field_supporter_region", "Region");
-        this.addPlaceholder("input#en__field_supporter_postcode", "Zip Code");
-        // Donation
-        this.addPlaceholder(".en__field--donationAmt.en__field--withOther .en__field__input--other", "Other");
-        this.addPlaceholder("input#en__field_transaction_ccnumber", "•••• •••• •••• ••••");
-        this.addPlaceholder("input#en__field_transaction_ccexpire", "MM / YY");
-        this.addPlaceholder("input#en__field_transaction_ccvv", "CVV");
-        this.addPlaceholder("input#en__field_supporter_bankAccountNumber", "Bank Account Number");
-        this.addPlaceholder("input#en__field_supporter_bankRoutingNumber", "Bank Routing Number");
-        // In Honor
-        this.addPlaceholder("input#en__field_transaction_honname", "Honoree Name");
-        this.addPlaceholder("input#en__field_transaction_infname", "Recipient Name");
-        this.addPlaceholder("input#en__field_transaction_infemail", "Recipient Email Address");
-        this.addPlaceholder("input#en__field_transaction_infcountry", "Country");
-        this.addPlaceholder("input#en__field_transaction_infadd1", "Recipient Street Address");
-        this.addPlaceholder("input#en__field_transaction_infadd2", "Recipient Apt., ste., bldg.");
-        this.addPlaceholder("input#en__field_transaction_infcity", "Recipient City");
-        this.addPlaceholder("input#en__field_transaction_infpostcd", "Recipient Postal Code");
-        // Miscillaneous
-        this.addPlaceholder("input#en__field_transaction_gftrsn", "Reason for your gift");
-        // Shipping Information
-        this.addPlaceholder("input#en__field_transaction_shipfname", "Shipping First Name");
-        this.addPlaceholder("input#en__field_transaction_shiplname", "Shipping Last Name");
-        this.addPlaceholder("input#en__field_transaction_shipemail", "Shipping Email Address");
-        this.addPlaceholder("input#en__field_transaction_shipcountry", "Shipping Country");
-        this.addPlaceholder("input#en__field_transaction_shipadd1", "Shipping Street Address");
-        this.addPlaceholder("input#en__field_transaction_shipadd2", "Shipping Apt., ste., bldg.");
-        this.addPlaceholder("input#en__field_transaction_shipcity", "Shipping City");
-        this.addPlaceholder("input#en__field_transaction_shipregion", "Shipping Region");
-        this.addPlaceholder("input#en__field_transaction_shippostcode", "Shipping Postal Code");
-        // Billing Infromation
-        this.addPlaceholder("input#en__field_supporter_billingCountry", "Billing Country");
-        this.addPlaceholder("input#en__field_supporter_billingAddress1", "Billing Street Address");
-        this.addPlaceholder("input#en__field_supporter_billingAddress2", "Billing Apt., ste., bldg.");
-        this.addPlaceholder("input#en__field_supporter_billingCity", "Billing City");
-        this.addPlaceholder("input#en__field_supporter_billingRegion", "Billing Region");
-        this.addPlaceholder("input#en__field_supporter_billingPostcode", "Billing Postal Code");
+        Object.keys(this.defaultPlaceholders).forEach((selector) => {
+            if (selector in this.defaultPlaceholders)
+                this.addPlaceholder(selector, this.defaultPlaceholders[selector]);
+        });
     }
     addPlaceholder(selector, placeholder) {
         const fieldEl = document.querySelector(selector);
@@ -13470,7 +13443,7 @@ class InputPlaceholders {
 /*
   Looks for specially crafted <img> links and will transform its markup to display an attribution overlay on top of the image
   Depends on "_engrid-media-attribution.scss" for styling
-  
+
   Example Image Input
   <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAABCAQAAABeK7cBAAAADUlEQVR42mO8/5+BAQAGgwHgbKwW2QAAAABJRU5ErkJggg==" data-src="https://via.placeholder.com/300x300" data-attribution-source="© Jane Doe 1">
   <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAABCAQAAABeK7cBAAAADUlEQVR42mO8/5+BAQAGgwHgbKwW2QAAAABJRU5ErkJggg==" data-src="https://via.placeholder.com/300x300" data-attribution-source="© John Doe 2" data-attribution-source-link="https://www.google.com/">
@@ -13519,7 +13492,7 @@ class MediaAttribution {
                         ? mediaWithAttributionElement.dataset.attributionSourceTooltip
                         : false;
                     if (attributionSourceTooltip) {
-                        tippy(".media-with-attribution figattribution", {
+                        tippy(mediaWithAttributionElement.nextSibling, {
                             content: attributionSourceTooltip,
                             arrow: true,
                             arrowType: "default",
@@ -14333,6 +14306,11 @@ class TranslateFields {
     }
     setStateField(country, state) {
         switch (country) {
+            case "ES":
+            case "ESP":
+            case "Spain":
+                this.setStateValues(state, "Provincia", null);
+                break;
             case "BR":
             case "BRA":
             case "Brazil":
@@ -15536,6 +15514,7 @@ const remember_me_tippy = (__webpack_require__(3861)/* ["default"] */ .ZP);
 class RememberMe {
     constructor(options) {
         this._form = EnForm.getInstance();
+        this._events = RememberMeEvents.getInstance();
         this.iframe = null;
         this.remoteUrl = options.remoteUrl ? options.remoteUrl : null;
         this.cookieName = options.cookieName
@@ -15671,9 +15650,11 @@ class RememberMe {
                         clearAutofillLink.style.display = "none";
                     }
                     this.rememberMeOptIn = false;
+                    this._events.dispatchClear();
                 });
             }
         }
+        this._events.dispatchLoad(true);
     }
     getElementByFirstSelector(selectorsString) {
         // iterate through the selectors until we find one that exists
@@ -15738,6 +15719,7 @@ class RememberMe {
         else if (this.rememberMeOptIn) {
             rememberMeOptInField.checked = true;
         }
+        this._events.dispatchLoad(false);
     }
     useRemote() {
         return (!!this.remoteUrl &&
@@ -15828,6 +15810,16 @@ class RememberMe {
         }
         this.writeFields(true);
     }
+    /**
+     * Writes the values from the fieldData object to the corresponding HTML input fields.
+     *
+     * This function iterates over the fieldNames array and for each field name, it selects the corresponding HTML input field.
+     * If the field is found and its tag name is "INPUT", it checks if the field name matches certain conditions (like being a donation recurring payment radio button or a donation amount radio button).
+     * Depending on these conditions, it either clicks the field or sets its value using the setFieldValue function.
+     * If the field tag name is "SELECT", it sets its value using the setFieldValue function.
+     *
+     * @param overwrite - A boolean indicating whether to overwrite the existing value of the fields. Defaults to false.
+     */
     writeFields(overwrite = false) {
         for (let i = 0; i < this.fieldNames.length; i++) {
             let fieldSelector = "[name='" + this.fieldNames[i] + "']";
@@ -16325,7 +16317,15 @@ class DataLayer {
             "supporter.billingAddress2",
             "supporter.billingAddress3",
         ];
-        this.onLoad();
+        if (engrid_ENGrid.getOption("RememberMe")) {
+            RememberMeEvents.getInstance().onLoad.subscribe((hasData) => {
+                this.logger.log("Remember me - onLoad", hasData);
+                this.onLoad();
+            });
+        }
+        else {
+            this.onLoad();
+        }
         this._form.onSubmit.subscribe(() => this.onSubmit());
     }
     transformJSON(value) {
@@ -16395,6 +16395,61 @@ class DataLayer {
             this.dataLayer.push({
                 event: "EN_RECURRING_FREQUENCIES",
                 [`'EN_RECURRING_FREQEUENCIES'`]: recurrValues,
+            });
+        }
+        let fastFormFill = false;
+        // Fast Form Fill - Personal Details
+        const fastPersonalDetailsFormBlock = document.querySelector(".en__component--formblock.fast-personal-details");
+        if (fastPersonalDetailsFormBlock) {
+            const allPersonalMandatoryInputsAreFilled = FastFormFill.allMandatoryInputsAreFilled(fastPersonalDetailsFormBlock);
+            const somePersonalMandatoryInputsAreFilled = FastFormFill.someMandatoryInputsAreFilled(fastPersonalDetailsFormBlock);
+            if (allPersonalMandatoryInputsAreFilled) {
+                this.dataLayer.push({
+                    event: "EN_FASTFORMFILL_PERSONALINFO_SUCCESS",
+                });
+                fastFormFill = true;
+            }
+            else if (somePersonalMandatoryInputsAreFilled) {
+                this.dataLayer.push({
+                    event: "EN_FASTFORMFILL_PERSONALINFO_PARTIALSUCCESS",
+                });
+            }
+            else {
+                this.dataLayer.push({
+                    event: "EN_FASTFORMFILL_PERSONALINFO_FAILURE",
+                });
+            }
+        }
+        // Fast Form Fill - Address Details
+        const fastAddressDetailsFormBlock = document.querySelector(".en__component--formblock.fast-address-details");
+        if (fastAddressDetailsFormBlock) {
+            const allAddressMandatoryInputsAreFilled = FastFormFill.allMandatoryInputsAreFilled(fastAddressDetailsFormBlock);
+            const someAddressMandatoryInputsAreFilled = FastFormFill.someMandatoryInputsAreFilled(fastAddressDetailsFormBlock);
+            if (allAddressMandatoryInputsAreFilled) {
+                this.dataLayer.push({
+                    event: "EN_FASTFORMFILL_ADDRESS_SUCCESS",
+                });
+                fastFormFill = fastFormFill ? true : false; // Only set to true if it was true before
+            }
+            else if (someAddressMandatoryInputsAreFilled) {
+                this.dataLayer.push({
+                    event: "EN_FASTFORMFILL_ADDRESS_PARTIALSUCCESS",
+                });
+            }
+            else {
+                this.dataLayer.push({
+                    event: "EN_FASTFORMFILL_ADDRESS_FAILURE",
+                });
+            }
+        }
+        if (fastFormFill) {
+            this.dataLayer.push({
+                event: "EN_FASTFORMFILL_ALL_SUCCESS",
+            });
+        }
+        else {
+            this.dataLayer.push({
+                event: "EN_FASTFORMFILL_ALL_FAILURE",
             });
         }
         this.attachEventListeners();
@@ -19551,11 +19606,357 @@ class ExitIntentLightbox {
     }
 }
 
+;// CONCATENATED MODULE: ./node_modules/@4site/engrid-common/dist/supporter-hub.js
+// Component that adds 4Site Special Features to the Supporter Hub Page
+
+class SupporterHub {
+    constructor() {
+        this.logger = new EngridLogger("SupporterHub", "black", "pink", "🛖");
+        this._form = EnForm.getInstance();
+        if (!this.shoudRun())
+            return;
+        this.logger.log("Enabled");
+        this.watch();
+    }
+    shoudRun() {
+        return ("pageJson" in window &&
+            "pageType" in window.pageJson &&
+            window.pageJson.pageType === "supporterhub");
+    }
+    watch() {
+        const form = engrid_ENGrid.enForm;
+        // Create a observer to watch the Form for overlays
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === "childList") {
+                    mutation.addedNodes.forEach((node) => {
+                        if (node.nodeName === "DIV") {
+                            const overlay = node;
+                            if (overlay.classList.contains("en__hubOverlay")) {
+                                this.logger.log("Overlay found");
+                                this.creditCardUpdate(node);
+                            }
+                        }
+                    });
+                }
+            });
+        });
+        // Start observing the Link ID #plaid-link-button
+        observer.observe(form, {
+            childList: true,
+            subtree: true,
+        });
+        // Run the Credit Card Update function in case the overlay is already present on page load
+        const hubOverlay = document.querySelector(".en__hubOverlay");
+        if (hubOverlay) {
+            this.creditCardUpdate(hubOverlay);
+        }
+    }
+    creditCardUpdate(overlay) {
+        window.setTimeout(() => {
+            // Check if the overlay has Credit Card field and Update Button
+            const ccField = overlay.querySelector("#en__hubPledge__field--ccnumber"), updateButton = overlay.querySelector(".en__hubUpdateCC__toggle");
+            if (ccField && updateButton) {
+                // When field gets focus, click the update button
+                ccField.addEventListener("focus", () => {
+                    this.logger.log("Credit Card field focused");
+                    updateButton.click();
+                });
+            }
+        }, 300);
+    }
+}
+
+;// CONCATENATED MODULE: ./node_modules/@4site/engrid-common/dist/fast-form-fill.js
+/**
+ * This class adds body data attributes if all mandatory inputs, on specific form blocks, are filled.
+ * Related styling (to hide elements) can be found in "fast-form-fill.scss".
+ *
+ * To activate: add the custom class "fast-personal-details" or "fast-address-details"
+ * to the relevant form block.
+ */
+
+class FastFormFill {
+    constructor() {
+        this.logger = new EngridLogger("FastFormFill", "white", "magenta", "📌");
+        this.rememberMeEvents = RememberMeEvents.getInstance();
+        if (engrid_ENGrid.getOption("RememberMe")) {
+            this.rememberMeEvents.onLoad.subscribe((hasData) => {
+                this.logger.log("Remember me - onLoad", hasData);
+                this.run();
+            });
+            this.rememberMeEvents.onClear.subscribe(() => {
+                // This is a test for the onClear event
+                this.logger.log("Remember me - onClear");
+            });
+        }
+        else {
+            this.run();
+        }
+    }
+    run() {
+        const fastPersonalDetailsFormBlock = document.querySelector(".en__component--formblock.fast-personal-details");
+        if (fastPersonalDetailsFormBlock) {
+            if (FastFormFill.allMandatoryInputsAreFilled(fastPersonalDetailsFormBlock)) {
+                this.logger.log("Personal details - All mandatory inputs are filled");
+                engrid_ENGrid.setBodyData("hide-fast-personal-details", "true");
+            }
+            else {
+                this.logger.log("Personal details - Not all mandatory inputs are filled");
+                engrid_ENGrid.setBodyData("hide-fast-personal-details", "false");
+            }
+        }
+        const fastAddressDetailsFormBlock = document.querySelector(".en__component--formblock.fast-address-details");
+        if (fastAddressDetailsFormBlock) {
+            if (FastFormFill.allMandatoryInputsAreFilled(fastAddressDetailsFormBlock)) {
+                this.logger.log("Address details - All mandatory inputs are filled");
+                engrid_ENGrid.setBodyData("hide-fast-address-details", "true");
+            }
+            else {
+                this.logger.log("Address details - Not all mandatory inputs are filled");
+                engrid_ENGrid.setBodyData("hide-fast-address-details", "false");
+            }
+        }
+    }
+    static allMandatoryInputsAreFilled(formBlock) {
+        const fields = formBlock.querySelectorAll(".en__mandatory input, .en__mandatory select, .en__mandatory textarea");
+        return [...fields].every((input) => {
+            if (input.type === "radio" || input.type === "checkbox") {
+                const inputs = document.querySelectorAll('[name="' + input.name + '"]');
+                return [...inputs].some((radioOrCheckbox) => radioOrCheckbox.checked);
+            }
+            else {
+                return input.value !== null && input.value.trim() !== "";
+            }
+        });
+    }
+    static someMandatoryInputsAreFilled(formBlock) {
+        const fields = formBlock.querySelectorAll(".en__mandatory input, .en__mandatory select, .en__mandatory textarea");
+        return [...fields].some((input) => {
+            if (input.type === "radio" || input.type === "checkbox") {
+                const inputs = document.querySelectorAll('[name="' + input.name + '"]');
+                return [...inputs].some((radioOrCheckbox) => radioOrCheckbox.checked);
+            }
+            else {
+                return input.value !== null && input.value.trim() !== "";
+            }
+        });
+    }
+}
+
+;// CONCATENATED MODULE: ./node_modules/@4site/engrid-common/dist/set-attr.js
+/*+
+  The class is used to set body attributes via click handlers.
+  The format is "setattr--{attribute}--{value}".
+  e.g. setattr--data-engrid-hide-fast-address-details--true
+ */
+
+class SetAttr {
+    constructor() {
+        this.logger = new EngridLogger("SetAttr", "black", "yellow", "📌");
+        const enGrid = document.getElementById("engrid");
+        if (enGrid) {
+            enGrid.addEventListener("click", (e) => {
+                const clickedEl = e.target;
+                const clickedElClassNames = clickedEl.className.split(" ");
+                if (clickedElClassNames.some((className) => className.startsWith("setattr--"))) {
+                    clickedEl.classList.forEach((className) => {
+                        //Check element has class with format "setattr--attribute--value"
+                        const match = className.match(/^setattr--(.+)--(.+)$/i);
+                        if (match && match[1] && match[2]) {
+                            this.logger.log(`Clicked element with class "${className}". Setting body attribute "${match[1]}" to "${match[2]}"`);
+                            engrid_ENGrid.setBodyData(match[1].replace("data-engrid-", ""), match[2]);
+                        }
+                    });
+                }
+            });
+        }
+    }
+}
+
+;// CONCATENATED MODULE: ./node_modules/@4site/engrid-common/dist/show-if-present.js
+/**
+ * This class contains the logic for special classes that can be used to hide elements if
+ * certain supporter questions are present or absent.
+ * Typically, this can be used to hide elements when an opt in question is not rendered on the page
+ * because the supporter came from a campaign link and is already opted in, so EN doesn't render
+ * the question on the page.
+ *
+ * The class names are of the format:
+ * engrid__supporterquestions{id}-present -- show this element when the supporter question is present
+ * engrid__supporterquestions{id}-absent -- show this element when the supporter question is absent
+ *
+ * The {id} is the id of the supporter question. This can be found by inspecting the element on the page.
+ *
+ * It's also possible to combine multiple questions using the following format. These examples show 2 questions,
+ * but you can use as many as you like:
+ * engrid__supporterquestions{id1}__supporterquestions{id2}-present -- show this element when EITHER question is present
+ * engrid__supporterquestions{id1}__supporterquestions{id2}-absent -- show this element when EITHER question is absent
+ */
+
+class ShowIfPresent {
+    constructor() {
+        this.logger = new EngridLogger("ShowIfPresent", "yellow", "black", "👀");
+        this.elements = [];
+        if (this.shouldRun()) {
+            this.run();
+        }
+    }
+    shouldRun() {
+        // Check if we have any elements on the page that match the pattern for this functionality
+        // e.g. engrid__supporterquestions{id}__supporterquestions{id}-present, etc.
+        this.elements = [
+            ...document.querySelectorAll('[class*="engrid__supporterquestions"]'),
+        ].filter((el) => {
+            const classNames = el.className.split(" ");
+            return classNames.some((className) => /^engrid__supporterquestions\d+(__supporterquestions\d+)*-(present|absent)$/.test(className));
+        });
+        return this.elements.length > 0;
+    }
+    run() {
+        const actions = [];
+        // Create an array of actions for each element we have
+        this.elements.forEach((el) => {
+            // Mapping to an object with the class name, field name(s), and type
+            const classNames = el.className.split(" ");
+            const matchingClass = classNames.find((className) => /^engrid__supporterquestions\d+(__supporterquestions\d+)*-(present|absent)$/.test(className));
+            if (!matchingClass)
+                return null;
+            const typeIndex = matchingClass.lastIndexOf("-");
+            const type = matchingClass.substring(typeIndex + 1);
+            // Getting an array of the matching input names
+            // e.g. engrid__supporterquestions12345-present => ['supporter.questions.12345']
+            // e.g. engrid__supporterquestions12345__supporterquestions67890-present => ['supporter.questions.12345', 'supporter.questions.67890']
+            const inputIds = matchingClass
+                .substring(8, typeIndex)
+                .split("__")
+                .map((id) => `supporter.questions.${id.substring(18)}`);
+            actions.push({
+                class: matchingClass,
+                fieldNames: inputIds,
+                type: type,
+            });
+        });
+        //Process the actions
+        actions.forEach((action) => {
+            const inputElements = action.fieldNames.map((fieldName) => document.getElementsByName(fieldName)[0]);
+            const elements = document.querySelectorAll(`.${action.class}`);
+            const areAllInputsPresent = inputElements.every((input) => !!input);
+            const areAllInputsAbsent = inputElements.every((input) => !input);
+            // Hide the elements based on AND conditions
+            if ((action.type === "present" && areAllInputsAbsent) ||
+                (action.type === "absent" && areAllInputsPresent)) {
+                this.logger.log(`Conditions not met, hiding elements with class ${action.class}`);
+                elements.forEach((el) => {
+                    el.style.display = "none";
+                });
+            }
+        });
+    }
+}
+
+;// CONCATENATED MODULE: ./node_modules/@4site/engrid-common/dist/en-validators.js
+// This component uses EN's Custom Validators on the client side to validate form fields.
+// It's currently behind a feature flag, so it's not enabled by default.
+// To enable it, add the following to your options:
+// ENValidators: true
+
+class ENValidators {
+    constructor() {
+        this._form = EnForm.getInstance();
+        this._enElements = null;
+        this.logger = new EngridLogger("ENValidators", "white", "darkolivegreen", "🧐");
+        if (!this.loadValidators()) {
+            // This is an error to flag a racing condition. If the script is loaded before the validators are loaded, it will not work.
+            this.logger.error("Not Loaded");
+            return;
+        }
+        if (!this.shouldRun()) {
+            // If there's no custom validators, get out
+            this.logger.log("Not Needed");
+            console.log(this._enElements);
+            return;
+        }
+        this._form.onValidate.subscribe(this.enOnValidate.bind(this));
+    }
+    loadValidators() {
+        if (!engrid_ENGrid.checkNested(window.EngagingNetworks, "require", "_defined", "enValidation", "validation", "validators")) {
+            return false;
+        }
+        // Loop through the array validators and add them to this._enElements
+        const validators = window.EngagingNetworks.require._defined.enValidation.validation
+            .validators;
+        this._enElements = validators.reduce((acc, validator) => {
+            if ("type" in validator && validator.type === "CUST") {
+                const container = document.querySelector(".en__field--" + validator.field);
+                const field = container
+                    ? container.querySelector("input, select, textarea")
+                    : null;
+                if (field) {
+                    field.addEventListener("input", this.liveValidate.bind(this, container, field, validator.regex, validator.message));
+                    acc.push({
+                        container: container,
+                        field: field,
+                        regex: validator.regex,
+                        message: validator.message,
+                    });
+                }
+            }
+            return acc;
+        }, []);
+        return true;
+    }
+    // Should we run the script?
+    shouldRun() {
+        return (engrid_ENGrid.getOption("ENValidators") &&
+            this._enElements &&
+            this._enElements.length > 0);
+    }
+    // Don't submit the form if any of the fields are invalid
+    enOnValidate() {
+        if (!this._enElements || this._form.validate === false) {
+            return;
+        }
+        this._enElements.forEach((element) => {
+            const fieldValidation = this.liveValidate(element.container, element.field, element.regex, element.message);
+            if (!fieldValidation) {
+                this._form.validate = false;
+                element.field.focus();
+                return;
+            }
+        });
+        this._form.validate = true;
+    }
+    // Validate the field on the fly
+    liveValidate(container, field, regex, message) {
+        const value = engrid_ENGrid.getFieldValue(field.getAttribute("name") || "");
+        // Do not validate empty fields, that's the job of the required validator
+        if (value === "") {
+            return true;
+        }
+        this.logger.log(`Live Validate ${field.getAttribute("name")} with ${regex}`);
+        // compare the value of the field with the regex
+        if (!value.match(regex)) {
+            // If the value is not valid, add the error message
+            engrid_ENGrid.setError(container, message);
+            return false;
+        }
+        // If the value is valid, remove the error message
+        engrid_ENGrid.removeError(container);
+        return true;
+    }
+}
+
 ;// CONCATENATED MODULE: ./node_modules/@4site/engrid-common/dist/version.js
-const AppVersion = "0.14.15";
+const AppVersion = "0.15.11";
 
 ;// CONCATENATED MODULE: ./node_modules/@4site/engrid-common/dist/index.js
  // Runs first so it can change the DOM markup before any markup dependent code fires
+
+
+
+
+
 
 
 
@@ -19627,27 +20028,32 @@ const AppVersion = "0.14.15";
 
 
 ;// CONCATENATED MODULE: ./src/scripts/main.js
+
+
 const main_tippy = (__webpack_require__(3861)/* ["default"] */ .ZP);
 
 const customScript = function (App, EnForm) {
   console.log("ENGrid client scripts are executing"); // Add your client scripts here
 
-  let enFieldPhoneNumber = document.querySelectorAll("input#en__field_supporter_phoneNumber")[0];
+  const theme = document.body.dataset.engridTheme;
 
-  if (enFieldPhoneNumber) {
-    enFieldPhoneNumber.placeholder = "000-000-0000 (Optional)";
+  function addPlaceholder(selector, placeholder) {
+    let el = document.querySelector(selector);
+
+    if (el) {
+      el.placeholder = placeholder;
+    }
   }
 
-  let enFieldCVV = document.querySelectorAll("input#en__field_transaction_ccvv")[0];
-
-  if (enFieldCVV) {
-    enFieldCVV.placeholder = "3 Digits";
-  } //On form block with .us-only and a country field, add a notice, set value to US and disable field
-
+  addPlaceholder("input#en__field_supporter_phoneNumber", "000-000-0000 (Optional)");
+  addPlaceholder("input#en__field_transaction_ccvv", "3 Digits");
+  addPlaceholder("input#en__field_supporter_postcode", "ZIP Code");
+  addPlaceholder("input#en__field_supporter_address1", "Address Line 1");
+  addPlaceholder("input#en__field_supporter_address2", "Address Line 2"); //On form block with .us-only and a country field, add a notice, set value to US and disable field
 
   if (document.querySelector(".en__component--formblock.us-only .en__field--country")) {
     if (!document.querySelector(".en__field--country .en__field__notice")) {
-      App.addHtml('<div class="en__field__notice"><em>Note: This action is limited to US addresses.</em></div>', ".us-only .en__field--country .en__field__element", "after");
+      App.addHtml('<div class="en__field__notice"><em>Note: This action is limited to U.S. addresses.</em></div>', ".us-only .en__field--country .en__field__element", "after");
     }
 
     const countrySelect = App.getField("supporter.country");
@@ -19686,7 +20092,7 @@ const customScript = function (App, EnForm) {
   addTooltip(document.querySelector(".en__field--ccvv > label"), "ccv", "What's this?", "The three or four digit security code on your debit or credit card");
 
   if (App.getPageType() === "DONATION") {
-    addTooltip(document.querySelector(".en__field--postcode > label"), "postcode", "?", "If donating with a Credit Card, your Zip Code must match your billing address.");
+    addTooltip(document.querySelector(".en__field--postcode > label"), "postcode", "?", "If donating with a Credit Card, your ZIP Code must match your billing address.");
   }
 
   const userIP = () => {
@@ -19707,61 +20113,68 @@ const customScript = function (App, EnForm) {
     window.dataLayer.push({
       event: "hasUserIP"
     });
-  }); // Digital Wallets Moving Parts
+  });
 
-  const digitalWalletWrapper = document.querySelector("#en__digitalWallet");
-  const giveBySelect = document.querySelector(".give-by-select");
+  function legacyDigitalWalletsSetup() {
+    const digitalWalletWrapper = document.querySelector("#en__digitalWallet");
+    const giveBySelect = document.querySelector(".give-by-select");
 
-  if (digitalWalletWrapper && giveBySelect) {
-    giveBySelect.appendChild(digitalWalletWrapper);
-    digitalWalletWrapper.insertAdjacentHTML("beforeend", "<div class='digital-divider recurring-frequency-y-hide'><span class='divider-left'></span><p class='divider-center'>or enter manually</p><span class='divider-right'></span></div>");
-    const applePayWrapper = document.querySelector(".applePayWrapper");
-    const digitalDivider = document.querySelector(".digital-divider");
+    if (digitalWalletWrapper && giveBySelect) {
+      giveBySelect.appendChild(digitalWalletWrapper);
+      digitalWalletWrapper.insertAdjacentHTML("beforeend", "<div class='digital-divider recurring-frequency-y-hide'><span class='divider-left'></span><p class='divider-center'>or enter manually</p><span class='divider-right'></span></div>");
+      const applePayWrapper = document.querySelector(".applePayWrapper");
+      const digitalDivider = document.querySelector(".digital-divider");
 
-    if (applePayWrapper && digitalDivider) {
-      digitalDivider.insertAdjacentElement("beforebegin", applePayWrapper);
-    }
-
-    let digitalWalletsExist;
-    digitalWalletsExist = document.querySelectorAll(".en__digitalWallet__container > *");
-
-    if (digitalWalletsExist.length > 0) {
-      giveBySelect.setAttribute("show-wallets", "");
-    }
-
-    setTimeout(function () {
-      let digitalWalletsExist = document.querySelectorAll(".en__digitalWallet__container > *");
-
-      if (digitalWalletsExist.length > 0) {
-        giveBySelect.setAttribute("show-wallets", "");
+      if (applePayWrapper && digitalDivider) {
+        digitalDivider.insertAdjacentElement("beforebegin", applePayWrapper);
       }
-    }, 500);
-    setTimeout(function () {
+
+      let digitalWalletsExist;
       digitalWalletsExist = document.querySelectorAll(".en__digitalWallet__container > *");
 
       if (digitalWalletsExist.length > 0) {
         giveBySelect.setAttribute("show-wallets", "");
       }
-    }, 2500); // Check if a digital wallet container was loaded
 
-    const config = {
-      attributes: true,
-      childList: true,
-      subtree: true
-    };
-    let isLoaded = false;
-    const observer = new MutationObserver(mutations => {
-      mutations.forEach(mutation => {
-        if (mutation.type === "childList" && mutation.addedNodes.length > 0 && !isLoaded) {
-          const giveBySelectItems = document.querySelectorAll(".give-by-select .card, .give-by-select .paypal, .give-by-select .check");
-          giveBySelectItems.forEach(item => {
-            item.classList.add("recurring-frequency-n-hide");
-          });
-          isLoaded = true;
+      setTimeout(function () {
+        let digitalWalletsExist = document.querySelectorAll(".en__digitalWallet__container > *");
+
+        if (digitalWalletsExist.length > 0) {
+          giveBySelect.setAttribute("show-wallets", "");
         }
+      }, 500);
+      setTimeout(function () {
+        digitalWalletsExist = document.querySelectorAll(".en__digitalWallet__container > *");
+
+        if (digitalWalletsExist.length > 0) {
+          giveBySelect.setAttribute("show-wallets", "");
+        }
+      }, 2500); // Check if a digital wallet container was loaded
+
+      const config = {
+        attributes: true,
+        childList: true,
+        subtree: true
+      };
+      let isLoaded = false;
+      const observer = new MutationObserver(mutations => {
+        mutations.forEach(mutation => {
+          if (mutation.type === "childList" && mutation.addedNodes.length > 0 && !isLoaded) {
+            const giveBySelectItems = document.querySelectorAll(".give-by-select .card, .give-by-select .paypal, .give-by-select .check, .give-by-select .paypaltouch");
+            giveBySelectItems.forEach(item => {
+              item.classList.add("recurring-frequency-n-hide");
+            });
+            isLoaded = true;
+          }
+        });
       });
-    });
-    observer.observe(digitalWalletWrapper, config);
+      observer.observe(digitalWalletWrapper, config);
+    }
+  } // Digital Wallets Moving Parts
+
+
+  if (theme === "oc") {
+    legacyDigitalWalletsSetup();
   } //GTM event handling for opted in on previous page in session
 
 
@@ -19785,6 +20198,393 @@ const customScript = function (App, EnForm) {
       }
     }
   });
+  const selects = document.querySelectorAll("select");
+
+  if (selects) {
+    selects.forEach(select => {
+      select.dataset.selectedValue = select.value ?? "";
+    });
+  }
+
+  document.addEventListener("change", function (event) {
+    const target = event.target;
+
+    if (target && target.tagName === "SELECT") {
+      target.dataset.selectedValue = target.value ?? "";
+    }
+  });
+  /**
+   * Function to set the "data-engrid-legacy-theme'" data attribute on the "body" element to "oc1".
+   */
+
+  function legacySetLegacyThemeAttribute() {
+    document.body.setAttribute("data-engrid-legacy-theme", "oc1");
+  }
+  /**
+   * This function replaces the CSS class of a specified element that has a legacy class name.
+   * The replacement is applied only if the <body> element has the data attribute "data-engrid-theme" set to "oc2".
+   */
+
+
+  function legacyGiftFrequencyAndAmountFormComponent() {
+    // Check if the <body> element has the data attribute data-engrid-theme="oc2"
+    const bodyElement = document.querySelector("body[data-engrid-theme='oc2']");
+
+    if (!bodyElement) {
+      // If the data attribute is not present, exit the function
+      return;
+    } // Get the element with the old CSS class
+
+
+    const oldClassElement = document.querySelector(".en__component.en__component--formblock.recurring-frequency_count_3.radio-to-buttons_donationAmt.donation-amount_count_4.i1-hide-label.i2-hide.i3-hide-label"); // Check if the element with the old class exists
+
+    if (oldClassElement) {
+      // Define the new CSS class
+      const newClass = "en__component en__component--formblock recurring-frequency_count_2 radio-to-buttons_recurrfreq radio-to-buttons_donationAmt donation-amount_count_3 hide-labels i2-hide"; // Remove the old class from the element
+
+      oldClassElement.classList.remove("en__component", "en__component--formblock", "recurring-frequency_count_3", "radio-to-buttons_donationAmt", "donation-amount_count_4", "i1-hide-label", "i2-hide", "i3-hide-label"); // Add the new class to the element
+
+      oldClassElement.classList.add(...newClass.split(" "));
+    }
+  } // Call the function to replace the class if the specified condition is met
+
+
+  legacyGiftFrequencyAndAmountFormComponent();
+  /**
+   * This function checks if there are no results for ".page-backgroundImage > img" and
+   * moves the contents of ".body-banner" to ".page-backgroundImage" if needed.
+   */
+
+  function legacyMoveBodyBannerToPageBackground() {
+    // Check if there are no results for ".page-backgroundImage > img"
+    const pageBackgroundImages = document.querySelectorAll(".page-backgroundImage img[src]");
+
+    if (pageBackgroundImages.length === 0) {
+      console.log("No page background images found."); // Get the elements inside ".body-banner"
+
+      const bodyBanner = document.querySelector(".body-banner");
+
+      if (bodyBanner) {
+        console.log("Moving contents from .body-banner to .page-backgroundImage"); // Get the ".page-backgroundImage" element
+
+        const pageBackground = document.querySelector(".page-backgroundImage");
+
+        if (pageBackground) {
+          //Empty the contents of ".page-backgroundImage"
+          pageBackground.replaceChildren(); // Move the contents of ".body-banner" to ".page-backgroundImage"
+
+          while (bodyBanner.firstChild) {
+            pageBackground.appendChild(bodyBanner.firstChild);
+          }
+
+          console.log("Contents moved successfully."); // Get the image element inside ".pageBackground" again
+
+          const pageBackgroundImage = pageBackground.querySelector("img");
+
+          if (pageBackgroundImage) {
+            // Get the image source (src) from the pageBackgroundImage
+            const imageSrc = pageBackgroundImage.getAttribute("src"); // Set the image source as a CSS custom property on the ".page-backgroundImage" element
+
+            pageBackground.style.setProperty("--engrid__page-backgroundImage_url", `url('${imageSrc}')`);
+            console.log(`Image source set as CSS custom property: --engrid__page-backgroundImage_url: url('${imageSrc}')`); // Update the data attribute on the <body> element to be "image"
+
+            document.body.setAttribute("data-engrid-page-background", "image");
+            console.log("data-engrid-page-background attribute updated to 'image' on <body>."); // Set data-engrid-body-banner="empty" on the <body> element
+
+            document.body.setAttribute("data-engrid-body-banner", "empty");
+            console.log("data-engrid-body-banner attribute set to 'empty' on <body>."); // Set data-replace-banner-with-background="if-banner-empty" on the <body> element
+
+            document.body.setAttribute("data-replace-banner-with-background", "if-banner-empty");
+            console.log("data-replace-banner-with-background attribute set to 'if-banner-empty' on <body>.");
+          } else {
+            console.log("Image not found inside .page-backgroundImage.");
+          } // Remove the data attribute from the <body> element
+
+
+          document.body.removeAttribute("data-engrid-no-page-backgroundimage");
+          console.log("data-engrid-no-page-backgroundimage attribute removed from <body>.");
+          legacySetLegacyThemeAttribute();
+          console.log("legacySetLegacyThemeAttribute 1 called");
+        } else {
+          console.log(".page-backgroundImage not found. Cannot move contents.");
+        }
+      } else {
+        console.log(".body-banner not found. Nothing to move.");
+      }
+    } else {
+      console.log("Page background images found. No need to move contents.");
+    }
+  } // Call the function to move contents if needed
+
+
+  legacyMoveBodyBannerToPageBackground();
+  /**
+   * This function checks the values of [for*="en__field_transaction_recurrfreq"] elements
+   * and updates them based on specific criteria.
+   */
+
+  function legacyUpdateRecurrfreqValues() {
+    const recurrfreqElements = document.querySelectorAll('[for*="en__field_transaction_recurrfreq"]');
+    recurrfreqElements.forEach(element => {
+      const value = element.textContent.trim();
+
+      switch (value) {
+        case "Give Once":
+          element.textContent = "One-Time";
+          console.log(`Updated "${value}" to "One-Time"`);
+          legacySetLegacyThemeAttribute();
+          break;
+
+        case "Give Monthly":
+          element.textContent = "Monthly";
+          console.log(`Updated "${value}" to "Monthly"`);
+          legacySetLegacyThemeAttribute();
+          break;
+
+        case "Give Annually":
+          element.textContent = "Annually";
+          console.log(`Updated "${value}" to "Annually"`);
+          legacySetLegacyThemeAttribute();
+          break;
+
+        default:
+          console.log(`No update needed for "${value}"`);
+          break;
+      }
+    });
+  } // Call the function to update recurrfreq values
+
+
+  legacyUpdateRecurrfreqValues();
+  /**
+   * This function checks for the presence of ".content-footer > .en__component--copyblock + .en__component--copyblock > p"
+   * and if it exists, it gets its content and sets it as a data attribute on ".page-backgroundImage img" as "data-attribution-source" so long as it does not already have an attribution source.
+   * It also adds a new <figattribution> element with the same value inside wrapped in a <p> tag after the <img> tag,
+   * and removes the original attribution element.
+   */
+
+  function legacySetBackgroundImageAttributionSource() {
+    const attributionElement = document.querySelector(".content-footer > .en__component--copyblock + .en__component--copyblock > p");
+
+    if (attributionElement) {
+      const backgroundImage = document.querySelector(".page-backgroundImage img:not([data-attribution-source])");
+
+      if (backgroundImage) {
+        const attributionContent = attributionElement.textContent.trim();
+        backgroundImage.setAttribute("data-attribution-source", attributionContent);
+        console.log(`Set "data-attribution-source" to "${attributionContent}"`); // Create the <figattribution> element with the content and wrap it in a <p> tag
+
+        const figAttribution = document.createElement("figattribution");
+        const pTag = document.createElement("p");
+        pTag.textContent = attributionContent;
+        figAttribution.appendChild(pTag); // Insert the <figattribution> element after the <img> tag
+
+        backgroundImage.insertAdjacentElement("afterend", figAttribution); // Remove the original attribution element
+
+        attributionElement.remove();
+        console.log("Original attribution element removed.");
+        legacySetLegacyThemeAttribute();
+        console.log("legacySetLegacyThemeAttribute 6 called");
+      }
+    }
+  } // Call the function to set the background image attribution source, add <figattribution> element, and remove the original attribution element
+
+
+  legacySetBackgroundImageAttributionSource();
+
+  function legacyRemoveDuplicateCopyrightNotice() {
+    const copyrightElement = document.querySelector(".content-footer > .en__component--copyblock + .en__component--copyblock > p + p");
+
+    if (copyrightElement) {
+      copyrightElement.remove();
+    }
+  }
+
+  legacyRemoveDuplicateCopyrightNotice();
+
+  function legacyConvertBodyTitleSubheaderTag() {
+    const bodyTitleSubheaders = document.querySelectorAll(".body-title > .en__component--copyblock > h2");
+    bodyTitleSubheaders.forEach(el => {
+      el.outerHTML = `<h3>${el.innerHTML}</h3>`;
+      App.log(`Converted body-title subheader to h3: ${el.innerHTML}`);
+    });
+  }
+
+  legacyConvertBodyTitleSubheaderTag();
+  /**
+   * This function moves the "--banner-image-height" custom attribute from the "img" tag inside ".page-backgroundImage"
+   * and adds it to the ".page-backgroundImage" element's style attribute, ensuring not to overwrite any existing styles.
+   */
+
+  function legacyMoveBannerImageHeightToBackgroundImage() {
+    const pageBackgroundImage = document.querySelector(".page-backgroundImage");
+    const backgroundImage = pageBackgroundImage.querySelector("img");
+
+    if (pageBackgroundImage && backgroundImage) {
+      // Get the "--banner-image-height" style from the "img" tag
+      const bannerImageHeightStyle = backgroundImage.getAttribute("style");
+
+      if (bannerImageHeightStyle) {
+        // Remove the "--banner-image-height" style from the "img" tag
+        backgroundImage.setAttribute("style", bannerImageHeightStyle.replace(/(--banner-image-height:[^;]+;?)/g, "").trim()); // Append the "--banner-image-height" style to the ".page-backgroundImage" style
+
+        const pageBackgroundImageStyle = pageBackgroundImage.getAttribute("style");
+        pageBackgroundImage.setAttribute("style", `${pageBackgroundImageStyle ? pageBackgroundImageStyle + " " : ""}${bannerImageHeightStyle}`);
+      }
+    }
+  } // Call the function to move "--banner-image-height" from the "img" tag to ".page-backgroundImage" style
+
+
+  legacyMoveBannerImageHeightToBackgroundImage();
+  /**
+   * Function to check if any of the ".en__field--donationAmt label" elements contain a dollar sign ($).
+   */
+
+  function legacyCheckDonationAmtLabelsForDollarSign() {
+    const donationAmtLabels = document.querySelectorAll(".en__field--donationAmt label");
+
+    for (const label of donationAmtLabels) {
+      const labelValue = label.textContent.trim(); // Check if the label value contains a dollar sign ($)
+
+      if (labelValue.includes("$")) {
+        legacySetLegacyThemeAttribute();
+        console.log("legacySetLegacyThemeAttribute 8 called");
+      }
+    }
+  }
+
+  legacyCheckDonationAmtLabelsForDollarSign();
+  /**
+   * Function to detect if ".page-backgroundImage figure > img + figattribution" exists.
+   * If it doesn't, check if ".page-backgroundImage img + figattribution" exists and wrap it in a <figure> tag with the "media-with-attribution" class.
+   */
+
+  function legacyWrapFigAttributionWithFigure() {
+    const existingFigureAttribution = document.querySelector(".page-backgroundImage figure > img + figattribution");
+
+    if (!existingFigureAttribution) {
+      const imgAttribution = document.querySelector(".page-backgroundImage img + figattribution");
+
+      if (imgAttribution) {
+        const figure = document.createElement("figure");
+        figure.classList.add("media-with-attribution"); // Wrap the imgAttribution inside the <figure> element
+
+        imgAttribution.parentNode.insertBefore(figure, imgAttribution);
+        figure.appendChild(imgAttribution);
+        const backgroundImage = document.querySelector(".page-backgroundImage img");
+
+        if (backgroundImage) {
+          const figattribution = document.querySelector(".page-backgroundImage figattribution"); // Move the backgroundImage before the <figureattribution> element
+
+          if (figattribution) {
+            figattribution.parentNode.insertBefore(backgroundImage, figattribution);
+          }
+        }
+      }
+    }
+  } // Call the function to wrap figattribution with a figure element if needed
+
+
+  legacyWrapFigAttributionWithFigure();
+  /**
+   * Legacy function: Adds the markup "<div class="en__component en__component--copyblock header-with-divider movebefore-en__field--donationAmt"> <p>Select Gift Amount</p> </div>"
+   * before ".en__field--donationAmt" if the "<p>Select Gift Amount</p>" markup is not detected in ".body-main .en__component--copyblock p".
+   */
+
+  function legacyAddSelectGiftAmountMarkup() {
+    const selectGiftAmountParagraphs = document.querySelectorAll(".body-main .en__component--copyblock p");
+    const hasSelectGiftAmountMarkup = Array.from(selectGiftAmountParagraphs).some(paragraph => {
+      return paragraph.textContent.includes("Select Gift Amount");
+    });
+
+    if (!hasSelectGiftAmountMarkup) {
+      const giftAmountDiv = document.createElement("div");
+      giftAmountDiv.classList.add("en__component", "en__component--copyblock", "header-with-divider", "movebefore-en__field--donationAmt");
+      giftAmountDiv.innerHTML = "<p>Select Gift Amount</p>";
+      const donationAmtField = document.querySelector(".en__field--donationAmt");
+
+      if (donationAmtField && donationAmtField.parentNode) {
+        donationAmtField.parentNode.insertBefore(giftAmountDiv, donationAmtField);
+        console.log("Markup added successfully.");
+      } else {
+        console.log(".en__field--donationAmt not found. Cannot add markup.");
+      }
+    } else {
+      console.log("Markup already exists. Nothing to add.");
+    }
+  } // Call the function to add the markup if needed
+
+
+  legacyAddSelectGiftAmountMarkup();
+  /**
+   * Function to rearrange elements on the page by moving specific elements after and before other elements.
+   * Moves elements with the "moveafter-en__field--recurrfreq" class after the "en__field--recurrfreq" class,
+   * and moves elements with the "movebefore-en__field--donationAmt" class before the "en__field--donationAmt" class.
+   */
+
+  function rearrangePageElements() {
+    // Move elements with the "moveafter-en__field--recurrfreq" class after the "en__field--recurrfreq" class
+    const moveAfterElements = document.querySelectorAll(".moveafter-en__field--recurrfreq");
+    const afterElement = document.querySelector(".en__field--recurrfreq");
+
+    if (afterElement && moveAfterElements.length > 0) {
+      moveAfterElements.forEach(element => {
+        afterElement.insertAdjacentElement("afterend", element);
+      });
+    } // Move elements with the "movebefore-en__field--donationAmt" class before the "en__field--donationAmt" class
+
+
+    const moveBeforeElements = document.querySelectorAll(".movebefore-en__field--donationAmt");
+    const beforeElement = document.querySelector(".en__field--donationAmt");
+
+    if (beforeElement && moveBeforeElements.length > 0) {
+      moveBeforeElements.forEach(element => {
+        beforeElement.insertAdjacentElement("beforebegin", element);
+      });
+    }
+  } // Call the function to rearrange elements on the page
+
+
+  rearrangePageElements();
+
+  function mobileMediaAttribution() {
+    const bgImageTooltip = document.querySelector(".page-backgroundImage figattribution");
+
+    if (bgImageTooltip) {
+      const bgImageTooltipText = bgImageTooltip.innerHTML;
+      bgImageTooltip.insertAdjacentHTML("afterend", `<div id="mobile-bg-tooltip"></div>`);
+      main_tippy("#mobile-bg-tooltip", {
+        theme: "black",
+        content: bgImageTooltipText,
+        allowHTML: true,
+        placement: "left",
+        trigger: "click mouseenter focus"
+      });
+    }
+  } // Add click-to-expand-cta event listeners
+
+
+  function clickToExpandCta() {
+    document.querySelectorAll(".click-to-expand-cta").forEach(el => {
+      el.addEventListener("click", () => {
+        el.parentElement.classList.add("expanded");
+        const buttonContainer = document.querySelector(".engrid-mobile-cta-container");
+        if (buttonContainer) buttonContainer.style.display = "block";
+      });
+    });
+  }
+
+  if (theme === "oc2") {
+    mobileMediaAttribution(); // Call the function to set the mobile media attribution tooltip
+
+    clickToExpandCta(); // Call the function to add click-to-expand-cta event listeners
+    //support for digital wallets on legacy page layouts running on oc2 theme
+    //detecting old payment method layout (digital wallets block inside the card fields form block).
+
+    if (document.querySelector(".en__component--formblock.giveBySelect-Card > #en__digitalWallet")) {
+      legacyDigitalWalletsSetup();
+    }
+  }
 };
 // EXTERNAL MODULE: ./node_modules/smoothscroll-polyfill/dist/smoothscroll.js
 var smoothscroll = __webpack_require__(523);
@@ -20610,6 +21410,7 @@ class DonationLightboxForm {
 
 
 
+const theme = document.body.dataset.engridTheme;
 
 function getUserData() {
   let phone = app_App.getFieldValue("supporter.phoneNumber");
@@ -20725,8 +21526,9 @@ function dataCapture() {
 }
 
 const options = {
-  AutoYear: true,
+  ENValidators: true,
   applePay: true,
+  AutoYear: true,
   CapitalizeFields: true,
   ClickToExpand: true,
   CurrencySymbol: "$",
@@ -20766,6 +21568,15 @@ const options = {
     });
   }
 };
+
+if (theme === "oc2") {
+  options.AddCurrencySymbol = false;
+  options.MobileCTA = {
+    label: "Add Your Name",
+    pages: ["ADVOCACY", "EMAILTOTARGET", "TWEETPAGE"]
+  };
+}
+
 new app_App(options);
 })();
 
