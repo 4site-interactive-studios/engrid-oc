@@ -116,6 +116,9 @@ export const customScript = function (App, EnForm) {
     const digitalWalletWrapper = document.querySelector("#en__digitalWallet");
     const giveBySelect = document.querySelector(".give-by-select");
     if (digitalWalletWrapper && giveBySelect) {
+      document.body.removeAttribute(
+        "data-conditonally-hide-show-digital-wallet-elements"
+      );
       giveBySelect.appendChild(digitalWalletWrapper);
       digitalWalletWrapper.insertAdjacentHTML(
         "beforeend",

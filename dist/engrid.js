@@ -17,7 +17,7 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Monday, October 23, 2023 @ 09:42:59 ET
+ *  Date: Monday, October 23, 2023 @ 10:12:44 ET
  *  By: michael
  *  ENGrid styles: v0.15.3
  *  ENGrid scripts: v0.15.11
@@ -20120,6 +20120,7 @@ const customScript = function (App, EnForm) {
     const giveBySelect = document.querySelector(".give-by-select");
 
     if (digitalWalletWrapper && giveBySelect) {
+      document.body.removeAttribute("data-conditonally-hide-show-digital-wallet-elements");
       giveBySelect.appendChild(digitalWalletWrapper);
       digitalWalletWrapper.insertAdjacentHTML("beforeend", "<div class='digital-divider recurring-frequency-y-hide'><span class='divider-left'></span><p class='divider-center'>or enter manually</p><span class='divider-right'></span></div>");
       const applePayWrapper = document.querySelector(".applePayWrapper");
