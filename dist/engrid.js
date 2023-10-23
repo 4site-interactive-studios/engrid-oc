@@ -17,7 +17,7 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Monday, October 23, 2023 @ 10:12:44 ET
+ *  Date: Monday, October 23, 2023 @ 12:00:21 ET
  *  By: michael
  *  ENGrid styles: v0.15.3
  *  ENGrid scripts: v0.15.11
@@ -20584,6 +20584,15 @@ const customScript = function (App, EnForm) {
 
     if (document.querySelector(".en__component--formblock.giveBySelect-Card > #en__digitalWallet")) {
       legacyDigitalWalletsSetup();
+    } //Support for hiding submit button when digital wallet is selected
+    //For layouts where we couldn't add this to the form block because the submit button
+    //and the digital wallets are on the same form block.
+
+
+    const submitBtnContainer = document.querySelector(".en__submit");
+
+    if (submitBtnContainer) {
+      submitBtnContainer.classList.add("hideif-stripedigitalwallet-selected", "hideif-paypaltouch-selected");
     }
   }
 };

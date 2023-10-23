@@ -707,5 +707,16 @@ export const customScript = function (App, EnForm) {
     ) {
       legacyDigitalWalletsSetup();
     }
+
+    //Support for hiding submit button when digital wallet is selected
+    //For layouts where we couldn't add this to the form block because the submit button
+    //and the digital wallets are on the same form block.
+    const submitBtnContainer = document.querySelector(".en__submit");
+    if (submitBtnContainer) {
+      submitBtnContainer.classList.add(
+        "hideif-stripedigitalwallet-selected",
+        "hideif-paypaltouch-selected"
+      );
+    }
   }
 };
