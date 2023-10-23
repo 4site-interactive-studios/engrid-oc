@@ -1,3 +1,5 @@
+import { ENGrid } from "@4site/engrid-common";
+
 const tippy = require("tippy.js").default;
 
 export const customScript = function (App, EnForm) {
@@ -281,7 +283,7 @@ export const customScript = function (App, EnForm) {
   function legacyMoveBodyBannerToPageBackground() {
     // Check if there are no results for ".page-backgroundImage > img"
     const pageBackgroundImages = document.querySelectorAll(
-      ".page-backgroundImage img"
+      ".page-backgroundImage img[src]"
     );
     if (pageBackgroundImages.length === 0) {
       console.log("No page background images found.");
@@ -296,6 +298,8 @@ export const customScript = function (App, EnForm) {
         // Get the ".page-backgroundImage" element
         const pageBackground = document.querySelector(".page-backgroundImage");
         if (pageBackground) {
+          //Empty the contents of ".page-backgroundImage"
+          pageBackground.replaceChildren();
           // Move the contents of ".body-banner" to ".page-backgroundImage"
           while (bodyBanner.firstChild) {
             pageBackground.appendChild(bodyBanner.firstChild);
@@ -446,6 +450,30 @@ export const customScript = function (App, EnForm) {
 
   // Call the function to set the background image attribution source, add <figattribution> element, and remove the original attribution element
   legacySetBackgroundImageAttributionSource();
+
+  function legacyRemoveDuplicateCopyrightNotice() {
+    const copyrightElement = document.querySelector(
+      ".content-footer > .en__component--copyblock + .en__component--copyblock > p + p"
+    );
+
+    if (copyrightElement) {
+      copyrightElement.remove();
+    }
+  }
+
+  legacyRemoveDuplicateCopyrightNotice();
+
+  function legacyConvertBodyTitleSubheaderTag() {
+    const bodyTitleSubheaders = document.querySelectorAll(
+      ".body-title > .en__component--copyblock > h2"
+    );
+    bodyTitleSubheaders.forEach((el) => {
+      el.outerHTML = `<h3>${el.innerHTML}</h3>`;
+      App.log(`Converted body-title subheader to h3: ${el.innerHTML}`);
+    });
+  }
+
+  legacyConvertBodyTitleSubheaderTag();
 
   /**
    * This function moves the "--banner-image-height" custom attribute from the "img" tag inside ".page-backgroundImage"

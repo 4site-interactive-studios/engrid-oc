@@ -17,10 +17,10 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Friday, October 13, 2023 @ 10:55:30 ET
- *  By: fernando
+ *  Date: Monday, October 23, 2023 @ 08:08:49 ET
+ *  By: michael
  *  ENGrid styles: v0.15.3
- *  ENGrid scripts: v0.15.9
+ *  ENGrid scripts: v0.15.11
  *
  *  Created by 4Site Studios
  *  Come work with us or join our team, we would love to hear from you
@@ -11106,15 +11106,12 @@ class EnForm {
         }
     }
     get onSubmit() {
-        // if(ENGrid.debug) console.log("onSubmit");
         return this._onSubmit.asEvent();
     }
     get onError() {
-        // if(ENGrid.debug) console.log("onError");
         return this._onError.asEvent();
     }
     get onValidate() {
-        // if(ENGrid.debug) console.log("onError");
         return this._onValidate.asEvent();
     }
 }
@@ -11367,7 +11364,7 @@ class engrid_ENGrid {
                             if ("actions" in dependency && dependency.actions.length > 0) {
                                 let amountIdFound = false;
                                 dependency.actions.forEach((action) => {
-                                    if ("target" in action && action.target === amountID) {
+                                    if ("target" in action && action.target == amountID) {
                                         amountIdFound = true;
                                     }
                                 });
@@ -11954,7 +11951,46 @@ class ProcessingFees {
     }
 }
 
+;// CONCATENATED MODULE: ./node_modules/@4site/engrid-common/dist/events/remember-me-events.js
+/**
+ * This class is responsible for managing events related to the "Remember Me" functionality.
+ * It uses the Singleton design pattern to ensure only one instance of this class exists.
+ * It provides methods for dispatching load and clear events, and getters for accessing these events.
+ */
+
+
+class RememberMeEvents {
+    constructor() {
+        this.logger = new EngridLogger("RememberMeEvents");
+        this._onLoad = new dist/* SimpleEventDispatcher */.FK();
+        this._onClear = new dist/* SignalDispatcher */.nz();
+        this.hasData = false;
+    }
+    static getInstance() {
+        if (!RememberMeEvents.instance) {
+            RememberMeEvents.instance = new RememberMeEvents();
+        }
+        return RememberMeEvents.instance;
+    }
+    dispatchLoad(hasData) {
+        this.hasData = hasData;
+        this._onLoad.dispatch(hasData);
+        this.logger.log(`dispatchLoad: ${hasData}`);
+    }
+    dispatchClear() {
+        this._onClear.dispatch();
+        this.logger.log("dispatchClear");
+    }
+    get onLoad() {
+        return this._onLoad.asEvent();
+    }
+    get onClear() {
+        return this._onClear.asEvent();
+    }
+}
+
 ;// CONCATENATED MODULE: ./node_modules/@4site/engrid-common/dist/events/index.js
+
 
 
 
@@ -12107,6 +12143,8 @@ class app_App extends engrid_ENGrid {
         // On the end of the script, after all subscribers defined, let's load the current value
         this._amount.load();
         this._frequency.load();
+        // Fast Form Fill
+        new FastFormFill();
         // Auto Country Select
         new AutoCountrySelect();
         // Add Image Attribution
@@ -12196,7 +12234,6 @@ class app_App extends engrid_ENGrid {
         //Exit Intent Lightbox
         new ExitIntentLightbox();
         new UrlParamsToBodyAttrs();
-        new FastFormFill();
         new SetAttr();
         new ShowIfPresent();
         //Debug panel
@@ -15477,6 +15514,7 @@ const remember_me_tippy = (__webpack_require__(3861)/* ["default"] */ .ZP);
 class RememberMe {
     constructor(options) {
         this._form = EnForm.getInstance();
+        this._events = RememberMeEvents.getInstance();
         this.iframe = null;
         this.remoteUrl = options.remoteUrl ? options.remoteUrl : null;
         this.cookieName = options.cookieName
@@ -15612,9 +15650,11 @@ class RememberMe {
                         clearAutofillLink.style.display = "none";
                     }
                     this.rememberMeOptIn = false;
+                    this._events.dispatchClear();
                 });
             }
         }
+        this._events.dispatchLoad(true);
     }
     getElementByFirstSelector(selectorsString) {
         // iterate through the selectors until we find one that exists
@@ -15679,6 +15719,7 @@ class RememberMe {
         else if (this.rememberMeOptIn) {
             rememberMeOptInField.checked = true;
         }
+        this._events.dispatchLoad(false);
     }
     useRemote() {
         return (!!this.remoteUrl &&
@@ -15769,6 +15810,16 @@ class RememberMe {
         }
         this.writeFields(true);
     }
+    /**
+     * Writes the values from the fieldData object to the corresponding HTML input fields.
+     *
+     * This function iterates over the fieldNames array and for each field name, it selects the corresponding HTML input field.
+     * If the field is found and its tag name is "INPUT", it checks if the field name matches certain conditions (like being a donation recurring payment radio button or a donation amount radio button).
+     * Depending on these conditions, it either clicks the field or sets its value using the setFieldValue function.
+     * If the field tag name is "SELECT", it sets its value using the setFieldValue function.
+     *
+     * @param overwrite - A boolean indicating whether to overwrite the existing value of the fields. Defaults to false.
+     */
     writeFields(overwrite = false) {
         for (let i = 0; i < this.fieldNames.length; i++) {
             let fieldSelector = "[name='" + this.fieldNames[i] + "']";
@@ -16266,7 +16317,15 @@ class DataLayer {
             "supporter.billingAddress2",
             "supporter.billingAddress3",
         ];
-        this.onLoad();
+        if (engrid_ENGrid.getOption("RememberMe")) {
+            RememberMeEvents.getInstance().onLoad.subscribe((hasData) => {
+                this.logger.log("Remember me - onLoad", hasData);
+                this.onLoad();
+            });
+        }
+        else {
+            this.onLoad();
+        }
         this._form.onSubmit.subscribe(() => this.onSubmit());
     }
     transformJSON(value) {
@@ -16336,6 +16395,61 @@ class DataLayer {
             this.dataLayer.push({
                 event: "EN_RECURRING_FREQUENCIES",
                 [`'EN_RECURRING_FREQEUENCIES'`]: recurrValues,
+            });
+        }
+        let fastFormFill = false;
+        // Fast Form Fill - Personal Details
+        const fastPersonalDetailsFormBlock = document.querySelector(".en__component--formblock.fast-personal-details");
+        if (fastPersonalDetailsFormBlock) {
+            const allPersonalMandatoryInputsAreFilled = FastFormFill.allMandatoryInputsAreFilled(fastPersonalDetailsFormBlock);
+            const somePersonalMandatoryInputsAreFilled = FastFormFill.someMandatoryInputsAreFilled(fastPersonalDetailsFormBlock);
+            if (allPersonalMandatoryInputsAreFilled) {
+                this.dataLayer.push({
+                    event: "EN_FASTFORMFILL_PERSONALINFO_SUCCESS",
+                });
+                fastFormFill = true;
+            }
+            else if (somePersonalMandatoryInputsAreFilled) {
+                this.dataLayer.push({
+                    event: "EN_FASTFORMFILL_PERSONALINFO_PARTIALSUCCESS",
+                });
+            }
+            else {
+                this.dataLayer.push({
+                    event: "EN_FASTFORMFILL_PERSONALINFO_FAILURE",
+                });
+            }
+        }
+        // Fast Form Fill - Address Details
+        const fastAddressDetailsFormBlock = document.querySelector(".en__component--formblock.fast-address-details");
+        if (fastAddressDetailsFormBlock) {
+            const allAddressMandatoryInputsAreFilled = FastFormFill.allMandatoryInputsAreFilled(fastAddressDetailsFormBlock);
+            const someAddressMandatoryInputsAreFilled = FastFormFill.someMandatoryInputsAreFilled(fastAddressDetailsFormBlock);
+            if (allAddressMandatoryInputsAreFilled) {
+                this.dataLayer.push({
+                    event: "EN_FASTFORMFILL_ADDRESS_SUCCESS",
+                });
+                fastFormFill = fastFormFill ? true : false; // Only set to true if it was true before
+            }
+            else if (someAddressMandatoryInputsAreFilled) {
+                this.dataLayer.push({
+                    event: "EN_FASTFORMFILL_ADDRESS_PARTIALSUCCESS",
+                });
+            }
+            else {
+                this.dataLayer.push({
+                    event: "EN_FASTFORMFILL_ADDRESS_FAILURE",
+                });
+            }
+        }
+        if (fastFormFill) {
+            this.dataLayer.push({
+                event: "EN_FASTFORMFILL_ALL_SUCCESS",
+            });
+        }
+        else {
+            this.dataLayer.push({
+                event: "EN_FASTFORMFILL_ALL_FAILURE",
             });
         }
         this.attachEventListeners();
@@ -19565,9 +19679,25 @@ class SupporterHub {
 class FastFormFill {
     constructor() {
         this.logger = new EngridLogger("FastFormFill", "white", "magenta", "📌");
+        this.rememberMeEvents = RememberMeEvents.getInstance();
+        if (engrid_ENGrid.getOption("RememberMe")) {
+            this.rememberMeEvents.onLoad.subscribe((hasData) => {
+                this.logger.log("Remember me - onLoad", hasData);
+                this.run();
+            });
+            this.rememberMeEvents.onClear.subscribe(() => {
+                // This is a test for the onClear event
+                this.logger.log("Remember me - onClear");
+            });
+        }
+        else {
+            this.run();
+        }
+    }
+    run() {
         const fastPersonalDetailsFormBlock = document.querySelector(".en__component--formblock.fast-personal-details");
         if (fastPersonalDetailsFormBlock) {
-            if (this.allMandatoryInputsAreFilled(fastPersonalDetailsFormBlock)) {
+            if (FastFormFill.allMandatoryInputsAreFilled(fastPersonalDetailsFormBlock)) {
                 this.logger.log("Personal details - All mandatory inputs are filled");
                 engrid_ENGrid.setBodyData("hide-fast-personal-details", "true");
             }
@@ -19578,7 +19708,7 @@ class FastFormFill {
         }
         const fastAddressDetailsFormBlock = document.querySelector(".en__component--formblock.fast-address-details");
         if (fastAddressDetailsFormBlock) {
-            if (this.allMandatoryInputsAreFilled(fastAddressDetailsFormBlock)) {
+            if (FastFormFill.allMandatoryInputsAreFilled(fastAddressDetailsFormBlock)) {
                 this.logger.log("Address details - All mandatory inputs are filled");
                 engrid_ENGrid.setBodyData("hide-fast-address-details", "true");
             }
@@ -19588,9 +19718,21 @@ class FastFormFill {
             }
         }
     }
-    allMandatoryInputsAreFilled(formBlock) {
+    static allMandatoryInputsAreFilled(formBlock) {
         const fields = formBlock.querySelectorAll(".en__mandatory input, .en__mandatory select, .en__mandatory textarea");
         return [...fields].every((input) => {
+            if (input.type === "radio" || input.type === "checkbox") {
+                const inputs = document.querySelectorAll('[name="' + input.name + '"]');
+                return [...inputs].some((radioOrCheckbox) => radioOrCheckbox.checked);
+            }
+            else {
+                return input.value !== null && input.value.trim() !== "";
+            }
+        });
+    }
+    static someMandatoryInputsAreFilled(formBlock) {
+        const fields = formBlock.querySelectorAll(".en__mandatory input, .en__mandatory select, .en__mandatory textarea");
+        return [...fields].some((input) => {
             if (input.type === "radio" || input.type === "checkbox") {
                 const inputs = document.querySelectorAll('[name="' + input.name + '"]');
                 return [...inputs].some((radioOrCheckbox) => radioOrCheckbox.checked);
@@ -19806,7 +19948,7 @@ class ENValidators {
 }
 
 ;// CONCATENATED MODULE: ./node_modules/@4site/engrid-common/dist/version.js
-const AppVersion = "0.15.9";
+const AppVersion = "0.15.11";
 
 ;// CONCATENATED MODULE: ./node_modules/@4site/engrid-common/dist/index.js
  // Runs first so it can change the DOM markup before any markup dependent code fires
@@ -19886,6 +20028,8 @@ const AppVersion = "0.15.9";
 
 
 ;// CONCATENATED MODULE: ./src/scripts/main.js
+
+
 const main_tippy = (__webpack_require__(3861)/* ["default"] */ .ZP);
 
 const customScript = function (App, EnForm) {
@@ -20113,7 +20257,7 @@ const customScript = function (App, EnForm) {
 
   function legacyMoveBodyBannerToPageBackground() {
     // Check if there are no results for ".page-backgroundImage > img"
-    const pageBackgroundImages = document.querySelectorAll(".page-backgroundImage img");
+    const pageBackgroundImages = document.querySelectorAll(".page-backgroundImage img[src]");
 
     if (pageBackgroundImages.length === 0) {
       console.log("No page background images found."); // Get the elements inside ".body-banner"
@@ -20126,7 +20270,9 @@ const customScript = function (App, EnForm) {
         const pageBackground = document.querySelector(".page-backgroundImage");
 
         if (pageBackground) {
-          // Move the contents of ".body-banner" to ".page-backgroundImage"
+          //Empty the contents of ".page-backgroundImage"
+          pageBackground.replaceChildren(); // Move the contents of ".body-banner" to ".page-backgroundImage"
+
           while (bodyBanner.firstChild) {
             pageBackground.appendChild(bodyBanner.firstChild);
           }
@@ -20245,6 +20391,26 @@ const customScript = function (App, EnForm) {
 
 
   legacySetBackgroundImageAttributionSource();
+
+  function legacyRemoveDuplicateCopyrightNotice() {
+    const copyrightElement = document.querySelector(".content-footer > .en__component--copyblock + .en__component--copyblock > p + p");
+
+    if (copyrightElement) {
+      copyrightElement.remove();
+    }
+  }
+
+  legacyRemoveDuplicateCopyrightNotice();
+
+  function legacyConvertBodyTitleSubheaderTag() {
+    const bodyTitleSubheaders = document.querySelectorAll(".body-title > .en__component--copyblock > h2");
+    bodyTitleSubheaders.forEach(el => {
+      el.outerHTML = `<h3>${el.innerHTML}</h3>`;
+      App.log(`Converted body-title subheader to h3: ${el.innerHTML}`);
+    });
+  }
+
+  legacyConvertBodyTitleSubheaderTag();
   /**
    * This function moves the "--banner-image-height" custom attribute from the "img" tag inside ".page-backgroundImage"
    * and adds it to the ".page-backgroundImage" element's style attribute, ensuring not to overwrite any existing styles.
