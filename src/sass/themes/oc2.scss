@@ -1220,4 +1220,36 @@
         brightness(97%) contrast(98%);
     }
   }
+
+  /* Fixes legacy styling of headers */
+  /* REF: https://www.bugherd.com/projects/352663/tasks/65 */
+  /* REF: https://www.bugherd.com/projects/352663/tasks/66 */
+  /* REF: https://www.bugherd.com/projects/352663/tasks/67 */
+
+  .body-title {
+    h3:first-child {
+      margin-top: 0;
+
+      span span {
+        font-size: var(--h1_font-size) !important;
+        line-height: var(--h1_line-height);
+      }
+    }
+
+    h3 + h3 {
+      text-align: left !important;
+
+      strong {
+        font-weight: var(--h3_font-weight) !important;
+      }
+    }
+  }
+
+  &[data-engrid-legacy-theme="oc1"] {
+    .body-top {
+      *[style="text-align: center;"] {
+        text-align: left !important;
+      }
+    }
+  }
 }
