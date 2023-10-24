@@ -478,8 +478,7 @@ label a.label-tooltip {
       bc-start lbc-start] minmax(250px, 420px) [lbc-end
       rbc-start] minmax(250px, 420px) [rbc-end bc-end
       rcc-start] minmax(25px, 250px) [rcc-end cc-end
-      rpc-start] minmax(25px, 1fr) [rpc-end pc-end
-      ];
+      rpc-start] minmax(25px, 1fr) [rpc-end pc-end];
   }
 }
 
@@ -762,8 +761,9 @@ h1 {
   justify-content: space-between;
 
   > .en__component:first-child,
-  > .en__component:not(:first-child):nth-last-child(-n
-      + 2):not(.messageOverlay) {
+  > .en__component:not(:first-child):nth-last-child(-n + 2):not(
+      .messageOverlay
+    ) {
     align-items: center;
     justify-content: center;
   }
@@ -783,8 +783,9 @@ h1 {
     }
   }
 
-  > .en__component:not(:first-child):nth-last-child(-n
-      + 2):not(.messageOverlay) {
+  > .en__component:not(:first-child):nth-last-child(-n + 2):not(
+      .messageOverlay
+    ) {
     grid-column: rbc / pc;
     display: flex;
     justify-content: flex-end;
