@@ -929,4 +929,9 @@
   .label-wrapper {
     display: none;
   }
+  iframe[title^="recaptcha"] {
+    position: fixed;
+    left: -1px;
+    top: -1px;
+  }
 }
