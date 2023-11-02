@@ -929,6 +929,9 @@
   .label-wrapper {
     display: none;
   }
+  .g-recaptcha-bubble-arrow {
+    display: none !important;
+  }
   iframe[title^="recaptcha"] {
     position: fixed;
     left: -1px;
@@ -937,7 +940,7 @@
   iframe[title^="recaptcha"][style*="height: 275px"],
   iframe[title^="recaptcha"][style*="height: 235px"] {
     position: fixed;
-    left: initial !important;
+    left: 50px !important;
     top: 30px !important;
     border: 1px solid rgb(204, 204, 204);
     background-color: white;
@@ -945,5 +948,10 @@
   div[style*="height: 275px"],
   div[style*="height: 235px"] {
     border: 0 !important;
+  }
+  div[style*="z-index: 2000000000"] {
+    box-shadow: none !important;
+    border: 0 !important;
+    background: transparent !important;
   }
 }
