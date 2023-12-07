@@ -17,7 +17,7 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Thursday, November 9, 2023 @ 16:38:44 ET
+ *  Date: Thursday, December 7, 2023 @ 05:29:26 ET
  *  By: michael
  *  ENGrid styles: v0.15.12
  *  ENGrid scripts: v0.15.13
@@ -20905,7 +20905,7 @@ class DonationLightboxForm {
     if (this.sections[sectionId]) {
       console.log(section);
       this.currentSectionId = sectionId;
-      console.log('Changed current section ID to', sectionId);
+      console.log("Changed current section ID to", sectionId);
       this.sections[sectionId].scrollIntoView({
         behavior: "smooth" // block: "start",
         // inline: "center",
@@ -20921,7 +20921,7 @@ class DonationLightboxForm {
 
       if (sectionId) {
         this.currentSectionId = sectionId;
-        console.log('Changed current section ID to', sectionId);
+        console.log("Changed current section ID to", sectionId);
         this.scrollToSection(sectionId);
       }
     }
@@ -20990,8 +20990,8 @@ class DonationLightboxForm {
             return false;
           }
 
-          if (amount > 30000) {
-            this.sendMessage("error", "Amount must be less than $30,000 - Contact us for assistance");
+          if (amount > 25000) {
+            this.sendMessage("error", "Contact us to give above $25,000 at 202-280-6283 or vision@oceanconservancy.org");
 
             if (amountBlock) {
               amountBlock.classList.add("has-error");

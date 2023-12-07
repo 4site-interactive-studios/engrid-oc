@@ -133,7 +133,8 @@ export default class DonationLightboxForm {
             const currentSectionId = Number(this.currentSectionId);
 
             setTimeout(() => {
-              const focusIsOnNextSection = nextSectionId === (currentSectionId + 1);
+              const focusIsOnNextSection =
+                nextSectionId === currentSectionId + 1;
 
               if (focusIsOnNextSection && this.validateForm(currentSectionId)) {
                 this.scrollToElement(e);
@@ -328,7 +329,7 @@ export default class DonationLightboxForm {
     if (this.sections[sectionId]) {
       console.log(section);
       this.currentSectionId = sectionId;
-      console.log('Changed current section ID to', sectionId);
+      console.log("Changed current section ID to", sectionId);
       this.sections[sectionId].scrollIntoView({
         behavior: "smooth",
         // block: "start",
@@ -342,7 +343,7 @@ export default class DonationLightboxForm {
       const sectionId = this.getSectionId(element);
       if (sectionId) {
         this.currentSectionId = sectionId;
-        console.log('Changed current section ID to', sectionId);
+        console.log("Changed current section ID to", sectionId);
         this.scrollToSection(sectionId);
       }
     }
@@ -405,10 +406,10 @@ export default class DonationLightboxForm {
             }
             return false;
           }
-          if (amount > 30000) {
+          if (amount > 25000) {
             this.sendMessage(
               "error",
-              "Amount must be less than $30,000 - Contact us for assistance"
+              "Contact us to give above $25,000 at 202-280-6283 or vision@oceanconservancy.org"
             );
             if (amountBlock) {
               amountBlock.classList.add("has-error");
