@@ -186,29 +186,47 @@ const options: Options = {
     (<any>window).DonationLightboxForm = DonationLightboxForm;
     new DonationLightboxForm(DonationAmount, DonationFrequency);
     customScript(App, EnForm);
+    // Push to dataLayer an read_more_click event when the user clicks on the read more link
+    const readMore = document.querySelectorAll(".click-to-expand-cta");
+    if (readMore.length && "dataLayer" in window) {
+      readMore.forEach((link) => {
+        link.addEventListener("click", () => {
+          (window as any).dataLayer.push({
+            event: link
+              .closest(".click-to-expand")
+              ?.classList.contains("click-to-expand-mobile")
+              ? "read_more_click_mobile"
+              : "read_more_click",
+          });
+        });
+      });
+    }
   },
   onResize: () => console.log("Starter Theme Window Resized"),
   onSubmit: () => {
-    console.log(
-      "%c Upland / Mobilecommons Script",
-      "font-size: 30px; background-color: #000; color: #FF0"
-    );
-    return new Promise(function (resolve, reject) {
-      let userData = getUserData();
-      console.log("User Data", userData);
-      if (!userData) return resolve(true);
-      postAjax(
-        "https://oceanconservancy.org/wp-admin/admin-ajax.php?action=upland_sms_signup",
-        userData,
-        function (data: string) {
-          console.log("Response Data", data);
-          var response = JSON.parse(data);
-          if (response.error) console.log("error adding contact");
-          else console.log(response.message);
-          resolve(true);
-        }
+    const enForm = EnForm.getInstance();
+    if (enForm.submit) {
+      console.log(
+        "%c Upland / Mobilecommons Script",
+        "font-size: 30px; background-color: #000; color: #FF0"
       );
-    });
+      return new Promise(function (resolve, reject) {
+        let userData = getUserData();
+        console.log("User Data", userData);
+        if (!userData) return resolve(true);
+        postAjax(
+          "https://oceanconservancy.org/wp-admin/admin-ajax.php?action=upland_sms_signup",
+          userData,
+          function (data: string) {
+            console.log("Response Data", data);
+            var response = JSON.parse(data);
+            if (response.error) console.log("error adding contact");
+            else console.log(response.message);
+            resolve(true);
+          }
+        );
+      });
+    }
   },
 };
 
