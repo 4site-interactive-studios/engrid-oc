@@ -17,7 +17,7 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Friday, January 5, 2024 @ 13:51:02 ET
+ *  Date: Friday, January 5, 2024 @ 14:00:58 ET
  *  By: fernando
  *  ENGrid styles: v0.16.4
  *  ENGrid scripts: v0.16.10
@@ -21869,9 +21869,10 @@ const customScript = function (App, EnForm) {
 
   function legacyMoveBannerImageHeightToBackgroundImage() {
     const pageBackgroundImage = document.querySelector(".page-backgroundImage");
+    let backgroundImage = null;
 
     if (pageBackgroundImage) {
-      const backgroundImage = pageBackgroundImage.querySelector("img");
+      backgroundImage = pageBackgroundImage.querySelector("img");
     }
 
     if (pageBackgroundImage && backgroundImage) {

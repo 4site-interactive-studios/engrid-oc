@@ -484,8 +484,9 @@ export const customScript = function (App, EnForm) {
    */
   function legacyMoveBannerImageHeightToBackgroundImage() {
     const pageBackgroundImage = document.querySelector(".page-backgroundImage");
+    let backgroundImage = null;
     if (pageBackgroundImage) {
-      const backgroundImage = pageBackgroundImage.querySelector("img");
+      backgroundImage = pageBackgroundImage.querySelector("img");
     }
 
     if (pageBackgroundImage && backgroundImage) {
