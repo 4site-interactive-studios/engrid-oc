@@ -17,7 +17,7 @@
  *
  *  ENGRID PAGE TEMPLATE ASSETS
  *
- *  Date: Friday, January 5, 2024 @ 14:00:58 ET
+ *  Date: Monday, January 8, 2024 @ 17:32:06 ET
  *  By: fernando
  *  ENGrid styles: v0.16.4
  *  ENGrid scripts: v0.16.10
@@ -22481,7 +22481,7 @@ class DonationLightboxForm {
             }
           }
 
-          if (/^\d+$/.test(ccnumber.value) === false) {
+          if (/^[0-9\s]+$/.test(ccnumber.value) === false) {
             this.scrollToElement(ccnumber);
             this.sendMessage("error", "Only numbers are allowed on credit card");
 
